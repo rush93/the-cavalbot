@@ -1,6 +1,7 @@
 # the-cavalbot
 ## PREREQUIS
   - node
+  - npm
 
 ## INSTALLATION
   - create app & bot discord https://discordapp.com/developers/applications/me
