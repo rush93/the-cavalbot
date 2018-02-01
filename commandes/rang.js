@@ -30,7 +30,6 @@ var displayRoleOfMember = function (message, member) {
     }
     var role = Clans.getRole(clan.id, member.guild);
     var ranks = Ranks.getRankOfPlayer(member);
-    console.log(ranks);
     var fields = [];
     for (var i = 0; i < ranks.length; i++) {
         var rank = Ranks.getRank(role.id, ranks[i].name);

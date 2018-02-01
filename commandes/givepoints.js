@@ -25,8 +25,12 @@ module.exports = {
             Utils.reply(message, 'Le nombre de points dois être un nombre.', true);
             return;
         }
-
-        var oldPoints = Players.getPlayer(member.id).points;
+        var player = Players.getPlayer(member.id)
+        var oldPoints = 0;
+        if (player)
+            oldPoints = player.points;
+        if (!oldPoints)
+            oldPoints = 0;
         var newPoints = oldPoints + points
         Players.setPoints(member.id, newPoints);
         Utils.reply(message, 'Les points du joueur on bien été modifier.');
