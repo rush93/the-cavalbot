@@ -3,7 +3,7 @@
   - node
 
 ## INSTALLATION
-  - create app & bot discord https://discord.js.org/#/docs/main/stable/class/Role?scrollTo=members
+  - create app & bot discord https://discordapp.com/developers/applications/me
   - invite him to discord
   - create token.js
   ```js
