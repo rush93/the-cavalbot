@@ -75,7 +75,7 @@ var commands = {
         help: [
             'Si a \'true\' le nom du rang pourras être modifié par les utilisateurs.'
         ],
-        args: '[points]',
+        args: '[true|false]',
         runCommand: (role, name, args, message) => {
             if (!Ranks.getRank(role.id, name)) {
                 Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
@@ -87,6 +87,26 @@ var commands = {
             }
             Ranks.setIsCustomable(role.id, name, args[0].toLowerCase() === "true");
             Utils.reply(message, "Le rang est maintenant " + (args[0].toLowerCase() === "true" ? 'customisable': 'non customisable')  + ".");
+            return;
+        }
+    },
+    setrole: {
+        help: [
+            'attache un role au rang.'
+        ],
+        args: '<@role>',
+        runCommand: (role, name, args, message) => {
+            if (!Ranks.getRank(role.id, name)) {
+                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                return;
+            }
+            var attachRole = message.mentions.roles.last();
+            if (!attachRole) {
+                Utils.reply(message, "Vous devez mentionner un role a attacher.", true);
+                return;
+            }
+            Ranks.setRole(role.id, name, attachRole);
+            Utils.reply(message, "Le role à bien été attacher au role.");
             return;
         }
     }
@@ -109,7 +129,7 @@ module.exports = {
     help,
     runCommand: (args, message) => {
         if (!message.member.hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, "Vous n'avez pas la perissions d'administrer les rangs", true);
+            Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les rangs", true);
             return;
         }
         if(args.length < 2) {
@@ -118,7 +138,7 @@ module.exports = {
         }
         var role = message.mentions.roles.first();
         if (!role) {
-            Utils.reply(message, "Vous devez mensionnez un role", true);
+            Utils.reply(message, "Vous devez mentionner un role", true);
             return;
         }
         args.shift();

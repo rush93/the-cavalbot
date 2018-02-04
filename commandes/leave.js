@@ -1,3 +1,4 @@
+
 const Discord = require('discord.js');
 var moment = require('moment');
 const Utils = require('../utils');
@@ -20,8 +21,8 @@ module.exports = {
             Utils.reply(message, "Vous ne pouvez pas quitter de clan.", true);
             return;
         }
-
-        var lastJoin =  Players.getPlayer(message.member.id) ? Players.getPlayer(message.member.id).cooldown : null;
+        var clan = Clans.getPlayerClan(message.member); 
+        var lastJoin =  Players.getPlayer(message.member.id, clan.id) ? Players.getPlayer(message.member.id, clan.id).cooldown : null;
         if (lastJoin) {
             lastJoin = moment(lastJoin);
             var now = moment();
@@ -34,13 +35,12 @@ module.exports = {
             }
         }
 
-        clan = Clans.getPlayerClan(message.member);
         if (!clan) {
             Utils.reply(message, "Vous n'êtes pas dans un clan.", true);
             return;
         }
         if (Constants.resetRankWhenChangeClan) {
-            Players.setPoints(message.member.id, 0);
+            Players.setPoints(message.member.id, clan.id, 0);
         }
         Players.resetRank(message.member.id);
         Clans.removePlayer(Clans.getRole(clan.id, message.guild), message.member, "quitter le clan avec la commande leave")

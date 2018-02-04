@@ -19,7 +19,7 @@ module.exports = {
             var guildRole = message.guild.roles.get(keys[i])
             fields.push({
                 title: guildRole.name,
-                text: Clans.getClan(guildRole).description,
+                text: Clans.getClan(guildRole).description ? Clans.getClan(guildRole).description : 'Aucune description',
                 grid: true
             });
         }

@@ -130,7 +130,7 @@ module.exports = {
     help,
     runCommand: (args, message) => {
         if (!message.member.hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, "Vous n'avez pas la perissions de changer des config", true);
+            Utils.reply(message, "Vous n'avez pas assez de couilles pour changer les config", true);
             return;
         }
         if (commands[args[0]]) {

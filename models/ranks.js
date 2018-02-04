@@ -70,8 +70,8 @@ module.exports = {
         var clan  = Clans.getPlayerClan(guildMember);
         if (!clan) return [];
         var sortedRanks = getSortedKeys(clan.id);
-        console.log(guildMember.id);
-        var player = Players.getPlayer(guildMember.id);
+        (guildMember.id);
+        var player = Players.getPlayer(guildMember.id, clan.id);
         var playerRanks = [];
         for (var i = 0; i < sortedRanks.length; i++) {
             if ( ranks[clan.id][sortedRanks[i]].points > player.points ) {
@@ -103,6 +103,14 @@ module.exports = {
             return false;
         }
         ranks[clanId][name].isCustomable = isCustomable;
+        save();
+        return true;
+    },
+    setRole: function (clanId, name, GuildRole) {
+        if (!ranks[clanId]) {
+            return false;
+        }
+        ranks[clanId][name].roleId = GuildRole.id;
         save();
         return true;
     }

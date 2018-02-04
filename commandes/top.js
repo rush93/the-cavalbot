@@ -16,9 +16,10 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        var role = message.mentions.roles.first();
+
+        var role = Clans.getRoleByName(args.join(' '), message.channel.guild);
         if (!role) {
-            Utils.reply(message, "Vous devez mentioner un clan.", true);
+            Utils.reply(message, "Aucuns clans avec ce nom.", true);
             return;
         }
         var clan = Clans.getClan(role);
@@ -32,7 +33,7 @@ module.exports = {
         for (var i = 0; i < keys.length; i++) {
             var member = role.members.get(keys[i]);
             if (member) {
-                teamPlayers.push(players[keys[i]]);
+                teamPlayers.push(players[keys[i]][role.id]);
             }
         }
         var sortedPlayers = teamPlayers.sort(function (a, b) {

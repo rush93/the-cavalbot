@@ -25,7 +25,7 @@ module.exports = {
             Utils.reply(message, "Aucuns rang porte ce nom dans votre clan.", true);
             return;
         }
-        var player = Players.getPlayer(message.member.id);
+        var player = Players.getPlayer(message.member.id, clan.id);
         if(!player || player.points < rang.points) {
             Utils.reply(message, `Vous n'avez pas assez de points pour rejoindre le clan **${rang.name}**,
 il vous en faut **${rang.points}** et vous en avez **${ (player && player.points) ? player.points : 0 }**.`, true);
@@ -33,8 +33,13 @@ il vous en faut **${rang.points}** et vous en avez **${ (player && player.points
         }
         var promise = Players.setActiveRank(message.member, rang);
         if (promise) {
-            promise.catch(() => {
-                Utils.reply(message, 'Aie tu est trop puissant pour moi, je peu pas changer ton pseudo.', true);
+            promise.catch((e) => {
+                console.error(e);
+                if (e.code === 0) {
+                    Utils.reply(message, 'Aie tu est trop puissant pour moi, je peu pas changer ton pseudo.', true);
+                } else {
+                    Utils.reply(message, 'Et la c\'est le bug #google.', true);
+                }
             });
         }
         Utils.reply(message, 'Votre rang actif est maintenant **' + rang.name + '**.');

@@ -13,9 +13,9 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        var role = message.mentions.roles.first();
+        var role = Clans.getRoleByName(args.join(" "), message.channel.guild);
         if (!role) {
-            Utils.reply(message, "Vous devez mensionnez un role", true);
+            Utils.reply(message, "Aucuns role avec ce nom", true);
             return;
         }
         var clan = Clans.getClan(role);

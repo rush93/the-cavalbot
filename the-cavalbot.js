@@ -26,6 +26,8 @@ var setrankCommands = require('./commandes/setrank');
 var customCommands = require('./commandes/custom');
 var rangCommands = require('./commandes/rang');
 var topCommands = require('./commandes/top');
+var btagCommands = require('./commandes/btag');
+var psnCommands = require('./commandes/psn');
 
 var commands = {
   config: configCommands,
@@ -40,7 +42,8 @@ var commands = {
   setrank: setrankCommands,
   custom: customCommands,
   rang: rangCommands,
-  top: topCommands
+  btag: btagCommands,
+  psn: psnCommands
 }
 
 bot.on('ready', function () {

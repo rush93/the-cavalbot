@@ -20,7 +20,7 @@ module.exports = {
             Utils.reply(message, "Vous devez être dans un clan pour cela.", true);
             return;
         }
-        var player = Players.getPlayer(message.member.id);
+        var player = Players.getPlayer(message.member.id, clan.id);
         if (!player) {
             Utils.reply(message, "Vous n'avez pas de rang actif.", true);
             return;

@@ -12,18 +12,18 @@ var displayRoleOfClan= function (message, role) {
     for (var i = 0; i < ranks.length; i++) {
         var rank = Ranks.getRank(role.id, ranks[i]);
         fields.push({
-            title: rank.smiley + ' ' + rank.name,
+            title: (rank.smiley ? rank.smiley + ' ' : '') + rank.name,
             text: rank.points + 'points',
             grid: true
         });
     }
-    Utils.sendEmbed(message, role.color, "Rangs de " + role.name, "", message.author, fields, clan.image);
+    Utils.sendEmbed(message, role.color, "Rangs de " + role.name, clan.description ? clan.description : '', message.author, fields, clan.image);
     return;
 }
 
 var displayRoleOfMember = function (message, member) {
-    var player = Players.getPlayer(member.id);
     var clan = Clans.getPlayerClan(member);
+    var player = Players.getPlayer(member.id, clan.id);
     if (!clan) {
         Utils.reply(message, 'Cet personne n\'as pas de clan !');
         return
@@ -39,10 +39,17 @@ var displayRoleOfMember = function (message, member) {
             grid: true
         });
     }
-
+    var btag = Players.getBtag(player.id);
+    var psn = Players.getPsn(player.id);
+    var psncomprank = Players.getPsnComprank(player.id);
+    var comprank = Players.getComprank(player.id);
     Utils.sendEmbed(message, role.color, "Rangs de " + (member.nickname ? member.nickname : member.user.username),
     `**Clan:** ${role.name}
-**Total de points:** ${player.points ? player.points : 0}`
+**Total de points:** ${player.points ? player.points : 0}` + (!btag ? '' : `
+**Battle tag:** ${btag}`) + (!psn ? '' : `
+**PSN:** ${psn}`) + (!comprank ? '' : `
+**Points de compétitions:** ${comprank}`) + (!psncomprank ? '' : `
+**Points de compétitions psn:** ${psncomprank}`)
     , message.author, fields, clan.image);
     return;
 }
@@ -57,7 +64,7 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        var role = message.mentions.roles.first();
+        var role = Clans.getRoleByName(args.join(' '), message.channel.guild);
         var member = message.mentions.members.first();
         if(!role && !member) {
             var member = message.member;

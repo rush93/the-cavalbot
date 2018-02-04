@@ -3,6 +3,7 @@ var Constants = require('./constants');
 var Utils = require('../utils');
 
 var clans = {};
+var clansMap = {};
 
 function save() {
     fs.writeFile("./data/clans.json", JSON.stringify(clans), function (err) {
@@ -27,7 +28,10 @@ module.exports = {
     init: function () {
         return new Promise((resolve, reject) => {
             load()
-                .then(r => resolve(r))
+                .then(r => {
+                    resolve(r)
+                    var ids = Object.keys(clans);
+                })
                 .catch(e => reject(e));
         });
     },
@@ -120,6 +124,16 @@ module.exports = {
     },
     getRole: function (clanId, guild) {
         return guild.roles.get(clanId);
+    },
+    getRoleByName: function (name, guild) {
+        if ( clansMap[name] ) {
+            return guild.roles.get(clansMap[name]);
+        }
+        var role = guild.roles.find('name', name);
+        if (role) {
+            clansMap[role.name] = role.id;
+        }
+        return role;
     },
     get clans() {
         return clans;

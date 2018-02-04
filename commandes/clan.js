@@ -138,7 +138,7 @@ var commands = {
                 return;
             }
             if (Constants.resetRankWhenChangeClan) {
-                Players.setPoints(user.id, 0);
+                Players.setPoints(user.id, clanRemoved.id , 0);
             }
             Players.resetRank(user.id);
             Utils.reply(message,'Le joueur a bien été supprimé du clan.' );
@@ -163,21 +163,23 @@ module.exports = {
     help,
     runCommand: (args, message) => {
         if (!message.member.hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, "Vous n'avez pas la perissions d'administrer les clans", true);
+            Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les clans", true);
             return;
         }
         if(args.length < 2) {
             help(message);
             return;
         }
-        var role = message.mentions.roles.first();
+        var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
+        args = reg[2].trim().split(' ');
+        var name = reg[1].replace(/"/g,'');
+        var role = Clans.getRoleByName(name, message.channel.guild);
         if (!role) {
-            Utils.reply(message, "Vous devez mensionnez un role", true);
+            Utils.reply(message, "Aucuns role avec ce nom", true);
             return;
         }
-        if (commands[args[1]]) {
-            var label = args[1];
-            args.shift();
+        if (commands[args[0]]) {
+            var label = args[0];
             args.shift();
             commands[label].runCommand(role, args, message);
         } else {
