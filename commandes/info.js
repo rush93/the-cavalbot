@@ -1,7 +1,9 @@
 const Discord = require('discord.js');
 const Utils = require('../utils');
 var Clans = require('../models/clans');
+var Ranks = require('../models/ranks');
 var Constants = require('../models/constants');
+
 module.exports = {
     role: 'SEND_MESSAGES',
     helpCat: 'Permet d\'afficher plus d\'information sur un clan',
@@ -34,6 +36,16 @@ module.exports = {
             embed.setThumbnail(clan.image);
         }
         embed.addField("Nombre de personnes", role.members.array().length, true);
+        embed.addField("Rangs", 'Tous les rangs du clan:', false);
+        var ranks = Ranks.getSortedKeys(role.id);
+        for (var i = 0; i < ranks.length; i++) {
+            var rank = Ranks.getRank(role.id, ranks[i]);
+            embed.addField(
+                (rank.smiley ? rank.smiley + ' ' : '') + rank.name,
+                rank.points + 'points',
+                true
+            );
+        }
         embed.setFooter(message.author.username + "#" + message.author.discriminator, message.author.avatarURL);
         message.channel.send("", embed);
     }

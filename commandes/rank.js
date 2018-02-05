@@ -3,6 +3,7 @@ const Utils = require('../utils');
 var Constants = require('../models/constants');
 var Ranks = require('../models/ranks');
 var Players = require('../models/players');
+var Clans = require('../models/clans');
 var commands = {
     create: {
         help: [
@@ -136,12 +137,14 @@ module.exports = {
             help(message);
             return;
         }
-        var role = message.mentions.roles.first();
+        var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
+        args = reg[2].trim().split(' ');
+        var roleName = reg[1].replace(/"/g,'');
+        var role = Clans.getRoleByName(roleName, message.channel.guild);
         if (!role) {
-            Utils.reply(message, "Vous devez mentionner un role", true);
+            Utils.reply(message, "Aucuns role avec ce nom", true);
             return;
         }
-        args.shift();
         var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
         args = reg[2].trim().split(' ');
         var name = reg[1].replace(/"/g,'');
