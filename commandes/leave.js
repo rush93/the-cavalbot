@@ -22,6 +22,10 @@ module.exports = {
             return;
         }
         var clan = Clans.getPlayerClan(message.member); 
+        if (!clan) {
+            Utils.reply(message, "Vous n'êtes pas dans un clan.", true);
+            return;
+        }
         var lastJoin =  Players.getPlayer(message.member.id, clan.id) ? Players.getPlayer(message.member.id, clan.id).cooldown : null;
         if (lastJoin) {
             lastJoin = moment(lastJoin);
@@ -33,11 +37,6 @@ module.exports = {
                 Utils.reply(message, 'Vous ne pouvez pas changer de clan pour le moment, vous devez encore attendre ' + moment.duration(timeLeft, 'minutes').humanize());
                 return;
             }
-        }
-
-        if (!clan) {
-            Utils.reply(message, "Vous n'êtes pas dans un clan.", true);
-            return;
         }
         if (Constants.resetRankWhenChangeClan) {
             Players.setPoints(message.member.id, clan.id, 0);
