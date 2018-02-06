@@ -146,6 +146,7 @@ module.exports = {
             }
             players[id].btag = btag;
             save();
+            console.log(`https://owapi.net/api/v3/u/${ btag.replace('#', '-') }/blob`);
             request({
                 url: `https://owapi.net/api/v3/u/${ btag.replace('#', '-') }/blob`,
                 headers: {
@@ -157,12 +158,14 @@ module.exports = {
                     return;
                 }
                 var result = JSON.parse(body);
+                if (!result.eu || !result.eu.stats || !result.eu.stats) {
+                    reject();
+
+                }
                 if (result.eu && result.eu.stats && result.eu.stats.competitive && result.eu.stats.competitive.overall_stats && result.eu.stats.competitive.overall_stats.comprank) {
                     players[id].comprank = result.eu.stats.competitive.overall_stats.comprank;
                     players[id].lastUpdate = new Date();
                     save();
-                } else {
-                    reject();
                 }
                 resolve(players[id].comprank);
             });

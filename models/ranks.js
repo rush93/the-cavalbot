@@ -72,6 +72,9 @@ module.exports = {
         var sortedRanks = getSortedKeys(clan.id);
         (guildMember.id);
         var player = Players.getPlayer(guildMember.id, clan.id);
+        if (!player) {
+            return [];
+        }
         var playerRanks = [];
         for (var i = 0; i < sortedRanks.length; i++) {
             if ( ranks[clan.id][sortedRanks[i]].points > player.points ) {

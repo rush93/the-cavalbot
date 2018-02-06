@@ -23,6 +23,10 @@ var displayRoleOfClan= function (message, role) {
 
 var displayRoleOfMember = function (message, member) {
     var clan = Clans.getPlayerClan(member);
+    if(!clan) {
+        Utils.reply(message, 'Vous devez rejoindre un clan.', true);
+        return;
+    }
     var player = Players.getPlayer(member.id, clan.id);
     if (!clan) {
         Utils.reply(message, 'Cet personne n\'as pas de clan !');
@@ -39,13 +43,16 @@ var displayRoleOfMember = function (message, member) {
             grid: true
         });
     }
-    var btag = Players.getBtag(player.id);
-    var psn = Players.getPsn(player.id);
-    var psncomprank = Players.getPsnComprank(player.id);
-    var comprank = Players.getComprank(player.id);
+    var globalPlayer = Players.getPlayers()[member.id];
+    if (globalPlayer) {
+        var btag = Players.getBtag(globalPlayer.id);
+        var psn = Players.getPsn(globalPlayer.id);
+        var psncomprank = Players.getPsnComprank(globalPlayer.id);
+        var comprank = Players.getComprank(globalPlayer.id);
+    }
     Utils.sendEmbed(message, role.color, "Rangs de " + (member.nickname ? member.nickname : member.user.username),
     `**Clan:** ${role.name}
-**Total de points:** ${player.points ? player.points : 0}` + (!btag ? '' : `
+**Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btag ? '' : `
 **Battle tag:** ${btag}`) + (!psn ? '' : `
 **PSN:** ${psn}`) + (!comprank ? '' : `
 **Points de compétitions:** ${comprank}`) + (!psncomprank ? '' : `
