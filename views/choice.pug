@@ -1,0 +1,10 @@
+include head.html
+<body>
+    h1 Choissez votre Clans: 
+    each clan in clans
+        .clan
+            a(
+                href='/clan?c=' + clan.id + '&u='+user
+            )='Rejoindre ' + Clans.getRole(clan.id, guild).name
+            img(src=clan.image, alt='clan image')
+</body>

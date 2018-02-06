@@ -256,5 +256,15 @@ module.exports = {
         moment.locale('fr');
         var diff = moment.duration(moment().diff(players[id].lastUpdate)).humanize();
         return players[id].psncomprank + ` (il y a ${diff})`;
+    },
+    setTempClanToJoin: function(id, clan, code) {
+        if (!players[id] ) {
+            players[id] = {
+                id: id
+            }
+        }
+        players[id].tempCode = code;
+        players[id].tempGuild = clan;
+        save();
     }
 }

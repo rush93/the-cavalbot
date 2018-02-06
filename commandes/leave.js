@@ -42,7 +42,7 @@ module.exports = {
         if (Constants.resetRankWhenChangeClan) {
             Players.setPoints(message.member.id, clan.id, 0);
         }
-        Players.resetRank(message.member.id);
+        Players.resetRank(message.member);
         Clans.removePlayer(Clans.getRole(clan.id, message.guild), message.member, "quitter le clan avec la commande leave")
         Utils.reply(message, "Vous avez bien quitter le clan.");
     }

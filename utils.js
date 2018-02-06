@@ -66,11 +66,13 @@ module.exports = {
             input = input.replace(/%rank%/g, player.activeRank ? player.activeRank.displayName : '');
         
         }
-        if (rank) {
+        if (rank && rank.smiley) {
             input = input.replace(/%srank%/g, rank.smiley);
         }
         input = input.replace(/%clan%/g, clanName);
-        input = input.replace(/%sclan%/g, clan.smiley);
+        if(clan.smiley) {
+            input = input.replace(/%sclan%/g, clan.smiley);
+        }
 
         return input;
     }
