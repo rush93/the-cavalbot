@@ -9,7 +9,7 @@ module.exports = {
     helpCat: 'Permet de changer son psn.',
     help: function(message) {
         Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande psn", "", message.author, [{
-            title: Constants.prefix + '<psn>',
+            title: Constants.prefix + 'psn <psn>',
             text: "Permet de changer son psn.",
             grid: false
         }]);

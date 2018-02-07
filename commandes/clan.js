@@ -151,7 +151,7 @@ var help = function (message) {
     keys.forEach((command, index) => {
         fields.push({
             text: commands[command].help,
-            title: `${Constants.prefix}clan <@role> ${command} ${commands[command].args}`,
+            title: `${Constants.prefix}clan <clan> ${command} ${commands[command].args}`,
             grid: false
         });
     });

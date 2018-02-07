@@ -9,7 +9,7 @@ module.exports = {
     helpCat: 'Permet de changer son btag.',
     help: function(message) {
         Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande btag", "", message.author, [{
-            title: Constants.prefix + '<btag>',
+            title: Constants.prefix + 'btag <btag>',
             text: "Permet de changer son btag.",
             grid: false
         }]);

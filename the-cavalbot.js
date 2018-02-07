@@ -19,12 +19,11 @@ var listclanCommands = require('./commandes/list');
 var infoClanCommands = require('./commandes/info');
 var joinCommands = require('./commandes/join');
 var leaveCommands = require('./commandes/leave');
-var rankCommands = require('./commandes/rank');
+var rangCommands = require('./commandes/rang');
 var givepointsCommands = require('./commandes/givepoints');
 var takepointsCommands = require('./commandes/takepoints');
-var setrankCommands = require('./commandes/setrank');
+var setrangCommands = require('./commandes/setrang');
 var customCommands = require('./commandes/custom');
-var rangCommands = require('./commandes/rang');
 var topCommands = require('./commandes/top');
 var btagCommands = require('./commandes/btag');
 var psnCommands = require('./commandes/psn');
@@ -32,16 +31,15 @@ var psnCommands = require('./commandes/psn');
 var commands = {
   config: configCommands,
   clan: clanCommands,
-  rank: rankCommands,
+  rang: rangCommands,
   givepoints: givepointsCommands,
   takepoints: takepointsCommands,
   list: listclanCommands,
   info: infoClanCommands,
   join: joinCommands,
   leave: leaveCommands,
-  setrank: setrankCommands,
+  setrang: setrangCommands,
   custom: customCommands,
-  rang: rangCommands,
   btag: btagCommands,
   psn: psnCommands
 }

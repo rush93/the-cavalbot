@@ -24,7 +24,7 @@ var commands = {
             '**%srank%** le smiley du rank',
             '**%clan%** le nom du clan',
             '**%sclan%** le smiley du clan',
-            '**%player%** le smiley du joueur',
+            '**%player%** le nom du joueur',
             'pour que le bot ne modifie pas les nom mettre \'no\''
         ],
         args: '[modifier]',

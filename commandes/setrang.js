@@ -8,8 +8,8 @@ module.exports = {
     role: 'SEND_MESSAGES',
     helpCat: 'Permet de changer le rang actif.',
     help: function(message) {
-        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande setrank", "", message.author, [{
-            title: Constants.prefix + 'setrank <rang>',
+        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande setrang", "", message.author, [{
+            title: Constants.prefix + 'setrang <rang>',
             text: "Permet de changer le rang actif.",
             grid: false
         }]);

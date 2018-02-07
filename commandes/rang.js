@@ -1,85 +1,159 @@
 const Discord = require('discord.js');
 const Utils = require('../utils');
-var Players = require('../models/players');
-var Ranks = require('../models/ranks');
-var Clans = require('../models/clans');
 var Constants = require('../models/constants');
-
-var displayRoleOfClan= function (message, role) {
-    var ranks = Ranks.getSortedKeys(role.id);
-    var clan = Clans.getClan(role);
-    var fields = [];
-    for (var i = 0; i < ranks.length; i++) {
-        var rank = Ranks.getRank(role.id, ranks[i]);
-        fields.push({
-            title: (rank.smiley ? rank.smiley + ' ' : '') + rank.name,
-            text: rank.points + 'points',
-            grid: true
-        });
-    }
-    Utils.sendEmbed(message, role.color, "Rangs de " + role.name, clan.description ? clan.description : '', message.author, fields, clan.image);
-    return;
-}
-
-var displayRoleOfMember = function (message, member) {
-    var clan = Clans.getPlayerClan(member);
-    if(!clan) {
-        Utils.reply(message, 'Vous devez rejoindre un clan.', true);
-        return;
-    }
-    var player = Players.getPlayer(member.id, clan.id);
-    if (!clan) {
-        Utils.reply(message, 'Cet personne n\'as pas de clan !');
-        return
-    }
-    var role = Clans.getRole(clan.id, member.guild);
-    var ranks = Ranks.getRankOfPlayer(member);
-    var fields = [];
-    for (var i = 0; i < ranks.length; i++) {
-        var rank = Ranks.getRank(role.id, ranks[i].name);
-        fields.push({
-            title: (ranks[i].smiley ? ranks[i].smiley + ' ' : '') + ranks[i].name,
-            text: ranks[i].points + ' points',
-            grid: true
-        });
-    }
-    var globalPlayer = Players.getPlayers()[member.id];
-    if (globalPlayer) {
-        var btag = Players.getBtag(globalPlayer.id);
-        var psn = Players.getPsn(globalPlayer.id);
-        var psncomprank = Players.getPsnComprank(globalPlayer.id);
-        var comprank = Players.getComprank(globalPlayer.id);
-    }
-    Utils.sendEmbed(message, role.color, "Rangs de " + (member.nickname ? member.nickname : member.user.username),
-    `**Clan:** ${role.name}
-**Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btag ? '' : `
-**Battle tag:** ${btag}`) + (!psn ? '' : `
-**PSN:** ${psn}`) + (!comprank ? '' : `
-**Points de compétitions:** ${comprank}`) + (!psncomprank ? '' : `
-**Points de compétitions psn:** ${psncomprank}`)
-    , message.author, fields, clan.image);
-    return;
-}
-module.exports = {
-    role: 'SEND_MESSAGES',
-    helpCat: 'Donne plus d\'info sur les rangs d\'une personne ou d\'un clan.',
-    help: function(message) {
-        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande rang", "", message.author, [{
-            title: Constants.prefix + 'rang [@clan|@membre]',
-            text: "Donne plus d\'info sur les rangs d\'une personne ou d\'un clan..",
-            grid: false
-        }]);
-    },
-    runCommand: (args, message) => {
-        var role = Clans.getRoleByName(args.join(' '), message.channel.guild);
-        var member = message.mentions.members.first();
-        if(!role && !member) {
-            var member = message.member;
+var Ranks = require('../models/ranks');
+var Players = require('../models/players');
+var Clans = require('../models/clans');
+var commands = {
+    create: {
+        help: [
+            'Permet de créer un rang.'
+        ],
+        args: '',
+        runCommand: (role, name, args, message) => {
+            if (Ranks.getRank(role.id, name)) {
+                Utils.reply(message, 'Ce rang pour ce clan à déjà été créé.', true);
+                return;
+            }
+            Ranks.create(role.id, name);
+            Utils.reply(message,'Le clan a bien été créé.');
         }
-        if (member) {
-            displayRoleOfMember(message, member);
+    },
+    delete: {
+        help: [
+            'Permet de supprimer un rang.'
+        ],
+        args: '',
+        runCommand: (role, name, args, message) => {
+            if (!Ranks.getRank(role.id, name)) {
+                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                return;
+            }
+            Ranks.delete(role.id, name);
+            Utils.reply(message,'Le rang a bien été supprimé.');
+        }
+    },
+    setpoints: {
+        help: [
+            'Permet de modifier le nombre de points qu\'il faut pour ce rang.'
+        ],
+        args: '<points>',
+        runCommand: (role, name, args, message) => {
+            if (!Ranks.getRank(role.id, name)) {
+                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                return;
+            }
+            var points = Number(args[0]);
+            if(isNaN(points)) {
+                Utils.reply(message, 'Le nombre de points dois être un nombre.', true);
+                return;
+            }
+            Ranks.setPoints(role.id, name, points);
+            Utils.reply(message, "Le nombre de points du rang a bien été modifié.");
             return;
         }
-        displayRoleOfClan(message, role);
+    },
+    setsmiley: {
+        help: [
+            'Permet de modifier le smiley d\'un rang.'
+        ],
+        args: '<:smiley:>',
+        runCommand: (role, name, args, message) => {
+            if (!Ranks.getRank(role.id, name)) {
+                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                return;
+            }
+            if(!args[0]) {
+                Utils.reply(message, 'Vous devez mettre un smiley.', true);
+                return;
+            }
+            Ranks.setSmiley(role.id, name, args.join(' '));
+            Utils.reply(message, "Le smiley de points du rang a bien été modifié.");
+            return;
+        }
+    },
+    setiscustomable: {
+        help: [
+            'Si a \'true\' le nom du rang pourras être modifié par les utilisateurs.'
+        ],
+        args: '[true|false]',
+        runCommand: (role, name, args, message) => {
+            if (!Ranks.getRank(role.id, name)) {
+                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                return;
+            }
+            if(args[0].toLowerCase() !== "true" && args[0].toLowerCase() !== "false") {
+                Utils.reply(message, "la valeur dois être 'true' ou 'false'.", true);
+                return;
+            }
+            Ranks.setIsCustomable(role.id, name, args[0].toLowerCase() === "true");
+            Utils.reply(message, "Le rang est maintenant " + (args[0].toLowerCase() === "true" ? 'customisable': 'non customisable')  + ".");
+            return;
+        }
+    },
+    setrole: {
+        help: [
+            'attache un role au rang.'
+        ],
+        args: '<@role>',
+        runCommand: (role, name, args, message) => {
+            if (!Ranks.getRank(role.id, name)) {
+                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                return;
+            }
+            var attachRole = message.mentions.roles.last();
+            if (!attachRole) {
+                Utils.reply(message, "Vous devez mentionner un role a attacher.", true);
+                return;
+            }
+            Ranks.setRole(role.id, name, attachRole);
+            Utils.reply(message, "Le role à bien été attacher au role.");
+            return;
+        }
+    }
+}
+var help = function (message) {
+    var keys = Object.keys(commands);
+    var fields = [];
+    keys.forEach((command, index) => {
+        fields.push({
+            text: commands[command].help,
+            title: `${Constants.prefix}rang <clan> <name> ${command} ${commands[command].args}`,
+            grid: false
+        });
+    });
+    Utils.sendEmbed(message, 0x00AFFF,'Liste des commandes des rangs', "", message.author, fields);
+}
+module.exports = {
+    role: 'MANAGE_GUILD',
+    helpCat: 'Permet d\'administrer les rangs',
+    help,
+    runCommand: (args, message) => {
+        if (!message.member.hasPermission("MANAGE_GUILD")) {
+            Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les rangs", true);
+            return;
+        }
+        if(args.length < 2) {
+            help(message);
+            return;
+        }
+        var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
+        args = reg[2].trim().split(' ');
+        var roleName = reg[1].replace(/"/g,'');
+        var role = Clans.getRoleByName(roleName, message.channel.guild);
+        if (!role) {
+            Utils.reply(message, "Aucuns role avec ce nom", true);
+            return;
+        }
+        var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
+        args = reg[2].trim().split(' ');
+        var name = reg[1].replace(/"/g,'');
+        if (commands[args[0]]) {
+            var label = args[0];
+            args.shift();
+            commands[label].runCommand(role, name, args, message);
+        } else {
+            help(message);
+        }
     }
 }
