@@ -15,42 +15,48 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        var member = message.mentions.members.first();
-        if (!member) {
-            Utils.reply(message, "Vous devez mensionnez un utilisateur", true);
+        var members = message.mentions.members;
+        if (members.array().length === 0) {
+            Utils.reply(message, "Vous devez mensionnez au moins un utilisateur", true);
             return;
         }
-        var points = Number(args[1]);
+
+        var points = Number(args[args.length - 1]);
         if(isNaN(points)) {
             Utils.reply(message, 'Le nombre de points dois être un nombre.', true);
             return;
         }
-        var clanId = Clans.getPlayerClan(member).id;
-        var player = Players.getPlayer(member.id, clanId)
-        var oldPoints = 0;
-        if (player)
-            oldPoints = player.points;
-        if (!oldPoints)
-            oldPoints = 0;
-        var newPoints = oldPoints + points
-        Players.setPoints(member.id, clanId, newPoints);
-        Utils.reply(message, 'Les points du joueur on bien été modifier.');
-        var playerClan = Clans.getPlayerClan(member);
-        var avaliabeRanks = Ranks.getRanks(playerClan.id);
-        var keys = Ranks.getSortedKeys(playerClan.id);
-        var nextRank = null;
-        for (var i = 0; i < keys.length; i++) {
-            if (avaliabeRanks[keys[i]].points > oldPoints) {
-                nextRank = avaliabeRanks[keys[i]];
-                break;
-            }
-        }
-        if(!nextRank) {
-            return;
-        }
-        if (nextRank.points <= newPoints) {
-            member.addRole(member.guild.roles.get(nextRank.roleId));
-            Utils.reply(message, `Bravo <@!${member.id}> tu as maintenant accès à un nouveau rang: **${nextRank.name}**.`);
-        }
+
+		members.forEach((member) => {
+			var clanId = Clans.getPlayerClan(member).id;
+			var player = Players.getPlayer(member.id, clanId)
+			var oldPoints = 0;
+			if (player)
+				oldPoints = player.points;
+			if (!oldPoints)
+				oldPoints = 0;
+			var newPoints = oldPoints + points
+			Players.setPoints(member.id, clanId, newPoints);
+			var playerClan = Clans.getPlayerClan(member);
+			var avaliabeRanks = Ranks.getRanks(playerClan.id);
+			var keys = Ranks.getSortedKeys(playerClan.id);
+			var nextRank = null;
+			for (var i = 0; i < keys.length; i++) {
+				if (avaliabeRanks[keys[i]].points > oldPoints) {
+					nextRank = avaliabeRanks[keys[i]];
+					break;
+				}
+			}
+			if(!nextRank) {
+				return;
+			}
+			if (nextRank.points <= newPoints) {
+				member.addRole(member.guild.roles.get(nextRank.roleId));
+				Utils.reply(message, `Bravo <@!${member.id}> tu as maintenant accès à un nouveau rang: **${nextRank.name}**.`);
+			}
+		});
+
+		if (members.array().length > 1) {Utils.reply(message, 'Les points des joueurs ont bien été modifiés.');}
+		else {Utils.reply(message, 'Les points du joueur ont bien été modifiés.');}
     }
 }
