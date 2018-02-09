@@ -56,7 +56,11 @@ module.exports = {
 			}
 		});
 
-		if (members.array().length > 1) {Utils.reply(message, 'Les points des joueurs ont bien été modifiés.');}
-		else {Utils.reply(message, 'Les points du joueur ont bien été modifiés.');}
+		if (members.array().length > 1) {
+			Utils.reply(message, 'Les points des joueurs ont bien été modifiés.');
+		}
+		else {
+			Utils.reply(message, 'Les points du joueur ont bien été modifiés.');
+		}
     }
 }
