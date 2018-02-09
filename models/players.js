@@ -42,8 +42,7 @@ module.exports = {
     setCooldown: function (guildMember) {
         if (!players[guildMember.id]) {
             players[guildMember.id] = {
-                id: guildMember.id,
-                id: id
+                id: guildMember.id
             }
         }
         players[guildMember.id].cooldown = new Date();
