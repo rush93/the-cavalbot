@@ -7,8 +7,8 @@ var Constants = require('../models/constants');
 module.exports = {
     role: 'SEND_MESSAGES',
     helpCat: 'Permet de changer le rang actif.',
-    help: function(message) {
-        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande setrang", "", message.author, [{
+    help: function (message) {
+        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande setrang", "", message.author, [{
             title: Constants.prefix + 'setrang <rang>',
             text: "Permet de changer le rang actif.",
             grid: false
@@ -26,9 +26,9 @@ module.exports = {
             return;
         }
         var player = Players.getPlayer(message.member.id, clan.id);
-        if(!player || player.points < rang.points) {
+        if (!player || player.points < rang.points) {
             Utils.reply(message, `Vous n'avez pas assez de points pour rejoindre le clan **${rang.name}**,
-il vous en faut **${rang.points}** et vous en avez **${ (player && player.points) ? player.points : 0 }**.`, true);
+il vous en faut **${rang.points}** et vous en avez **${(player && player.points) ? player.points : 0}**.`, true);
             return;
         }
         var promise = Players.setActiveRank(message.member, rang);

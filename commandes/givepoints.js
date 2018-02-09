@@ -5,27 +5,27 @@ var Ranks = require('../models/ranks');
 var Clans = require('../models/clans');
 var Constants = require('../models/constants');
 module.exports = {
-    role: 'MANAGE_GUILD',
-    helpCat: 'Permet de donner des points à un joueur.',
-    help: function(message) {
-        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande givepoints", "", message.author, [{
-            title: Constants.prefix + 'givepoints <points>',
-            text: "Permet de donner des points à un joueur.",
-            grid: false
-        }]);
-    },
-    runCommand: (args, message) => {
-        var members = message.mentions.members;
-        if (members.array().length === 0) {
-            Utils.reply(message, "Vous devez mensionnez au moins un utilisateur", true);
-            return;
-        }
+	role: 'MANAGE_GUILD',
+	helpCat: 'Permet de donner des points à un joueur.',
+	help: function (message) {
+		Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande givepoints", "", message.author, [{
+			title: Constants.prefix + 'givepoints <points>',
+			text: "Permet de donner des points à un joueur.",
+			grid: false
+		}]);
+	},
+	runCommand: (args, message) => {
+		var members = message.mentions.members;
+		if (members.array().length === 0) {
+			Utils.reply(message, "Vous devez mensionnez au moins un utilisateur", true);
+			return;
+		}
 
-        var points = Number(args[args.length - 1]);
-        if(isNaN(points)) {
-            Utils.reply(message, 'Le nombre de points dois être un nombre.', true);
-            return;
-        }
+		var points = Number(args[args.length - 1]);
+		if (isNaN(points)) {
+			Utils.reply(message, 'Le nombre de points dois être un nombre.', true);
+			return;
+		}
 
 		members.forEach((member) => {
 			var clanId = Clans.getPlayerClan(member).id;
@@ -47,7 +47,7 @@ module.exports = {
 					break;
 				}
 			}
-			if(!nextRank) {
+			if (!nextRank) {
 				return;
 			}
 			if (nextRank.points <= newPoints) {
@@ -62,5 +62,5 @@ module.exports = {
 		else {
 			Utils.reply(message, 'Les points du joueur ont bien été modifiés.');
 		}
-    }
+	}
 }

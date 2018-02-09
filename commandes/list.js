@@ -5,8 +5,8 @@ var Constants = require('../models/constants');
 module.exports = {
     role: 'SEND_MESSAGES',
     helpCat: 'Permet d\'afficher la liste des clans',
-    help: function(message) {
-        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande list", "", message.author, [{
+    help: function (message) {
+        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande list", "", message.author, [{
             title: Constants.prefix + 'list',
             text: "Permet d\'afficher la liste des clans",
             grid: false
@@ -23,6 +23,6 @@ module.exports = {
                 grid: true
             });
         }
-        Utils.sendEmbed(message,0xE8C408,"Liste des clans","",message.author,fields);
+        Utils.sendEmbed(message, 0xE8C408, "Liste des clans", "", message.author, fields);
     }
 }

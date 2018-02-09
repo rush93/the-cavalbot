@@ -7,8 +7,8 @@ var Constants = require('../models/constants');
 module.exports = {
     role: 'SEND_MESSAGES',
     helpCat: 'Permet de changer son btag.',
-    help: function(message) {
-        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande btag", "", message.author, [{
+    help: function (message) {
+        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande btag", "", message.author, [{
             title: Constants.prefix + 'btag <btag>',
             text: "Permet de changer son btag.",
             grid: false

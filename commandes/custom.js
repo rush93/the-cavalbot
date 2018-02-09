@@ -7,8 +7,8 @@ var Constants = require('../models/constants');
 module.exports = {
     role: 'SEND_MESSAGES',
     helpCat: 'Permet de customiser le nom du rang actif.',
-    help: function(message) {
-        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande custom", "", message.author, [{
+    help: function (message) {
+        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande custom", "", message.author, [{
             title: Constants.prefix + 'custom <nom>',
             text: "Permet de customiser le nom du rang actif",
             grid: false
@@ -25,7 +25,7 @@ module.exports = {
             Utils.reply(message, "Vous n'avez pas de rang actif.", true);
             return;
         }
-        var rank = Ranks.getRank(clan.id, player.activeRank ? player.activeRank.name: '' );
+        var rank = Ranks.getRank(clan.id, player.activeRank ? player.activeRank.name : '');
         if (!rank) {
             Utils.reply(message, "Vous n'avez pas de rang actif.", true);
             return;

@@ -29,8 +29,8 @@ function load() {
 var getSortedKeys = function (clanId) {
     var clanRanks = ranks[clanId];
     if (!clanRanks) return [];
-    return Object.keys(clanRanks).sort( function(a,b) {
-        return clanRanks[a].points-clanRanks[b].points
+    return Object.keys(clanRanks).sort(function (a, b) {
+        return clanRanks[a].points - clanRanks[b].points
     });
 };
 module.exports = {
@@ -52,14 +52,14 @@ module.exports = {
         save();
     },
     delete: function (clanId, name) {
-        if (!ranks[clanId] )
+        if (!ranks[clanId])
             return false;
         delete ranks[clanId][name];
         save();
         return true;
     },
     getRank: function (clanId, name) {
-        if(!ranks[clanId])
+        if (!ranks[clanId])
             return null;
         return ranks[clanId][name];
     },
@@ -67,7 +67,7 @@ module.exports = {
         return ranks[clanId];
     },
     getRankOfPlayer: function (guildMember) {
-        var clan  = Clans.getPlayerClan(guildMember);
+        var clan = Clans.getPlayerClan(guildMember);
         if (!clan) return [];
         var sortedRanks = getSortedKeys(clan.id);
         (guildMember.id);
@@ -77,14 +77,14 @@ module.exports = {
         }
         var playerRanks = [];
         for (var i = 0; i < sortedRanks.length; i++) {
-            if ( ranks[clan.id][sortedRanks[i]].points > player.points ) {
+            if (ranks[clan.id][sortedRanks[i]].points > player.points) {
                 break;
             }
             playerRanks.push(ranks[clan.id][sortedRanks[i]]);
         }
         return playerRanks;
     },
-    getSortedKeys, 
+    getSortedKeys,
     setPoints: function (clanId, name, points) {
         if (!ranks[clanId]) {
             return false;

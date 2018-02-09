@@ -16,7 +16,7 @@ var commands = {
                 return;
             }
             Ranks.create(role.id, name);
-            Utils.reply(message,'Le clan a bien été créé.');
+            Utils.reply(message, 'Le clan a bien été créé.');
         }
     },
     delete: {
@@ -30,7 +30,7 @@ var commands = {
                 return;
             }
             Ranks.delete(role.id, name);
-            Utils.reply(message,'Le rang a bien été supprimé.');
+            Utils.reply(message, 'Le rang a bien été supprimé.');
         }
     },
     setpoints: {
@@ -44,7 +44,7 @@ var commands = {
                 return;
             }
             var points = Number(args[0]);
-            if(isNaN(points)) {
+            if (isNaN(points)) {
                 Utils.reply(message, 'Le nombre de points dois être un nombre.', true);
                 return;
             }
@@ -63,7 +63,7 @@ var commands = {
                 Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
                 return;
             }
-            if(!args[0]) {
+            if (!args[0]) {
                 Utils.reply(message, 'Vous devez mettre un smiley.', true);
                 return;
             }
@@ -82,12 +82,12 @@ var commands = {
                 Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
                 return;
             }
-            if(args[0].toLowerCase() !== "true" && args[0].toLowerCase() !== "false") {
+            if (args[0].toLowerCase() !== "true" && args[0].toLowerCase() !== "false") {
                 Utils.reply(message, "la valeur dois être 'true' ou 'false'.", true);
                 return;
             }
             Ranks.setIsCustomable(role.id, name, args[0].toLowerCase() === "true");
-            Utils.reply(message, "Le rang est maintenant " + (args[0].toLowerCase() === "true" ? 'customisable': 'non customisable')  + ".");
+            Utils.reply(message, "Le rang est maintenant " + (args[0].toLowerCase() === "true" ? 'customisable' : 'non customisable') + ".");
             return;
         }
     },
@@ -122,7 +122,7 @@ var help = function (message) {
             grid: false
         });
     });
-    Utils.sendEmbed(message, 0x00AFFF,'Liste des commandes des rangs', "", message.author, fields);
+    Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des rangs', "", message.author, fields);
 }
 module.exports = {
     role: 'MANAGE_GUILD',
@@ -133,13 +133,13 @@ module.exports = {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les rangs", true);
             return;
         }
-        if(args.length < 2) {
+        if (args.length < 2) {
             help(message);
             return;
         }
         var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
         args = reg[2].trim().split(' ');
-        var roleName = reg[1].replace(/"/g,'');
+        var roleName = reg[1].replace(/"/g, '');
         var role = Clans.getRoleByName(roleName, message.channel.guild);
         if (!role) {
             Utils.reply(message, "Aucuns role avec ce nom", true);
@@ -147,7 +147,7 @@ module.exports = {
         }
         var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
         args = reg[2].trim().split(' ');
-        var name = reg[1].replace(/"/g,'');
+        var name = reg[1].replace(/"/g, '');
         if (commands[args[0]]) {
             var label = args[0];
             args.shift();

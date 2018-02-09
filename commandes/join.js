@@ -6,8 +6,8 @@ var Constants = require('../models/constants');
 module.exports = {
     role: 'SEND_MESSAGES',
     helpCat: 'Permet de rejoindre un clan',
-    help: function(message) {
-        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande join", "", message.author, [{
+    help: function (message) {
+        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande join", "", message.author, [{
             title: Constants.prefix + 'join <@clan>',
             text: "Permet de rejoindre un clan",
             grid: false

@@ -50,7 +50,7 @@ module.exports = {
         };
         save();
     },
-    getPlayerClan: function(guildMember) {
+    getPlayerClan: function (guildMember) {
         var roles = guildMember.roles;
 
         var playerRole = null;
@@ -111,11 +111,11 @@ module.exports = {
         var fail = true;
         player.roles.forEach((role) => {
             if (!fail) return;
-            if(role.id === guildRole.id) {
+            if (role.id === guildRole.id) {
                 fail = false;
                 player.removeRole(guildRole, reason);
                 if (Constants.leavemessage !== 'no' && clans[guildRole.id].channel) {
-                    var message = Utils.replaceModifier(Constants.leavemessage, clans[guildRole.id],player ,null, null);
+                    var message = Utils.replaceModifier(Constants.leavemessage, clans[guildRole.id], player, null, null);
                     guildRole.guild.channels.get(clans[guildRole.id].channel).send(message);
                 }
             }
@@ -126,7 +126,7 @@ module.exports = {
         return guild.roles.get(clanId);
     },
     getRoleByName: function (name, guild) {
-        if ( clansMap[name] ) {
+        if (clansMap[name]) {
             return guild.roles.get(clansMap[name]);
         }
         var role = guild.roles.find('name', name);

@@ -52,20 +52,20 @@ module.exports = {
         return players[id] ? players[id][clanId] : null;
     },
     setPoints: function (id, clanId, points) {
-        if (!players[id] ) {
+        if (!players[id]) {
             players[id] = {
                 id: id
             }
         }
         if (!players[id][clanId]) {
-            players[id][clanId] = { 
+            players[id][clanId] = {
                 id: id
             };
         }
         players[id][clanId].points = points;
         save();
     },
-    setActiveRank: function(guildMember, rank) {
+    setActiveRank: function (guildMember, rank) {
         if (!players[guildMember.id]) {
             players[guildMember.id] = {
                 id: guildMember.id
@@ -97,7 +97,7 @@ module.exports = {
             return guildMember.setNickname(nickname);
         }
     },
-    setDisplayRank: function(guildMember, rank, displayName) {
+    setDisplayRank: function (guildMember, rank, displayName) {
         clanId = Clans.getPlayerClan(guildMember).id;
         if (!players[guildMember.id] || !players[guildMember.id][clanId]) {
             return;
@@ -119,9 +119,9 @@ module.exports = {
             return guildMember.setNickname(nickname);
         }
     },
-    resetRank: function(guildMember) {
+    resetRank: function (guildMember) {
         clanId = Clans.getPlayerClan(guildMember);
-        if (!players[guildMember.id] || !players[guildMember.id][clanId]) {
+        if (!players[guildMember.id] ||  !players[guildMember.id][clanId]) {
             return;
         }
         players[guildMember.id][clanId].activeRank = null;
@@ -133,10 +133,10 @@ module.exports = {
             return guildMember.setNickname(guildMember.user.username);
         }
     },
-    getPlayers: function() {
+    getPlayers: function () {
         return players;
     },
-    setBtag: function(id, btag) {
+    setBtag: function (id, btag) {
         return new Promise((resolve, reject) => {
             if (!players[id]) {
                 players[id] = {
@@ -145,13 +145,13 @@ module.exports = {
             }
             players[id].btag = btag;
             save();
-            console.log(`https://owapi.net/api/v3/u/${ btag.replace('#', '-') }/blob`);
+            console.log(`https://owapi.net/api/v3/u/${btag.replace('#', '-')}/blob`);
             request({
-                url: `https://owapi.net/api/v3/u/${ btag.replace('#', '-') }/blob`,
+                url: `https://owapi.net/api/v3/u/${btag.replace('#', '-')}/blob`,
                 headers: {
                     'User-Agent': 'the cavalry discord bot'
                 }
-            },  (error, response, body) => {
+            }, (error, response, body) => {
                 if (error) {
                     reject();
                     return;
@@ -170,10 +170,10 @@ module.exports = {
             });
         });
     },
-    getBtag: function(id) {
+    getBtag: function (id) {
         return players[id].btag
     },
-    setPsn: function(id, psn) {
+    setPsn: function (id, psn) {
         return new Promise((resolve, reject) => {
             if (!players[id]) {
                 players[id] = {
@@ -183,11 +183,11 @@ module.exports = {
             players[id].psn = psn;
             save();
             request({
-                url: `https://owapi.net/api/v3/u/${ psn }/blob?platform=psn`,
+                url: `https://owapi.net/api/v3/u/${psn}/blob?platform=psn`,
                 headers: {
                     'User-Agent': 'the cavalry discord bot'
                 }
-            },  (error, response, body) => {
+            }, (error, response, body) => {
                 if (error) {
                     console.log(error);
                     reject();
@@ -206,16 +206,16 @@ module.exports = {
             });
         });
     },
-    getPsn: function(id) {
+    getPsn: function (id) {
         return players[id].psn
     },
-    getComprank: function(id) {
+    getComprank: function (id) {
         if (!players[id].comprank) {
             return null;
         }
         var btag = players[id].btag;
         request({
-            url: `https://owapi.net/api/v3/u/${ btag.replace('#', '-') }/blob`,
+            url: `https://owapi.net/api/v3/u/${btag.replace('#', '-')}/blob`,
             headers: {
                 'User-Agent': 'the cavalry discord bot'
             }
@@ -234,13 +234,13 @@ module.exports = {
         var diff = moment.duration(moment().diff(players[id].lastUpdate)).humanize();
         return players[id].comprank + ` (il y a ${diff})`;
     },
-    getPsnComprank: function(id) {
+    getPsnComprank: function (id) {
         if (!players[id].psncomprank) {
             return null;
         }
         var psn = players[id].psn;
         request({
-            url: `https://owapi.net/api/v3/u/${ psn }/blob?platform=psn`,
+            url: `https://owapi.net/api/v3/u/${psn}/blob?platform=psn`,
             headers: {
                 'User-Agent': 'the cavalry discord bot'
             }
@@ -259,8 +259,8 @@ module.exports = {
         var diff = moment.duration(moment().diff(players[id].lastUpdate)).humanize();
         return players[id].psncomprank + ` (il y a ${diff})`;
     },
-    setTempClanToJoin: function(id, clan, code) {
-        if (!players[id] ) {
+    setTempClanToJoin: function (id, clan, code) {
+        if (!players[id]) {
             players[id] = {
                 id: id
             }

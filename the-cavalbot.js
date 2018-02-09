@@ -50,18 +50,18 @@ bot.on('ready', function () {
 });
 
 bot.on('message', function (message) {
-  if (message.author.bot ) {
+  if (message.author.bot) {
     return;
   }
-  if(message.channel.constructor.name === 'DMChannel') {
+  if (message.channel.constructor.name === 'DMChannel') {
     console.log('DM MESSAGE:' + message.content);
     var player = players.getPlayers()[message.author.id];
-    if( player && player.tempCode) {
+    if (player && player.tempCode) {
       if (player.tempCode === Number(message.content)) {
         var role = clans.getRole(player.tempGuild, guild);
         var clan = clans.addPlayer(role, guild.members.get(player.id), 'à rejoins via le site');
         players.setTempClanToJoin(message.author.id, null, null);
-        if( !clan) {
+        if (!clan) {
           Utils.reply(message, 'Vous êtes deja dans un clan.', true);
           return;
         }
@@ -134,7 +134,7 @@ app.get('/choice', (req, res) => {
     res.render('choice', { title: 'Hey', clans: clans.clans, Clans: clans, guild, user: user })
   } else if (username) {
     var member = guild.members.find(val => {
-      return val.user.username === username || val.user.tag === username
+      return val.user.username === username ||  val.user.tag === username
     });
     if (member) {
       res.render('choice', { title: 'Hey', clans: clans.clans, Clans: clans, guild, user: member.id })
@@ -161,7 +161,7 @@ app.get('/clan', (req, res) => {
   member.sendMessage("Une demande pour rejoindre le clan " + clans.getRole(clanId, guild).name + " a été faite, veuillez entrer le code de sécurité. Si cette demande n'as pas été faite par vous merci d'ignorer ce message.");
   var tempCode = Math.floor((Math.random() * 100000) + 1000);
   players.setTempClanToJoin(userId, clanId, tempCode);
-  res.render('confirmCode', {code: tempCode});
+  res.render('confirmCode', { code: tempCode });
 });
 
 app.listen(3000, () => console.log('The web server running on port 3000!'))

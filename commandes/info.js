@@ -5,7 +5,7 @@ var Ranks = require('../models/ranks');
 var Clans = require('../models/clans');
 var Constants = require('../models/constants');
 
-var displayRoleOfClan= function (message, role) {
+var displayRoleOfClan = function (message, role) {
     var ranks = Ranks.getSortedKeys(role.id);
     var clan = Clans.getClan(role);
     var fields = [
@@ -33,7 +33,7 @@ var displayRoleOfClan= function (message, role) {
 
 var displayRoleOfMember = function (message, member) {
     var clan = Clans.getPlayerClan(member);
-    if(!clan) {
+    if (!clan) {
         Utils.reply(message, 'Vous devez rejoindre un clan.', true);
         return;
     }
@@ -61,20 +61,20 @@ var displayRoleOfMember = function (message, member) {
         var comprank = Players.getComprank(globalPlayer.id);
     }
     Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
-    `**Clan:** ${role.name}
+        `**Clan:** ${role.name}
 **Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btag ? '' : `
 **Battle tag:** ${btag}`) + (!psn ? '' : `
 **PSN:** ${psn}`) + (!comprank ? '' : `
 **Points de compétitions:** ${comprank}`) + (!psncomprank ? '' : `
 **Points de compétitions psn:** ${psncomprank}`)
-    , message.author, fields, clan.image);
+        , message.author, fields, clan.image);
     return;
 }
 module.exports = {
     role: 'SEND_MESSAGES',
     helpCat: 'Donne plus d\'info sur une personne ou un clan.',
-    help: function(message) {
-        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande rang", "", message.author, [{
+    help: function (message) {
+        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande rang", "", message.author, [{
             title: Constants.prefix + 'info [clan|@membre]',
             text: "Donne plus d\'info sur une personne ou un clan.",
             grid: false
@@ -83,7 +83,7 @@ module.exports = {
     runCommand: (args, message) => {
         var role = Clans.getRoleByName(args.join(' '), message.channel.guild);
         var member = message.mentions.members.first();
-        if(!role && !member) {
+        if (!role && !member) {
             var member = message.member;
         }
         if (member) {

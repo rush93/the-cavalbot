@@ -10,12 +10,12 @@ var commands = {
         ],
         args: '',
         runCommand: (clan, args, message) => {
-            if(Clans.getClan(clan)) {
+            if (Clans.getClan(clan)) {
                 Utils.reply(message, 'Un clan avec ce role à déjà été créé.', true);
                 return;
             }
             Clans.createClan(clan);
-            Utils.reply(message,'Le clan a bien été créé.')
+            Utils.reply(message, 'Le clan a bien été créé.')
         }
     },
     delete: {
@@ -24,12 +24,12 @@ var commands = {
         ],
         args: '',
         runCommand: (clan, args, message) => {
-            if(!Clans.getClan(clan)) {
+            if (!Clans.getClan(clan)) {
                 Utils.reply(message, 'Aucuns clan avec ce role.', true);
                 return;
             }
             Clans.deleteClan(clan);
-            Utils.reply(message,'Le clan a bien été supprimé.')
+            Utils.reply(message, 'Le clan a bien été supprimé.')
         }
     },
     setdesc: {
@@ -38,12 +38,12 @@ var commands = {
         ],
         args: '<description>',
         runCommand: (clan, args, message) => {
-            if(!Clans.getClan(clan)) {
+            if (!Clans.getClan(clan)) {
                 Utils.reply(message, 'Aucuns clan avec ce role.', true);
                 return;
             }
             Clans.setDescription(clan, args.join(' '));
-            Utils.reply(message,'La description a bien été changée.');
+            Utils.reply(message, 'La description a bien été changée.');
         }
     },
     setimage: {
@@ -52,12 +52,12 @@ var commands = {
         ],
         args: '<url>',
         runCommand: (clan, args, message) => {
-            if(!Clans.getClan(clan)) {
+            if (!Clans.getClan(clan)) {
                 Utils.reply(message, 'Aucuns clan avec ce role.', true);
                 return;
             }
             Clans.setImage(clan, args.join(' '));
-            Utils.reply(message,'L\'image a bien été changée.');
+            Utils.reply(message, 'L\'image a bien été changée.');
         }
     },
     setchannel: {
@@ -66,7 +66,7 @@ var commands = {
         ],
         args: '<#channel>',
         runCommand: (clan, args, message) => {
-            if(!Clans.getClan(clan)) {
+            if (!Clans.getClan(clan)) {
                 Utils.reply(message, 'Aucuns clan avec ce role.', true);
                 return;
             }
@@ -76,7 +76,7 @@ var commands = {
                 return;
             }
             Clans.setChannel(clan, channel);
-            Utils.reply(message,'Le channel a bien été changé.');
+            Utils.reply(message, 'Le channel a bien été changé.');
         }
     },
     setsmiley: {
@@ -85,12 +85,12 @@ var commands = {
         ],
         args: '<:smiley:>',
         runCommand: (clan, args, message) => {
-            if(!Clans.getClan(clan)) {
+            if (!Clans.getClan(clan)) {
                 Utils.reply(message, 'Aucuns clan avec ce role.', true);
                 return;
             }
             Clans.setSmiley(clan, args.join(' '));
-            Utils.reply(message,'Le smiley a bien été changée.');
+            Utils.reply(message, 'Le smiley a bien été changée.');
         }
     },
     addplayer: {
@@ -99,7 +99,7 @@ var commands = {
         ],
         args: '<@player>',
         runCommand: (clan, args, message) => {
-            if(!Clans.getClan(clan)) {
+            if (!Clans.getClan(clan)) {
                 Utils.reply(message, 'Aucuns clan avec ce role.', true);
                 return;
             }
@@ -110,11 +110,11 @@ var commands = {
             }
             var clanAdded = Clans.addPlayer(clan, user, "Ajout manuel de " + message.author.name);
             if (!clanAdded) {
-                Utils.reply(message,'Le joueur est déjà dans un clan veuillez l\'enlever en premier.', true );
+                Utils.reply(message, 'Le joueur est déjà dans un clan veuillez l\'enlever en premier.', true);
                 return
             }
             Players.setCooldown(user);
-            Utils.reply(message,'Le joueur a bien été ajouté dans le clan.' );
+            Utils.reply(message, 'Le joueur a bien été ajouté dans le clan.');
         }
     },
     delplayer: {
@@ -123,7 +123,7 @@ var commands = {
         ],
         args: '<@player>',
         runCommand: (clan, args, message) => {
-            if(!Clans.getClan(clan)) {
+            if (!Clans.getClan(clan)) {
                 Utils.reply(message, 'Aucuns clan avec ce role.', true);
                 return;
             }
@@ -134,14 +134,14 @@ var commands = {
             }
             var clanRemoved = Clans.removePlayer(clan, user, "Supression manuel de " + message.author.name);
             if (!clanRemoved) {
-                Utils.reply(message,'Le joueur n\'est pas dans ce clan.', true );
+                Utils.reply(message, 'Le joueur n\'est pas dans ce clan.', true);
                 return;
             }
             if (Constants.resetRankWhenChangeClan) {
-                Players.setPoints(user.id, clanRemoved.id , 0);
+                Players.setPoints(user.id, clanRemoved.id, 0);
             }
             Players.resetRank(user.id);
-            Utils.reply(message,'Le joueur a bien été supprimé du clan.' );
+            Utils.reply(message, 'Le joueur a bien été supprimé du clan.');
         }
     }
 }
@@ -155,7 +155,7 @@ var help = function (message) {
             grid: false
         });
     });
-    Utils.sendEmbed(message, 0x00AFFF,'Liste des commandes des clans', "", message.author, fields);
+    Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des clans', "", message.author, fields);
 }
 module.exports = {
     role: 'MANAGE_GUILD',
@@ -166,13 +166,13 @@ module.exports = {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les clans", true);
             return;
         }
-        if(args.length < 2) {
+        if (args.length < 2) {
             help(message);
             return;
         }
         var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
         args = reg[2].trim().split(' ');
-        var name = reg[1].replace(/"/g,'');
+        var name = reg[1].replace(/"/g, '');
         var role = Clans.getRoleByName(name, message.channel.guild);
         if (!role) {
             Utils.reply(message, "Aucuns role avec ce nom", true);

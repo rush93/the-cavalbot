@@ -6,7 +6,7 @@ module.exports = {
         embed.setColor(error ? 0xA80000 : 0x00AFFF);
         embed.setDescription(toSend);
         embed.setFooter(message.author.username + "#" + message.author.discriminator, message.author.avatarURL);
-        message.channel.send("",embed);
+        message.channel.send("", embed);
     },
     getHightRole: function (roles) {
         var hight;
@@ -20,7 +20,7 @@ module.exports = {
     canExecuteOn: function (author, user) {
         return getHightRole(author.roles).comparePositionTo(getHightRole(user.roles)) >= 0;
     },
-    sendEmbed: function(message, color, title, content, author, fields, image = null) {
+    sendEmbed: function (message, color, title, content, author, fields, image = null) {
         var embed;
         if (fields.length === 0) {
 
@@ -36,7 +36,7 @@ module.exports = {
             return;
         }
         for (var i = 0; i < fields.length; i++) {
-            if (i%10 === 0) {
+            if (i % 10 === 0) {
                 if (embed) {
                     message.channel.send("", embed);
                     embed = null;
@@ -64,13 +64,13 @@ module.exports = {
         input = input.replace(/%player%/g, playerName);
         if (player) {
             input = input.replace(/%rank%/g, player.activeRank ? player.activeRank.displayName : '');
-        
+
         }
         if (rank && rank.smiley) {
             input = input.replace(/%srank%/g, rank.smiley);
         }
         input = input.replace(/%clan%/g, clanName);
-        if(clan.smiley) {
+        if (clan.smiley) {
             input = input.replace(/%sclan%/g, clan.smiley);
         }
 

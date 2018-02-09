@@ -7,8 +7,8 @@ var Constants = require('../models/constants');
 module.exports = {
     role: 'MANAGE_GUILD',
     helpCat: 'Permet de retirer des points à un joueur.',
-    help: function(message) {
-        Utils.sendEmbed(message, 0x00AFFF,"Utilisation de la commande takepoints", "", message.author, [{
+    help: function (message) {
+        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande takepoints", "", message.author, [{
             title: Constants.prefix + 'takepoints <points>',
             text: "Permet de retirer des points à un joueur.",
             grid: false
@@ -21,7 +21,7 @@ module.exports = {
             return;
         }
         var points = Number(args[1]);
-        if(isNaN(points)) {
+        if (isNaN(points)) {
             Utils.reply(message, 'Le nombre de points dois être un nombre.', true);
             return;
         }
@@ -41,7 +41,7 @@ module.exports = {
                 break;
             }
         }
-        if(!nextRank) {
+        if (!nextRank) {
             return;
         }
         if (nextRank.points >= newPoints) {

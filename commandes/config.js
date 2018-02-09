@@ -14,12 +14,12 @@ var commands = {
                 return;
             }
             constants.prefix = args.join(' ');
-            Utils.reply(message,'Le préfix a bien été modifié.');
+            Utils.reply(message, 'Le préfix a bien été modifié.');
         }
     },
     pseudoModifier: {
         help: [
-            'Permet de changer le pseudo des joueurs en fonction de leurs rank', 
+            'Permet de changer le pseudo des joueurs en fonction de leurs rank',
             '**%rank%**le nom du rank',
             '**%srank%** le smiley du rank',
             '**%clan%** le nom du clan',
@@ -34,7 +34,7 @@ var commands = {
                 return;
             }
             constants.pseudoModifier = args.join(' ');
-            Utils.reply(message,'Le pseudo modifier a bien été modifié.');
+            Utils.reply(message, 'Le pseudo modifier a bien été modifié.');
         }
     },
     resetRankWhenChangeClan: {
@@ -47,12 +47,12 @@ var commands = {
                 Utils.reply(message, "**resetRankWhenChangeClan**: " + constants.resetRankWhenChangeClan);
                 return;
             }
-            if(args[0].toLowerCase() !== "true" && args[0].toLowerCase() !== "false") {
+            if (args[0].toLowerCase() !== "true" && args[0].toLowerCase() !== "false") {
                 Utils.reply(message, "la valeur dois être 'true' ou 'false'.", true);
                 return;
             }
             constants.resetRankWhenChangeClan = args[0].toLowerCase() === "true";
-            Utils.reply(message,'Le resetRankWhenChangeClan a bien été modifier.');
+            Utils.reply(message, 'Le resetRankWhenChangeClan a bien été modifier.');
         }
     },
     leaveCooldown: {
@@ -67,12 +67,12 @@ var commands = {
                 return;
             }
             var num = Number(args[0]);
-            if(isNaN(num)) {
+            if (isNaN(num)) {
                 Utils.reply(message, "la valeur dois être nombre.", true);
                 return;
             }
             constants.leaveCooldown = num;
-            Utils.reply(message,'Le leaveCooldown a bien été modifié.');
+            Utils.reply(message, 'Le leaveCooldown a bien été modifié.');
         }
     },
     joinmessage: {
@@ -89,7 +89,7 @@ var commands = {
                 return;
             }
             constants.joinmessage = args.join(' ');
-            Utils.reply(message,'Le joinmessage a bien été modifié.');
+            Utils.reply(message, 'Le joinmessage a bien été modifié.');
         }
     },
     leavemessage: {
@@ -106,7 +106,7 @@ var commands = {
                 return;
             }
             constants.leavemessage = args.join(' ');
-            Utils.reply(message,'Le leavemessage a bien été modifié.');
+            Utils.reply(message, 'Le leavemessage a bien été modifié.');
         }
     }
 }
@@ -121,7 +121,7 @@ var help = function (message) {
             grid: false
         });
     });
-    Utils.sendEmbed(message, 0x00AFFF,'Liste des commandes de config', "", message.author, fields);
+    Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes de config', "", message.author, fields);
 }
 
 module.exports = {

@@ -1,11 +1,11 @@
 var fs = require('fs');
 
-var constants = { 
+var constants = {
     prefix: "_",
-    pseudoModifier:  "Bonjour",
-    resetRankWhenChangeClan:  true,
-    leaveCooldown:  0,
-    joinmessage:  "no",
+    pseudoModifier: "Bonjour",
+    resetRankWhenChangeClan: true,
+    leaveCooldown: 0,
+    joinmessage: "no",
     leavemessage: "no"
 }
 
@@ -30,7 +30,7 @@ function load() {
 }
 
 module.exports = {
-    init: function() {
+    init: function () {
         return new Promise((resolve, reject) => {
             load()
                 .then(r => resolve(r))
