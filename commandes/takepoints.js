@@ -15,6 +15,10 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
+        if (!message.member.hasPermission("MANAGE_GUILD")) {
+            Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les clans", true);
+            return;
+        }
         var member = message.mentions.members.first();
         if (!member) {
             Utils.reply(message, "Vous devez mensionnez un utilisateur", true);

@@ -28,6 +28,10 @@ module.exports = {
 		}
 
 		members.forEach((member) => {
+			if (!message.member.hasPermission("MANAGE_GUILD")) {
+				Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les clans", true);
+				return;
+			}
 			var clanId = Clans.getPlayerClan(member).id;
 			var player = Players.getPlayer(member.id, clanId)
 			var oldPoints = 0;
