@@ -15,6 +15,12 @@ module.exports = {
 		}]);
 	},
 	runCommand: (args, message) => {
+
+        if (!message.member.hasPermission("MANAGE_GUILD")) {
+            Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les clans", true);
+            return;
+		}
+		
 		var members = message.mentions.members;
 		if (members.array().length === 0) {
 			Utils.reply(message, "Vous devez mensionnez au moins un utilisateur", true);
@@ -28,10 +34,6 @@ module.exports = {
 		}
 
 		members.forEach((member) => {
-			if (!message.member.hasPermission("MANAGE_GUILD")) {
-				Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les clans", true);
-				return;
-			}
 			var clanId = Clans.getPlayerClan(member).id;
 			var player = Players.getPlayer(member.id, clanId)
 			var oldPoints = 0;
