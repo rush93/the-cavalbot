@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const Utils = require('../utils');
 var Clans = require('../models/clans');
+var Players = require('../models/players');
 var Constants = require('../models/constants');
 module.exports = {
     role: 'SEND_MESSAGES',
@@ -13,13 +14,29 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        var keys = Object.keys(Clans.clans);
         var fields = [];
+        var scores = {};
+        var players = Players.getPlayers();
+        var PlayerKeys = Object.keys(players);
+        for (var i = 0; i < PlayerKeys.length; i++) {
+            var objectKeys = Object.keys(players[PlayerKeys[i]]);
+            for (var j = 0; j < objectKeys.length; j++) {
+                if (typeof(players[PlayerKeys[i]][objectKeys[j]]) === "object") {
+                    if (!scores[objectKeys[j]]) {
+                        scores[objectKeys[j]] = 0;
+                    }
+                    scores[objectKeys[j]]+= players[PlayerKeys[i]][objectKeys[j]].points;
+                }
+            }
+        }
+        var keys = Object.keys(Clans.clans);
         for (var i = 0; i < keys.length; i++) {
             var guildRole = message.guild.roles.get(keys[i])
             fields.push({
                 title: guildRole.name,
-                text: Clans.getClan(guildRole).description ? Clans.getClan(guildRole).description : 'Aucune description',
+                text: `**Nombre de joueurs:** ${guildRole.members.array().length}
+**Score du clan:** ${scores[guildRole.id] ? scores[guildRole.id] : 0}
+${Clans.getClan(guildRole).description ? Clans.getClan(guildRole).description : ''}`,
                 grid: true
             });
         }

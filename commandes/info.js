@@ -8,10 +8,22 @@ var Constants = require('../models/constants');
 var displayRoleOfClan = function (message, role) {
     var ranks = Ranks.getSortedKeys(role.id);
     var clan = Clans.getClan(role);
+    var totalPoints = 0;
+    var players = Players.getPlayers();
+    var keys = Object.keys(players);
+    for (var i = 0; i < keys.length; i++) {
+        if(players[keys[i]] && players[keys[i]][clan.id]) {
+            totalPoints+=players[keys[i]][clan.id].points;
+        }
+    }
     var fields = [
         {
             title: "Nombre de personnes",
             text: role.members.array().length,
+            grid: true
+        }, {
+            title: "Total de points",
+            text: totalPoints,
             grid: true
         }, {
             title: "Rangs",
@@ -65,8 +77,8 @@ var displayRoleOfMember = function (message, member) {
 **Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btag ? '' : `
 **Battle tag:** ${btag}`) + (!psn ? '' : `
 **PSN:** ${psn}`) + (!comprank ? '' : `
-**Points de compétitions:** ${comprank}`) + (!psncomprank ? '' : `
-**Points de compétitions psn:** ${psncomprank}`)
+**cote:** ${comprank}`) + (!psncomprank ? '' : `
+**cote PSN:** ${psncomprank}`)
         , message.author, fields, clan.image);
     return;
 }

@@ -194,6 +194,9 @@ module.exports = {
                     return;
                 }
                 var result = JSON.parse(body);
+                if (!result || !result.any || !result.any.stats) {
+                    reject();
+                }
                 if (result.any && result.any.stats && result.any.stats.competitive && result.any.stats.competitive.overall_stats && result.any.stats.competitive.overall_stats.comprank) {
                     players[id].psncomprank = result.any.stats.competitive.overall_stats.comprank;
                     players[id].lastUpdate = new Date();
