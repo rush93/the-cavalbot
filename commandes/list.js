@@ -25,7 +25,9 @@ module.exports = {
                     if (!scores[objectKeys[j]]) {
                         scores[objectKeys[j]] = 0;
                     }
-                    scores[objectKeys[j]]+= players[PlayerKeys[i]][objectKeys[j]].points;
+                    if (players[PlayerKeys[i]][objectKeys[j]]) {
+                        scores[objectKeys[j]]+= players[PlayerKeys[i]][objectKeys[j]].points;
+                    }
                 }
             }
         }
