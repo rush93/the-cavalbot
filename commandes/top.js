@@ -68,7 +68,7 @@ module.exports = {
         for (var i = nbPerPage * (page - 1); i < sortedPlayers.length && i < nbPerPage * page; i++) {
             var guildMember = role.members.get(sortedPlayers[i].id);
             fields.push({
-                title: guildMember.nickname ? guildMember.nickname : guildMember.user.username,
+                title: ((i + 1) === 1 ? '1er: ' : (i+1) +'e: ') + (guildMember.nickname ? guildMember.nickname : guildMember.user.username),
                 text: (sortedPlayers[i].points ? sortedPlayers[i].points : 0) + " points",
                 grid: true
             });
