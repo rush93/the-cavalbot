@@ -26,7 +26,11 @@ module.exports = {
             Utils.reply(message, "Vous n'êtes pas dans un clan.", true);
             return;
         }
-        var lastJoin = Players.getPlayer(message.member.id, clan.id) ? Players.getPlayer(message.member.id, clan.id).cooldown : null;
+        if (Constants.leaveCooldown === -1 ) {
+            Utils.reply(message, "Vous ne pouvez pas quitter de clans.", true);
+            return;
+        }
+        var lastJoin = Players.getPlayers()[message.member.id] ? Players.getPlayers()[message.member.id].cooldown : null;
         if (lastJoin) {
             lastJoin = moment(lastJoin);
             var now = moment();

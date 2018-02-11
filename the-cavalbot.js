@@ -36,6 +36,7 @@ var commands = {
   takepoints: takepointsCommands,
   list: listclanCommands,
   info: infoClanCommands,
+  // top: topCommands,
   join: joinCommands,
   leave: leaveCommands,
   setrang: setrangCommands,
