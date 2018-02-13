@@ -19,8 +19,15 @@ module.exports = {
             Utils.reply(message, 'Vous devez mettre un psn', true);
             return;
         }
+
+        var psns = Players.getPsns(message.member.id)
+        if(psns && psns[args.join(' ')]) {
+            Players.setPsn(message.member.id, args.join(' '));
+            Utils.reply(message, 'Votre PSN a bien été supprimé.');
+            return;
+        }
         Players.setPsn(message.member.id, args.join(' ')).then(() => {
-            Utils.reply(message, 'Votre PSN a été mis à jours.');
+            Utils.reply(message, 'Votre PSN a été mis à jour.');
         }).catch((e) => {
             console.log(e);
             Utils.reply(message, 'Votre PSN est introuvable.');

@@ -19,8 +19,14 @@ module.exports = {
             Utils.reply(message, 'Vous devez mettre un btag', true);
             return;
         }
+        var btags = Players.getBtags(message.member.id)
+        if(btags && btags[args.join(' ')]) {
+            Players.setBtag(message.member.id, args.join(' '));
+            Utils.reply(message, 'Votre btag a bien été supprimé.');
+            return;
+        }
         Players.setBtag(message.member.id, args.join(' ')).then(() => {
-            Utils.reply(message, 'Votre battle tag a été mis à jours.');
+            Utils.reply(message, 'Votre battle tag a été mis à jour.');
         }).catch(() => {
             Utils.reply(message, 'Votre battle tag est introuvable.');
         });

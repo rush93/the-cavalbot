@@ -19,14 +19,14 @@ module.exports = {
         var players = Players.getPlayers();
         var PlayerKeys = Object.keys(players);
         for (var i = 0; i < PlayerKeys.length; i++) {
-            var objectKeys = Object.keys(players[PlayerKeys[i]]);
+            var objectKeys = Object.keys(players[PlayerKeys[i]].clans);
             for (var j = 0; j < objectKeys.length; j++) {
-                if (typeof(players[PlayerKeys[i]][objectKeys[j]]) === "object") {
+                if (typeof(players[PlayerKeys[i]].clans[objectKeys[j]]) === "object") {
                     if (!scores[objectKeys[j]]) {
                         scores[objectKeys[j]] = 0;
                     }
-                    if (players[PlayerKeys[i]][objectKeys[j]]) {
-                        scores[objectKeys[j]]+= players[PlayerKeys[i]][objectKeys[j]].points;
+                    if (players[PlayerKeys[i]].clans[objectKeys[j]]) {
+                        scores[objectKeys[j]]+= players[PlayerKeys[i]].clans[objectKeys[j]].points;
                     }
                 }
             }

@@ -12,8 +12,8 @@ var displayRoleOfClan = function (message, role) {
     var players = Players.getPlayers();
     var keys = Object.keys(players);
     for (var i = 0; i < keys.length; i++) {
-        if(players[keys[i]] && players[keys[i]][clan.id]) {
-            totalPoints+=players[keys[i]][clan.id].points;
+        if(players[keys[i]] && players[keys[i]].clans[clan.id]) {
+            totalPoints+=players[keys[i]].clans[clan.id].points;
         }
     }
     var fields = [
@@ -67,18 +67,39 @@ var displayRoleOfMember = function (message, member) {
     }
     var globalPlayer = Players.getPlayers()[member.id];
     if (globalPlayer) {
-        var btag = Players.getBtag(globalPlayer.id);
-        var psn = Players.getPsn(globalPlayer.id);
-        var psncomprank = Players.getPsnComprank(globalPlayer.id);
-        var comprank = Players.getComprank(globalPlayer.id);
+        var btagString = null;
+        var btagObjects = Players.getBtags(globalPlayer.id);
+        if (btagObjects) {
+            btagString = [];
+            var btags = Object.keys(btagObjects);
+            for (var i = 0; i < btags.length; i++) {
+                var str = btags[i];
+                if (btagObjects[btags[i]].comprank ) {
+                    str += ' (' + btagObjects[btags[i]].comprank + ')';
+                }
+                btagString.push(str);
+            }
+        }
+
+        var psnString = null;
+        var psnObjects = Players.getPsns(globalPlayer.id);
+        if (psnObjects) {
+            psnString = [];
+            var psns = Object.keys(psnObjects);
+            for (var i = 0; i < psns.length; i++) {
+                var str = psns[i];
+                if (psnObjects[psns[i]].psncomprank ) {
+                    str += ' (' + psnObjects[psns[i]].psncomprank + ')';
+                }
+                psnString.push(str);
+            }
+        }
     }
     Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
         `**Clan:** ${role.name}
-**Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btag ? '' : `
-**Battle tag:** ${btag}`) + (!psn ? '' : `
-**PSN:** ${psn}`) + (!comprank ? '' : `
-**cote:** ${comprank}`) + (!psncomprank ? '' : `
-**cote PSN:** ${psncomprank}`)
+**Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btagString || btagString.length <= 0 ? '' : `
+**Battle tag:** ${btagString.join(', ')}`) + (!psnString || psnString.length <= 0  ? '' : `
+**PSN:** ${psnString.join(', ')}`)
         , message.author, fields, clan.image);
     return;
 }
