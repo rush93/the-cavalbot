@@ -117,7 +117,7 @@ bot.on('message', function (message) {
           var embed = new Discord.RichEmbed({});
           embed.setColor(0x00AFFF);
           embed.setImage(image);
-          message.channel.send("", embed);
+          return message.channel.send("", embed);
         }
         request({
           url: url
@@ -129,7 +129,10 @@ bot.on('message', function (message) {
             return;
           } 
           var gif = "https://media.tenor.com/images/00631c571898fbaf0b75cedcbaf2135e/tenor.gif";
-          sendEmbedImage(gif);
+          sendEmbedImage(gif).then(message => {
+              message.delete(1000);
+          });
+          
         });
       }
     }
