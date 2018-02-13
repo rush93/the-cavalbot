@@ -140,7 +140,7 @@ var commands = {
             if (Constants.resetRankWhenChangeClan) {
                 Players.setPoints(user.id, clanRemoved.id, 0);
             }
-            Players.resetRank(user.id);
+            Players.resetRank(user.id, clanRemoved);
             Utils.reply(message, 'Le joueur a bien été supprimé du clan.');
         }
     }

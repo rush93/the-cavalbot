@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const Utils = require('./utils');
+var request = require('request');
 
 var token = require('./token');
 
@@ -105,6 +106,31 @@ bot.on('message', function (message) {
         args.shift();
         commands[label].runCommand(args, message);
         return;
+      }
+    } else {
+      var regex = /^(?:\*([^\*]*)\*)|^(?:\*([^ ]+))/;
+      var result = regex.exec(message.content);
+      if (result) {
+        var word = result[1] ? result[1] : result[2];
+        var url = `https://api.tenor.com/v1/random?media_filter=minimal&key=PLSS61YOD7KR&limit=1&q=anime%20${encodeURI(word)}`;
+        var sendEmbedImage = (image) => {
+          var embed = new Discord.RichEmbed({});
+          embed.setColor(0x00AFFF);
+          embed.setImage(image);
+          message.channel.send("", embed);
+        }
+        request({
+          url: url
+        }, function (error, response, body) {
+          var result = JSON.parse(body);
+          if (result.results && result.results.length > 0) {
+            var gif = result.results[0].media[0].mediumgif.url;
+            sendEmbedImage(gif);
+            return;
+          } 
+          var gif = "https://media.tenor.com/images/00631c571898fbaf0b75cedcbaf2135e/tenor.gif";
+          sendEmbedImage(gif);
+        });
       }
     }
   } catch (e) {

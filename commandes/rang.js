@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const Utils = require('../utils');
 var Constants = require('../models/constants');
 var Ranks = require('../models/ranks');
-var Players = require('../models/players');
 var Clans = require('../models/clans');
 var commands = {
     create: {
