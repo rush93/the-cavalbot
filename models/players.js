@@ -195,13 +195,14 @@ module.exports = {
                 }
             }, (error, response, body) => {
                 if (error) {
-                    console.log(error);
                     reject();
                     return;
                 }
                 var result = JSON.parse(body);
+                console.log(result);
                 if (!result || !result.any || !result.any.stats) {
                     reject();
+                    return;
                 }
                 players[id].psns[psn] = { psn };
                 save();
@@ -209,9 +210,6 @@ module.exports = {
                     players[id].psns[psn].psncomprank = result.any.stats.competitive.overall_stats.comprank;
                     players[id].lastUpdate = new Date();
                     save();
-                } else {
-                    console.log(result);
-                    reject();
                 }
                 resolve(players[id].psns[psn].psncomprank);
             });
