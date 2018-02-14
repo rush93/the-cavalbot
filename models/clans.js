@@ -24,6 +24,18 @@ function load() {
         });
     })
 }
+
+var getRoleByName = function (name, guild) {
+    if (clansMap[name]) {
+        return guild.roles.get(clansMap[name]);
+    }
+    var role = guild.roles.find('name', name);
+    if (role) {
+        clansMap[role.name] = role.id;
+    }
+    return role;
+}
+
 module.exports = {
     init: function () {
         return new Promise((resolve, reject) => {
@@ -99,7 +111,11 @@ module.exports = {
             }
         });
         if (!fail) {
+            var GuestRole = getRoleByName('Guests', guildRole.guild);
             player.addRole(guildRole, reason);
+            if (GuestRole) {
+                player.removeRole(GuestRole, reason);
+            }
             if (Constants.joinmessage !== 'no' && clans[guildRole.id].channel) {
                 var message = Utils.replaceModifier(Constants.joinmessage, clans[guildRole.id], player, null, null);
                 guildRole.guild.channels.get(clans[guildRole.id].channel).send(message);
@@ -113,7 +129,11 @@ module.exports = {
             if (!fail) return;
             if (role.id === guildRole.id) {
                 fail = false;
+                var GuestRole = getRoleByName('Guests', guildRole.guild);
                 player.removeRole(guildRole, reason);
+                if (GuestRole) {
+                    player.addRole(GuestRole, reason);
+                }
                 if (Constants.leavemessage !== 'no' && clans[guildRole.id].channel) {
                     var message = Utils.replaceModifier(Constants.leavemessage, clans[guildRole.id], player, null, null);
                     guildRole.guild.channels.get(clans[guildRole.id].channel).send(message);
@@ -125,16 +145,7 @@ module.exports = {
     getRole: function (clanId, guild) {
         return guild.roles.get(clanId);
     },
-    getRoleByName: function (name, guild) {
-        if (clansMap[name]) {
-            return guild.roles.get(clansMap[name]);
-        }
-        var role = guild.roles.find('name', name);
-        if (role) {
-            clansMap[role.name] = role.id;
-        }
-        return role;
-    },
+    getRoleByName,
     get clans() {
         return clans;
     }
