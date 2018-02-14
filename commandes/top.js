@@ -49,8 +49,8 @@ module.exports = {
         var teamPlayers = [];
         for (var i = 0; i < keys.length; i++) {
             var member = role.members.get(keys[i]);
-            if (member && players[keys[i]][role.id]) {
-                teamPlayers.push(players[keys[i]][role.id]);
+            if (member && players[keys[i]].clans[role.id]) {
+                teamPlayers.push(players[keys[i]].clans[role.id]);
             }
         }
         var sortedPlayers = teamPlayers.sort(function (a, b) {

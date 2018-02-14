@@ -5,7 +5,6 @@ var Utils = require('../utils');
 
 var request = require('request');
 var moment = require('moment');
-
 var players = {};
 
 function save() {
@@ -28,6 +27,17 @@ function load() {
     })
 }
 
+function createUserIfNotExist(id) {
+    if (!players[id]) {
+        players[id] = {
+            id: id,
+            clans: {},
+            btags: {},
+            psns: {}
+        }
+    }
+}
+
 module.exports = {
     init: function () {
         return new Promise((resolve, reject) => {
@@ -40,44 +50,32 @@ module.exports = {
         save();
     },
     setCooldown: function (guildMember) {
-        if (!players[guildMember.id]) {
-            players[guildMember.id] = {
-                id: guildMember.id
-            }
-        }
+        createUserIfNotExist(guildMember.id);
         players[guildMember.id].cooldown = new Date();
         save();
     },
     getPlayer: function (id, clanId) {
-        return players[id] ? players[id][clanId] : null;
+        return players[id] ? players[id].clans[clanId] : null;
     },
     setPoints: function (id, clanId, points) {
-        if (!players[id]) {
-            players[id] = {
-                id: id
-            }
-        }
-        if (!players[id][clanId]) {
-            players[id][clanId] = {
+        createUserIfNotExist(id);
+        if (!players[id].clans[clanId]) {
+            players[id].clans[clanId] = {
                 id: id
             };
         }
-        players[id][clanId].points = points;
+        players[id].clans[clanId].points = points;
         save();
     },
     setActiveRank: function (guildMember, rank) {
-        if (!players[guildMember.id]) {
-            players[guildMember.id] = {
-                id: guildMember.id
-            }
-        }
+        createUserIfNotExist(guildMember.id);
         var clanId = Clans.getPlayerClan(guildMember).id;
-        if (!players[guildMember.id][clanId]) {
-            players[guildMember.id][clanId] = {
+        if (!players[guildMember.id].clans[clanId]) {
+            players[guildMember.id].clan[clanId] = {
                 id: id
             };
         }
-        players[guildMember.id][clanId].activeRank = {
+        players[guildMember.id].clans[clanId].activeRank = {
             name: rank.name,
             displayName: rank.name
         };
@@ -87,7 +85,7 @@ module.exports = {
                 Constants.pseudoModifier,
                 Clans.getPlayerClan(guildMember),
                 guildMember,
-                players[guildMember.id][clanId],
+                players[guildMember.id].clans[clanId],
                 rank,
                 false
             );
@@ -98,18 +96,19 @@ module.exports = {
         }
     },
     setDisplayRank: function (guildMember, rank, displayName) {
+        createUserIfNotExist(guildMember.id);
         clanId = Clans.getPlayerClan(guildMember).id;
-        if (!players[guildMember.id] || !players[guildMember.id][clanId]) {
+        if (!players[guildMember.id] || !players[guildMember.id].clans[clanId] || !players[guildMember.id].clans[clanId].activeRank) {
             return;
         }
-        players[guildMember.id][clanId].activeRank.displayName = displayName;
+        players[guildMember.id].clans[clanId].activeRank.displayName = displayName;
         save();
         if (Constants.pseudoModifier !== 'no') {
             var nickname = Utils.replaceModifier(
                 Constants.pseudoModifier,
                 Clans.getPlayerClan(guildMember),
                 guildMember,
-                players[guildMember.id][clanId],
+                players[guildMember.id].clans[clanId],
                 rank,
                 false
             );
@@ -119,12 +118,13 @@ module.exports = {
             return guildMember.setNickname(nickname);
         }
     },
-    resetRank: function (guildMember) {
-        clanId = Clans.getPlayerClan(guildMember);
-        if (!players[guildMember.id] ||  !players[guildMember.id][clanId]) {
+    resetRank: function (guildMember, clan) {
+        createUserIfNotExist(guildMember.id);
+        clanId = clan.id;
+        if (!players[guildMember.id] || !players[guildMember.id].clans[clanId]) {
             return;
         }
-        players[guildMember.id][clanId].activeRank = null;
+        players[guildMember.id].clans[clanId].activeRank = null;
         save();
         if (Constants.pseudoModifier !== 'no') {
             if (nickname.length > 32) {
@@ -138,16 +138,17 @@ module.exports = {
     },
     setBtag: function (id, btag) {
         return new Promise((resolve, reject) => {
-            if (!players[id]) {
-                players[id] = {
-                    id
-                }
+            createUserIfNotExist(id);
+            if (players[id].btags[btag]) {
+                delete players[id].btags[btag];
+                save();
+                resolve(-1);
+                return;
             }
-            players[id].btag = btag;
-            save();
-            console.log(`https://owapi.net/api/v3/u/${btag.replace('#', '-')}/blob`);
+            var uncriptedbtag = encodeURI(btag.replace('#', '-'));
+            console.log(`https://owapi.net/api/v3/u/${uncriptedbtag}/blob`);
             request({
-                url: `https://owapi.net/api/v3/u/${btag.replace('#', '-')}/blob`,
+                url: `https://owapi.net/api/v3/u/${uncriptedbtag}/blob`,
                 headers: {
                     'User-Agent': 'the cavalry discord bot'
                 }
@@ -159,31 +160,36 @@ module.exports = {
                 var result = JSON.parse(body);
                 if (!result.eu || !result.eu.stats || !result.eu.stats) {
                     reject();
-
+                    return;
                 }
+                players[id].btags[btag] = { btag };
+                save();
                 if (result.eu && result.eu.stats && result.eu.stats.competitive && result.eu.stats.competitive.overall_stats && result.eu.stats.competitive.overall_stats.comprank) {
-                    players[id].comprank = result.eu.stats.competitive.overall_stats.comprank;
+                    players[id].btags[btag].comprank = result.eu.stats.competitive.overall_stats.comprank;
                     players[id].lastUpdate = new Date();
                     save();
                 }
-                resolve(players[id].comprank);
+                resolve(players[id].btags[btag].comprank);
             });
         });
     },
-    getBtag: function (id) {
-        return players[id].btag
+    getBtags: function (id) {
+        if(!players[id])
+            return null;
+        return players[id].btags
     },
     setPsn: function (id, psn) {
         return new Promise((resolve, reject) => {
-            if (!players[id]) {
-                players[id] = {
-                    id
-                }
+            createUserIfNotExist(id);
+            if (players[id].psns[psn]) {
+                delete players[id].psns[psn];
+                save();
+                resolve(-1);
+                return;
             }
-            players[id].psn = psn;
-            save();
+            var uncriptedpsn = encodeURI(psn);
             request({
-                url: `https://owapi.net/api/v3/u/${psn}/blob?platform=psn`,
+                url: `https://owapi.net/api/v3/u/${uncriptedpsn}/blob?platform=psn`,
                 headers: {
                     'User-Agent': 'the cavalry discord bot'
                 }
@@ -197,26 +203,28 @@ module.exports = {
                 if (!result || !result.any || !result.any.stats) {
                     reject();
                 }
+                players[id].psns[psn] = { psn };
+                save();
                 if (result.any && result.any.stats && result.any.stats.competitive && result.any.stats.competitive.overall_stats && result.any.stats.competitive.overall_stats.comprank) {
-                    players[id].psncomprank = result.any.stats.competitive.overall_stats.comprank;
+                    players[id].psns[psn].psncomprank = result.any.stats.competitive.overall_stats.comprank;
                     players[id].lastUpdate = new Date();
                     save();
                 } else {
                     console.log(result);
                     reject();
                 }
-                resolve(players[id].psncomprank);
+                resolve(players[id].psns[psn].psncomprank);
             });
         });
     },
-    getPsn: function (id) {
-        return players[id].psn
+    getPsns: function (id) {
+        return players[id].psns
     },
-    getComprank: function (id) {
-        if (!players[id].comprank) {
+    getComprank: function (id, btag) {
+        if (!players[id].btags[btag]) {
             return null;
         }
-        var btag = players[id].btag;
+        var btag = players[id].btags[btag];
         request({
             url: `https://owapi.net/api/v3/u/${btag.replace('#', '-')}/blob`,
             headers: {
@@ -228,20 +236,20 @@ module.exports = {
             }
             var result = JSON.parse(body);
             if (result.eu && result.eu.stats && result.eu.stats.competitive && result.eu.stats.competitive.overall_stats && result.eu.stats.competitive.overall_stats.comprank) {
-                players[id].comprank = result.eu.stats.competitive.overall_stats.comprank;
+                players[id].btags[btag].comprank = result.eu.stats.competitive.overall_stats.comprank;
                 players[id].lastUpdate = new Date();
                 save();
             }
         });
         moment.locale('fr');
         var diff = moment.duration(moment().diff(players[id].lastUpdate)).humanize();
-        return players[id].comprank + ` (il y a ${diff})`;
+        return players[id].btags[btag].comprank + ` (il y a ${diff})`;
     },
-    getPsnComprank: function (id) {
-        if (!players[id].psncomprank) {
+    getPsnComprank: function (id, psn) {
+        if (!players[id].psns[psn]) {
             return null;
         }
-        var psn = players[id].psn;
+        var psn = players[id].psns[psn];
         request({
             url: `https://owapi.net/api/v3/u/${psn}/blob?platform=psn`,
             headers: {
@@ -253,21 +261,17 @@ module.exports = {
             }
             var result = JSON.parse(body);
             if (result.any && result.any.stats && result.any.stats.competitive && result.any.stats.competitive.overall_stats && result.any.stats.competitive.overall_stats.comprank) {
-                players[id].psncomprank = result.any.stats.competitive.overall_stats.comprank;
+                players[id].psns[psn].psncomprank = result.any.stats.competitive.overall_stats.comprank;
                 players[id].lastUpdate = new Date();
                 save();
             }
         });
         moment.locale('fr');
         var diff = moment.duration(moment().diff(players[id].lastUpdate)).humanize();
-        return players[id].psncomprank + ` (il y a ${diff})`;
+        return players[id].psns[psn].psncomprank + ` (il y a ${diff})`;
     },
     setTempClanToJoin: function (id, clan, code) {
-        if (!players[id]) {
-            players[id] = {
-                id: id
-            }
-        }
+        createUserIfNotExist(id);
         players[id].tempCode = code;
         players[id].tempGuild = clan;
         save();
