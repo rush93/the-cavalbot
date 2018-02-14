@@ -71,6 +71,19 @@ bot.on('message', function (message) {
       } else {
         Utils.reply(message, "Le code est incorrect.", true);
       }
+    } else {
+      if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
+        return;
+      }
+      var result = /^say ([0-9]+) (.+)$/.exec(message.content);
+      if (result) {
+        var channel = guild.channels.get(result[1]);
+        if (!channel) {
+          Utils.reply(message, 'c\'est pas un channel ça', true);
+          return;
+        }
+        channel.send(result[2]);
+      }
     }
     return;
   }
