@@ -25,6 +25,7 @@ var commands = {
             '**%clan%** le nom du clan',
             '**%sclan%** le smiley du clan',
             '**%player%** le nom du joueur',
+            '**%PS4%** si il s\'agit d\'un joueur ps4',
             'pour que le bot ne modifie pas les nom mettre \'no\''
         ],
         args: '[modifier]',
@@ -107,6 +108,20 @@ var commands = {
             }
             constants.leavemessage = args.join(' ');
             Utils.reply(message, 'Le leavemessage a bien été modifié.');
+        }
+    },
+    ps4: {
+        help: [
+            'les lettres qui seron ajouter au pseudo du joueur si c\'est un joueur ps4',
+        ],
+        args: '[lettres]',
+        runCommand: (args, message) => {
+            if (args.length === 0) {
+                Utils.reply(message, "**ps4**: " + constants.PS4);
+                return;
+            }
+            constants.PS4 = args.join(' ');
+            Utils.reply(message, 'Le ps4 a bien été modifié.');
         }
     }
 }

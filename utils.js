@@ -54,26 +54,42 @@ module.exports = {
         }
         message.channel.send("", embed);
     },
-    replaceModifier: function (input, clan, guildMember, player, rank, withHightLight = true) {
+    replaceModifier: function (input, clan, guildMember, player, rank, isPS4, ps4text, withHightLight = true) {
         var playerName = `<@!${guildMember.id}>`;
-        var clanName = `<@&${clan.id}>`;
+        var clanName = clan ? guildMember.guild.roles.get(clan.id).name : null;
         if (!withHightLight) {
             playerName = guildMember.user.username;
-            clanName = guildMember.guild.roles.get(clan.id).name;
+            clanName = clan ? guildMember.guild.roles.get(clan.id).name : null;
         }
-        input = input.replace(/%player%/g, playerName);
+        input = input.replace(/%player%/gi, playerName);
+        replaceSomething = false;
         if (player) {
-            input = input.replace(/%rank%/g, player.activeRank ? player.activeRank.displayName : '');
-
+            input = input.replace(/%rank%/gi, player.activeRank ? player.activeRank.displayName : '');
+            replaceSomething = true;
+        } else {
+            input = input.replace(/%rank%/gi, '');
         }
         if (rank && rank.smiley) {
-            input = input.replace(/%srank%/g, rank.smiley);
+            input = input.replace(/%srank%/gi, rank.smiley);
+            replaceSomething = true;
+        } else {
+            input = input.replace(/%srank%/gi, '');
         }
-        input = input.replace(/%clan%/g, clanName);
-        if (clan.smiley) {
-            input = input.replace(/%sclan%/g, clan.smiley);
+        if (clanName) {
+            input = input.replace(/%clan%/gi, clanName);
+        } else {
+            input = input.replace(/%clan%/gi, '');
+        }
+        if (clan && clan.smiley) {
+            input = input.replace(/%sclan%/gi, clan.smiley);
+        } else {
+            input = input.replace(/%sclan%/gi, '');
         }
 
+        input = input.replace(/%PS4%/gi, isPS4 ? ps4text : '');
+        if (!withHightLight && !replaceSomething ) {
+            return isPS4 ? playerName + ' ' +  ps4text : playerName;
+        }
         return input;
     }
 }

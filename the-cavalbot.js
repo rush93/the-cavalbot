@@ -28,6 +28,7 @@ var customCommands = require('./commandes/custom');
 var topCommands = require('./commandes/top');
 var btagCommands = require('./commandes/btag');
 var psnCommands = require('./commandes/psn');
+var epingleCommand = require('./commandes/epingle');
 
 var commands = {
   config: configCommands,
@@ -35,6 +36,7 @@ var commands = {
   rang: rangCommands,
   givepoints: givepointsCommands,
   takepoints: takepointsCommands,
+  epingle: epingleCommand,
   list: listclanCommands,
   info: infoClanCommands,
   top: topCommands,
@@ -56,12 +58,12 @@ bot.on('message', function (message) {
     return;
   }
   if (message.channel.constructor.name === 'DMChannel') {
-    console.log('DM MESSAGE:' + message.content);
+    console.log(message.author.username + ' DM MESSAGE:' + message.content);
     var player = players.getPlayers()[message.author.id];
     if (player && player.tempCode) {
       if (player.tempCode === Number(message.content)) {
         var role = clans.getRole(player.tempGuild, guild);
-        var clan = clans.addPlayer(role, guild.members.get(player.id), 'à rejoins via le site');
+        var clan = clans.addPlayer(role, guild.members.get(player.id), 'à rejoins via le site', Object.keys(players.getPsns(player.id)).length > 0);
         players.setTempClanToJoin(message.author.id, null, null);
         if (!clan) {
           Utils.reply(message, 'Vous êtes deja dans un clan.', true);
