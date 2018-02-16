@@ -6,7 +6,8 @@ var constants = {
     resetRankWhenChangeClan: true,
     leaveCooldown: 0,
     joinmessage: "no",
-    leavemessage: "no"
+    leavemessage: "no",
+    PS4: "[PS4]"
 }
 
 function save() {
@@ -55,6 +56,9 @@ module.exports = {
     get leavemessage() {
         return constants.leavemessage;
     },
+    get PS4() {
+        return constants.PS4;
+    },
     set prefix(prefix) {
         constants.prefix = prefix;
         save();
@@ -84,5 +88,10 @@ module.exports = {
         constants.leavemessage = leavemessage;
         save();
         return constants.leavemessage;
+    },
+    set PS4(ps4) {
+        constants.PS4 = ps4;
+        save();
+        return constants.PS4;
     }
 };

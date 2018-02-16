@@ -24,7 +24,7 @@ module.exports = {
             Utils.reply(message, "Aucuns clan pour ce role.", true);
             return;
         }
-        clan = Clans.addPlayer(role, message.member, "rejoins le clan avec la commande join");
+        clan = Clans.addPlayer(role, message.member, "rejoins le clan avec la commande join", Object.keys(Players.getPsns(message.member.id)).length > 0);
         if (!clan) {
             Utils.reply(message, "Vous êtes déjà dans un clan.", true);
             return;
