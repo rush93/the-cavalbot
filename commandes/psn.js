@@ -24,9 +24,57 @@ module.exports = {
         if(psns && psns[args.join(' ')]) {
             Players.setPsn(message.member.id, args.join(' '));
             Utils.reply(message, 'Votre PSN a bien été supprimé.');
+            if ( Object.keys(Players.getPsns(message.member.id)).length === 0) {
+                var clan = Clans.getPlayerClan(message.member);
+                var player = clan ? Players.getPlayer(message.member.id, clan.id): null;
+                var rank =  player ? player.activeRank: null;
+                var nickname = Utils.replaceModifier(
+                    Constants.pseudoModifier,
+                    clan,
+                    message.member,
+                    player,
+                    rank,
+                    false,
+                    Constants.PS4,
+                    false
+                );
+                if (nickname.length > 32) {
+                    nickname = nickname.substr(0, 32);
+                }
+                message.member.setNickname(nickname).then(() => {
+                    Utils.reply(message, 'Votre PSN a été mis à jour.');
+                }).catch(() => {
+                    Utils.reply(message, 'Bah ton PSN a été mis à jour mais comme tu te sens au dessus des gens je peux pas changer ton pseudo.');
+                });
+                return;
+            }
             return;
         }
         Players.setPsn(message.member.id, args.join(' ')).then(() => {
+            if ( Object.keys(Players.getPsns(message.member.id)).length === 1) {
+                var clan = Clans.getPlayerClan(message.member);
+                var player = clan ? Players.getPlayer(message.member.id, clan.id): null;
+                var rank =  player ? player.activeRank: null;
+                var nickname = Utils.replaceModifier(
+                    Constants.pseudoModifier,
+                    clan,
+                    message.member,
+                    player,
+                    rank,
+                    true,
+                    Constants.PS4,
+                    false
+                );
+                if (nickname.length > 32) {
+                    nickname = nickname.substr(0, 32);
+                }
+                message.member.setNickname(nickname).then(() => {
+                    Utils.reply(message, 'Votre PSN a été mis à jour.');
+                }).catch(() => {
+                    Utils.reply(message, 'Bah ton PSN a été mis à jour mais comme tu te sens au dessus des gens je peux pas changer ton pseudo.');
+                });
+                return;
+            }
             Utils.reply(message, 'Votre PSN a été mis à jour.');
         }).catch((e) => {
             console.log(e);

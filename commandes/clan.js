@@ -108,7 +108,7 @@ var commands = {
                 Utils.reply(message, "Vous devez mentionner une personne.");
                 return;
             }
-            var clanAdded = Clans.addPlayer(clan, user, "Ajout manuel de " + message.author.name);
+            var clanAdded = Clans.addPlayer(clan, user, "Ajout manuel de " + message.author.name, Players.getPsns(user.id).length > 0);
             if (!clanAdded) {
                 Utils.reply(message, 'Le joueur est déjà dans un clan veuillez l\'enlever en premier.', true);
                 return
@@ -132,7 +132,7 @@ var commands = {
                 Utils.reply(message, "Vous devez mentionner une personne.");
                 return;
             }
-            var clanRemoved = Clans.removePlayer(clan, user, "Supression manuel de " + message.author.name);
+            var clanRemoved = Clans.removePlayer(clan, user, "Supression manuel de " + message.author.name, Players.getPsns(user.id).length > 0);
             if (!clanRemoved) {
                 Utils.reply(message, 'Le joueur n\'est pas dans ce clan.', true);
                 return;

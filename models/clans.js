@@ -97,7 +97,7 @@ module.exports = {
         clans[guildRole.id].channel = channel.id;
         save();
     },
-    addPlayer: function (guildRole, player, reason) {
+    addPlayer: function (guildRole, player, reason, isPS4) {
         var roles = player.roles;
 
         var fail = false;
@@ -117,13 +117,13 @@ module.exports = {
                 player.removeRole(GuestRole, reason);
             }
             if (Constants.joinmessage !== 'no' && clans[guildRole.id].channel) {
-                var message = Utils.replaceModifier(Constants.joinmessage, clans[guildRole.id], player, null, null);
+                var message = Utils.replaceModifier(Constants.joinmessage, clans[guildRole.id], player, null, null, isPS4, Constants.PS4);
                 guildRole.guild.channels.get(clans[guildRole.id].channel).send(message);
             }
         }
         return fail ? null : clans[guildRole.id];
     },
-    removePlayer: function (guildRole, player, reason) {
+    removePlayer: function (guildRole, player, reason, isPS4) {
         var fail = true;
         player.roles.forEach((role) => {
             if (!fail) return;
@@ -135,7 +135,7 @@ module.exports = {
                     player.addRole(GuestRole, reason);
                 }
                 if (Constants.leavemessage !== 'no' && clans[guildRole.id].channel) {
-                    var message = Utils.replaceModifier(Constants.leavemessage, clans[guildRole.id], player, null, null);
+                    var message = Utils.replaceModifier(Constants.leavemessage, clans[guildRole.id], player, null, null, isPS4, Constants.PS4);
                     guildRole.guild.channels.get(clans[guildRole.id].channel).send(message);
                 }
             }

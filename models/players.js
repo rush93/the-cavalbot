@@ -87,6 +87,8 @@ module.exports = {
                 guildMember,
                 players[guildMember.id].clans[clanId],
                 rank,
+                Object.keys(players[guildMember.id].psns).length > 0,
+                Constants.PS4,
                 false
             );
             if (nickname.length > 32) {
@@ -110,6 +112,8 @@ module.exports = {
                 guildMember,
                 players[guildMember.id].clans[clanId],
                 rank,
+                Object.keys(players[guildMember.id].psns).length > 0,
+                Constants.PS4,
                 false
             );
             if (nickname.length > 32) {
@@ -124,13 +128,24 @@ module.exports = {
         if (!players[guildMember.id] || !players[guildMember.id].clans[clanId]) {
             return;
         }
+        
         players[guildMember.id].clans[clanId].activeRank = null;
         save();
         if (Constants.pseudoModifier !== 'no') {
+            var nickname = Utils.replaceModifier(
+                Constants.pseudoModifier,
+                clan,
+                guildMember,
+                players[guildMember.id].clans[clanId],
+                null,
+                Object.keys(players[guildMember.id].psns).length > 0,
+                Constants.PS4,
+                false
+            );
             if (nickname.length > 32) {
                 nickname = nickname.substr(0, 32);
             }
-            return guildMember.setNickname(guildMember.user.username);
+            return guildMember.setNickname(nickname);
         }
     },
     getPlayers: function () {
@@ -199,7 +214,6 @@ module.exports = {
                     return;
                 }
                 var result = JSON.parse(body);
-                console.log(result);
                 if (!result || !result.any || !result.any.stats) {
                     reject();
                     return;
