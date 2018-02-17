@@ -189,6 +189,7 @@ module.exports = {
         });
     },
     getBtags: function (id) {
+        createUserIfNotExist(id);
         if(!players[id])
             return null;
         return players[id].btags
@@ -230,9 +231,11 @@ module.exports = {
         });
     },
     getPsns: function (id) {
+        createUserIfNotExist(id);
         return players[id].psns
     },
     getComprank: function (id, btag) {
+        createUserIfNotExist(id);
         if (!players[id].btags[btag]) {
             return null;
         }
@@ -258,6 +261,7 @@ module.exports = {
         return players[id].btags[btag].comprank + ` (il y a ${diff})`;
     },
     getPsnComprank: function (id, psn) {
+        createUserIfNotExist(id);
         if (!players[id].psns[psn]) {
             return null;
         }
