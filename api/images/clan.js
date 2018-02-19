@@ -20,15 +20,14 @@ module.exports = {
             Jimp.loadFont(`fonts/font.fnt`).then(function (font) {
                 image
                     .resize(300, 300)
-                    .print(font, 150 - ((score.length * 27) / 2), 190, score)
+                    .print(font, 150 - ((score.length * 27) / 2), 225, score)
                     .getBuffer(Jimp.MIME_PNG, function(err, buffer){
                     res.set("Content-Type", Jimp.MIME_PNG);
                     res.send(buffer);
-            });
+                });
             }).catch((err) => {
                 console.log(err);
             });
-            
         }).catch(function (err) {
             console.log(err);
         });

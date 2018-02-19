@@ -59,6 +59,9 @@ module.exports = {
     get PS4() {
         return constants.PS4;
     },
+    get domain() {
+        return constants.domain;
+    },
     set prefix(prefix) {
         constants.prefix = prefix;
         save();
@@ -93,5 +96,10 @@ module.exports = {
         constants.PS4 = ps4;
         save();
         return constants.PS4;
+    },
+    set domain(domain) {
+        constants.domain = domain;
+        save();
+        return constants.domain;
     }
 };
