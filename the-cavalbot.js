@@ -29,6 +29,11 @@ var topCommands = require('./commandes/top');
 var btagCommands = require('./commandes/btag');
 var psnCommands = require('./commandes/psn');
 var epingleCommand = require('./commandes/epingle');
+var marierCommand = require('./commandes/marier');
+var divorserCommand = require('./commandes/divorser');
+var proposeCommand = require('./commandes/propose');
+var acceptCommand = require('./commandes/accept');
+var declineCommand = require('./commandes/decline');
 
 var commands = {
   config: configCommands,
@@ -36,6 +41,8 @@ var commands = {
   rang: rangCommands,
   givepoints: givepointsCommands,
   takepoints: takepointsCommands,
+  marier: marierCommand,
+  divorser: divorserCommand,
   epingle: epingleCommand,
   list: listclanCommands,
   info: infoClanCommands,
@@ -45,7 +52,10 @@ var commands = {
   setrang: setrangCommands,
   custom: customCommands,
   btag: btagCommands,
-  psn: psnCommands
+  psn: psnCommands,
+  propose: proposeCommand,
+  accept: acceptCommand,
+  decline: declineCommand
 }
 
 bot.on('ready', function () {
