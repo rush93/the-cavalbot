@@ -92,7 +92,7 @@ module.exports = {
         }
         return input;
     },
-    getScoreOfClan(Players, clanId) {
+    getScoreOfClan: function(Players, clanId) {
 
         var scores = {};
         var players = Players.getPlayers();
@@ -112,5 +112,16 @@ module.exports = {
         }
 
         return scores[clanId];
+    },
+    getRolesOfPerm: function(guild, permissions) {
+        var roles = guild.roles;
+        var rolesKey = Object.keys(roles);
+        var rolesWithPerm = [];
+        for (var i = 0; i < rolesKey.length; i++) {
+            if (roles.get(rolesKey[i]).hasPermission(permissions)) {
+                rolesWithPerm.push(roles.get(rolesKey[i]));
+            }
+        }
+        return rolesWithPerm;
     }
 }
