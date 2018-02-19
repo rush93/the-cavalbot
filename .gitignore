@@ -1,5 +1,5 @@
-data
 data/**
+img/**
 node_modules
 node_modules/**
 token.js

@@ -11,6 +11,7 @@
   "dependencies": {
     "discord.js": "^11.0.0",
     "express": "^4.16.2",
+    "jimp": "^0.2.28",
     "moment": "^2.20.1",
     "pug": "^2.0.0-rc.4",
     "request": "^2.83.0"

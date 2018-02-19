@@ -16,4 +16,4 @@
   - run bot `node the-cavalbot.js`
 ## USAGE
 to view all commands `_help`
-and `_help <command>` to more info 
+and `_help <command>` for more info 

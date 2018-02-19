@@ -39,7 +39,8 @@ var displayRoleOfClan = function (message, role) {
             grid: true
         });
     }
-    Utils.sendEmbed(message, role.color, "Clan " + role.name, clan.description ? clan.description : '', message.author, fields, clan.image);
+    var image = Constants.domain + '/images/clan?c=' + clan.id;
+    Utils.sendEmbed(message, role.color, "Clan " + role.name, clan.description ? clan.description : '', message.author, fields, image);
     return;
 }
 
