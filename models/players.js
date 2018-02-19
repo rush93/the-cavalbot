@@ -291,5 +291,34 @@ module.exports = {
         players[id].tempCode = code;
         players[id].tempGuild = clan;
         save();
+    },
+    setEpou: function (player, epou) {
+        createUserIfNotExist(player.id);
+        players[player.id].epou = epou.id;
+        createUserIfNotExist(epou.id);
+        players[epou.id].epou = player.id;
+        save();
+    },
+    hasEpou: function (player) {
+        return players[player.id] && players[player.id].epou;
+    },
+    getEpou: function (player) {
+        return players[player.id] ? players[player.id].epou : null;
+    },
+    divorse: function (user1, user2) {
+        players[user1.id].epou = null;
+        players[user2.id].epou = null;
+        save();
+    },
+    hasAskFor: function (player) {
+        return players[player.id] && players[player.id].askFor;
+    },
+    getAskFor: function (player) {
+        return players[player.id] ? players[player.id].askFor : null;
+    },
+    setAskFor: function (player, askFor) {
+        createUserIfNotExist(player.id);
+        players[player.id].askFor = askFor ? askFor.id : null;
+        save();
     }
 }

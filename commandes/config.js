@@ -123,6 +123,20 @@ var commands = {
             constants.PS4 = args.join(' ');
             Utils.reply(message, 'Le ps4 a bien été modifié.');
         }
+    },
+    domain: {
+        help: [
+            'le nom de domaine du site.',
+        ],
+        args: '[url]',
+        runCommand: (args, message) => {
+            if (args.length === 0) {
+                Utils.reply(message, "**domaine: **: " + constants.domain);
+                return;
+            }
+            constants.domain = args.join(' ');
+            Utils.reply(message, 'Le nom de domaine à bien été modifié.');
+        }
     }
 }
 

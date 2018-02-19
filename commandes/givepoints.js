@@ -48,9 +48,8 @@ module.exports = {
 			var keys = Ranks.getSortedKeys(playerClan.id);
 			var nextRank = null;
 			for (var i = 0; i < keys.length; i++) {
-				if (avaliabeRanks[keys[i]].points > oldPoints) {
+				if (avaliabeRanks[keys[i]].points > oldPoints && avaliabeRanks[keys[i]].points <= newPoints) {
 					nextRank = avaliabeRanks[keys[i]];
-					break;
 				}
 			}
 			if (!nextRank) {
@@ -58,6 +57,7 @@ module.exports = {
 			}
 			if (nextRank.points <= newPoints) {
 				member.addRole(member.guild.roles.get(nextRank.roleId));
+				Players.setActiveRank(member, nextRank);
 				Utils.reply(message, `Bravo <@!${member.id}> tu as maintenant accès à un nouveau rang: **${nextRank.name}**.`);
 			}
 		});

@@ -8,14 +8,7 @@ var Constants = require('../models/constants');
 var displayRoleOfClan = function (message, role) {
     var ranks = Ranks.getSortedKeys(role.id);
     var clan = Clans.getClan(role);
-    var totalPoints = 0;
-    var players = Players.getPlayers();
-    var keys = Object.keys(players);
-    for (var i = 0; i < keys.length; i++) {
-        if(players[keys[i]] && players[keys[i]].clans[clan.id]) {
-            totalPoints+=players[keys[i]].clans[clan.id].points;
-        }
-    }
+    var totalPoints = Utils.getScoreOfClan(Players, clan.id);
     var fields = [
         {
             title: "Nombre de personnes",
@@ -39,7 +32,8 @@ var displayRoleOfClan = function (message, role) {
             grid: true
         });
     }
-    Utils.sendEmbed(message, role.color, "Clan " + role.name, clan.description ? clan.description : '', message.author, fields, clan.image);
+    var image = Constants.domain + '/images/clan?c=' + clan.id;
+    Utils.sendEmbed(message, role.color, "Clan " + role.name, clan.description ? clan.description : '', message.author, fields, image);
     return;
 }
 
@@ -99,7 +93,8 @@ var displayRoleOfMember = function (message, member) {
         `**Clan:** ${role.name}
 **Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btagString || btagString.length <= 0 ? '' : `
 **Battle tag:** ${btagString.join(', ')}`) + (!psnString || psnString.length <= 0  ? '' : `
-**PSN:** ${psnString.join(', ')}`)
+**PSN:** ${psnString.join(', ')} ${globalPlayer.epou ? `
+:ring: <@!${globalPlayer.epou}>` : ''} `)
         , message.author, fields, clan.image);
     return;
 }

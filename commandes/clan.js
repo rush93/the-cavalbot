@@ -79,6 +79,19 @@ var commands = {
             Utils.reply(message, 'Le channel a bien été changé.');
         }
     },
+    getdynamicimage: {
+        help: [
+            'Permet d\'afficher l\'image dynamique du clan.'
+        ],
+        args: '<Clan>',
+        runCommand: (clan, args, message) => {
+            if (!Clans.getClan(clan)) {
+                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                return;
+            }
+            message.channel.send('L\'url de l\'image: ' + Constants.domain + '/images/clan?c=' + clan.id);
+        }
+    },
     setsmiley: {
         help: [
             'Permet de modifier le smiley d\'un clan.'

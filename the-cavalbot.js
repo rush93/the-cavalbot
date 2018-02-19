@@ -29,6 +29,11 @@ var topCommands = require('./commandes/top');
 var btagCommands = require('./commandes/btag');
 var psnCommands = require('./commandes/psn');
 var epingleCommand = require('./commandes/epingle');
+var marierCommand = require('./commandes/marier');
+var divorserCommand = require('./commandes/divorser');
+var proposeCommand = require('./commandes/propose');
+var acceptCommand = require('./commandes/accept');
+var declineCommand = require('./commandes/decline');
 
 var commands = {
   config: configCommands,
@@ -36,6 +41,8 @@ var commands = {
   rang: rangCommands,
   givepoints: givepointsCommands,
   takepoints: takepointsCommands,
+  marier: marierCommand,
+  divorser: divorserCommand,
   epingle: epingleCommand,
   list: listclanCommands,
   info: infoClanCommands,
@@ -45,7 +52,10 @@ var commands = {
   setrang: setrangCommands,
   custom: customCommands,
   btag: btagCommands,
-  psn: psnCommands
+  psn: psnCommands,
+  propose: proposeCommand,
+  accept: acceptCommand,
+  decline: declineCommand
 }
 
 bot.on('ready', function () {
@@ -158,55 +168,10 @@ bot.on('message', function (message) {
 });
 
 var guild = null;
+var api = require('./api/index');
 bot.login(token).then(token => {
   guild = bot.guilds.first();
+  api.initServer(guild);
 }).catch((e) => {
   console.error(e);
 });
-
-const express = require('express')
-const pug = require('pug');
-const app = express()
-app.set('view engine', 'pug')
-app.get('/', (req, res) => {
-  res.render('index', { message: 'Veuillez entrer votre username discord' })
-})
-
-app.get('/choice', (req, res) => {
-  var user = req.query.user;
-  var username = req.query.username;
-  if (user) {
-    res.render('choice', { title: 'Hey', clans: clans.clans, Clans: clans, guild, user: user })
-  } else if (username) {
-    var member = guild.members.find(val => {
-      return val.user.username === username ||  val.user.tag === username
-    });
-    if (member) {
-      res.render('choice', { title: 'Hey', clans: clans.clans, Clans: clans, guild, user: member.id })
-    } else {
-      res.render('index', { message: 'Le username ' + username + ' est incorrect' })
-    }
-  } else {
-    res.redirect('/');
-  }
-});
-
-app.get('/clan', (req, res) => {
-  var userId = req.query.u;
-  var clanId = req.query.c;
-  if (!userId || !clanId) {
-    res.redirect('/');
-    return;
-  }
-  var member = guild.members.get(userId);
-  if (!member) {
-    res.render('error', { message: 'AIE! une erreur est survenu... vous n\‘avez pas été trouvé en temps que membre' });
-    return;
-  }
-  member.sendMessage("Une demande pour rejoindre le clan " + clans.getRole(clanId, guild).name + " a été faite, veuillez entrer le code de sécurité. Si cette demande n'as pas été faite par vous merci d'ignorer ce message.");
-  var tempCode = Math.floor((Math.random() * 100000) + 1000);
-  players.setTempClanToJoin(userId, clanId, tempCode);
-  res.render('confirmCode', { code: tempCode });
-});
-
-app.listen(3000, () => console.log('The web server running on port 3000!'))

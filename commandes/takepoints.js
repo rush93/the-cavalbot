@@ -30,8 +30,10 @@ module.exports = {
             return;
         }
 
-        var clanId = Clans.getPlayerClan(member).id;
-        var oldPoints = Players.getPlayer(member.id, clanId).points;
+        var clan = Clans.getPlayerClan(member);
+        var clanId = clan.id;
+        var player = Players.getPlayer(member.id, clanId);
+        var oldPoints = player.points;
         var newPoints = oldPoints - points
         Players.setPoints(member.id, clanId, newPoints);
         Utils.reply(message, 'Les points du joueur on bien été modifier.');
@@ -50,6 +52,9 @@ module.exports = {
         }
         if (nextRank.points >= newPoints) {
             member.removeRole(member.guild.roles.get(nextRank.roleId));
+            if (player.activeRank && player.activeRank.name === nextRank.name) {
+                Players.resetRank(member, clan);
+            }
             Utils.reply(message, `Dommage <@!${member.id}> tu n'as maintenant plus accès au rang: **${nextRank.name}**.`);
         }
     }
