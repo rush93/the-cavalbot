@@ -1,15 +1,15 @@
 // THIS FILE IS FOR MIGRATE ALL PLAYER FORMAT TO THE NEW PLAYER FORMAT
 var fs = require('fs');
-
+var Utils = require('../utils');
 var players = {};
 var newPlayers = {};
 
 function save() {
     fs.writeFile("./data/players.json", JSON.stringify(newPlayers), function (err) {
         if (err) {
-            return console.log(err);
+            return Utils.log(err, true);
         }
-        console.log("The file was saved!");
+        Utils.log(`The ${Utils.Color.FgYellow}players${Utils.Color.Reset} file was saved!`);
     });
 }
 
@@ -72,5 +72,5 @@ load().then(() => {
     };
     save();
 }).catch(e => {
-    console.log(e);
+    Utils.log(e, true);
 });

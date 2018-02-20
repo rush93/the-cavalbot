@@ -1,5 +1,6 @@
 
 const express = require('express')
+const Utils = require('../utils');
 const pug = require('pug');
 const app = express()
 
@@ -28,7 +29,7 @@ var initServer = function (guild) {
         }
     }
 
-    app.listen(3000, () => console.log('The web server running on port 3000!'));
+    app.listen(3000, () => Utils.log(`The web server running on port ${Utils.Color.FgYellow}3000!`));
 }
 
 module.exports = {

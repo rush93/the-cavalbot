@@ -34,7 +34,7 @@ il vous en faut **${rang.points}** et vous en avez **${(player && player.points)
         var promise = Players.setActiveRank(message.member, rang);
         if (promise) {
             promise.catch((e) => {
-                console.error(e);
+                Utils.log(e, true);
                 if (e.code === 0) {
                     Utils.reply(message, 'Aie tu est trop puissant pour moi, je peu pas changer ton pseudo.', true);
                 } else {

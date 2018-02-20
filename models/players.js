@@ -10,9 +10,9 @@ var players = {};
 function save() {
     fs.writeFile("./data/players.json", JSON.stringify(players), function (err) {
         if (err) {
-            return console.log(err);
+            return Utils.log(err, true);
         }
-        console.log("The file was saved!");
+        Utils.log(`The ${Utils.Color.FgYellow}players${Utils.Color.Reset} file was saved!`);
     });
 }
 
@@ -161,7 +161,6 @@ module.exports = {
                 return;
             }
             var uncriptedbtag = encodeURI(btag.replace('#', '-'));
-            console.log(`https://owapi.net/api/v3/u/${uncriptedbtag}/blob`);
             request({
                 url: `https://owapi.net/api/v3/u/${uncriptedbtag}/blob`,
                 headers: {
