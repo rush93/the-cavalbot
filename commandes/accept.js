@@ -39,7 +39,7 @@ module.exports = {
         var roles = Utils.getRolesOfPerm(message.guild, 'MANAGE_GUILD');
         var str = [];
         for (var i = 0; i < roles.length; i++) {
-            str.push(`<@&${roles[i].name}>`);
+            str.push(`<@&${roles[i].id}>`);
         }
         message.channel.send(str.join(', '));
         Players.setAskFor(user1, null);
