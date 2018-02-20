@@ -142,10 +142,10 @@ module.exports = {
     },
     getRolesOfPerm: function(guild, permissions) {
         var roles = guild.roles;
-        var rolesKey = Object.keys(roles);
+        var rolesKey = roles.keyArray();
         var rolesWithPerm = [];
         for (var i = 0; i < rolesKey.length; i++) {
-            if (roles.get(rolesKey[i]).hasPermission(permissions)) {
+            if (roles.get(rolesKey[i]).hasPermission(permissions) && !roles.get(rolesKey[i]).managed) {
                 rolesWithPerm.push(roles.get(rolesKey[i]));
             }
         }
