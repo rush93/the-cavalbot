@@ -18,6 +18,10 @@ module.exports = {
             Utils.reply(message, "Vous devez mentionner un joueur", true);
             return;
         }
+        if ( message.member.id === user1.id) {
+            Utils.reply(message, `Non désolé mais le célibat à vie c'est pas possible.`, true);
+            return;
+        }
         if (Players.hasEpou(message.member)) {
             Utils.reply(message, `Vous êtes déjà marié !`, true);
             return;
