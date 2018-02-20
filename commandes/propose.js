@@ -33,13 +33,13 @@ module.exports = {
 
         var askfor = Players.getAskFor(message.member);
         if (askfor && user1.id === askfor) {
-            Utils.reply(message, `Vous avez l'avez déjà demandé veuillez attendre sa réponse.`, true);
+            Utils.reply(message, `Vous l'avez déjà demandé veuillez attendre sa réponse.`, true);
             return;
         }
         
         Players.setAskFor(message.member, user1);
         Utils.reply(message, `<@!${user1.id}>, <@!${message.member.id}> vous demande en mariage:
-    - Voulez vous accepter ? ( **${Constants.prefix}accept <@!${message.member.id}>** )
-    - Ou voulez vous refuser ? ( **${Constants.prefix}decline <@!${message.member.id}>** )`);
+    - Voulez-vous accepter ? ( **${Constants.prefix}accept <@!${message.member.id}>** )
+    - Ou voulez-vous refuser ? ( **${Constants.prefix}decline <@!${message.member.id}>** )`);
     }
 }
