@@ -4,17 +4,17 @@ var Constants = require('../models/constants');
 var Players = require('../models/players');
 module.exports = {
     role: 'MANAGE_GUILD',
-    helpCat: 'Permet de marier deux personnes',
+    helpCat: 'Permet de divorcer deux personnes',
     help: function (message) {
-        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande marier", "", message.author, [{
-            title: Constants.prefix + 'marier <@user> <@user>',
-            text: "Permet de marier deux personnes",
+        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande divorcer", "", message.author, [{
+            title: Constants.prefix + 'divorcer <@user> <@user>',
+            text: "Permet de divorcer deux personnes",
             grid: false
         }]);
     },
     runCommand: (args, message) => {
         if (!message.member.hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, "Vous n'êtes pas assez religieux pour marier des gens.", true);
+            Utils.reply(message, "Il vous faut appeler un juge pour divorcer.", true);
             return;
         }
         var user1 = message.mentions.members.first();

@@ -30,7 +30,7 @@ var btagCommands = require('./commandes/btag');
 var psnCommands = require('./commandes/psn');
 var epingleCommand = require('./commandes/epingle');
 var marierCommand = require('./commandes/marier');
-var divorserCommand = require('./commandes/divorser');
+var divorcerCommand = require('./commandes/divorcer');
 var proposeCommand = require('./commandes/propose');
 var acceptCommand = require('./commandes/accept');
 var declineCommand = require('./commandes/decline');
@@ -42,7 +42,7 @@ var commands = {
   givepoints: givepointsCommands,
   takepoints: takepointsCommands,
   marier: marierCommand,
-  divorser: divorserCommand,
+  divorcer: divorcerCommand,
   epingle: epingleCommand,
   list: listclanCommands,
   info: infoClanCommands,

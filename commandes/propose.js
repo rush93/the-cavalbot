@@ -39,7 +39,7 @@ module.exports = {
         
         Players.setAskFor(message.member, user1);
         Utils.reply(message, `<@!${user1.id}>, <@!${message.member.id}> vous demande en mariage:
-    - voulez vous accepter ? ( **${Constants.prefix}accept <@!${message.member.id}>** )
-    - ou voulez vous refuser ? ( **${Constants.prefix}decline <@!${message.member.id}>** )`);
+    - Voulez vous accepter ? ( **${Constants.prefix}accept <@!${message.member.id}>** )
+    - Ou voulez vous refuser ? ( **${Constants.prefix}decline <@!${message.member.id}>** )`);
     }
 }
