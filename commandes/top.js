@@ -79,6 +79,8 @@ module.exports = {
                 text: `Faites **${Constants.prefix}top ${args.join(' ')} ${page + 1}** pour voir la suite.`
             });
         }
-        Utils.sendEmbed(message, role.color, 'Classements du clan ' + role.name, '', message.author, fields, clan.image);
+        var totalPoints = Utils.getScoreOfClan(Players, clan.id);
+        var image = Constants.domain + '/images/clan?c=' + clan.id + '&s=' + totalPoints;
+        Utils.sendEmbed(message, role.color, 'Classements du clan ' + role.name, '', message.author, fields, image);
     }
 }
