@@ -9,7 +9,7 @@ module.exports = {
     help: function (message) {
         Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande decline", "", message.author, [{
             title: Constants.prefix + 'decline <@user>',
-            text: "Permetde refuser une demande en marriage",
+            text: "Permet de refuser une demande en marriage",
             grid: false
         }]);
     },
@@ -37,6 +37,6 @@ module.exports = {
             return;
         }
         Players.setAskFor(user1, null);
-        Utils.reply(message, `Vous avez dis non à la demande en mariage, <@!${user1.id}> peu aller se recoucher.`);
+        Utils.reply(message, `Vous avez dit non à la demande en mariage, <@!${user1.id}> peut aller se recoucher.`);
     }
 }
