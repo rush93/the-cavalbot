@@ -19,11 +19,12 @@ module.exports = {
         }
         var score = Utils.getScoreOfClan(Players, clan.id) + '';
         if (fs.existsSync(`img/generated/${clan.id}_${score}.png`)) {
-            console.log(__dirname);
+            Utils.log(`Image requested ${Utils.Color.FgGreen}load from cache.`);
             var path = require(`path`);
             res.sendFile(path.resolve(`img/generated/${clan.id}_${score}.png`));
             return;
         }
+        Utils.log(`Image requested ${Utils.Color.FgYellow}generate new one.`);
         Jimp.read(`img/${clan.id}.png`).then(function (image) {
             Jimp.loadFont(`fonts/font.fnt`).then(function (font) {
                 image
@@ -35,10 +36,10 @@ module.exports = {
                         res.send(buffer);
                     });
             }).catch((err) => {
-                console.log(err);
+                Utils.log(err, true);
             });
         }).catch(function (err) {
-            console.log(err);
+            Utils.log(err, true);
         });
     }
 };

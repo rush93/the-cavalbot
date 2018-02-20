@@ -13,9 +13,9 @@ var constants = {
 function save() {
     fs.writeFile("./data/constants.json", JSON.stringify(constants), function (err) {
         if (err) {
-            return console.log(err);
+            return Utils.log(err, true);
         }
-        console.log("The file was saved!");
+        Utils.log(`The ${Utils.Color.FgYellow}constants${Utils.Color.Reset} file was saved!`);
     });
 }
 

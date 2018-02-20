@@ -29,7 +29,7 @@ module.exports = {
             toPin.pin().then(() => {
                 Utils.reply(message, "Le message à bien été épingler.");
             }).catch((e) => {
-                console.log(e);
+                Utils.log(e, true);
                 Utils.reply(message, "Euh wait il c'est passé quoi la ? j'ai pas réussi à le faire :/", true);
             });
             return;
@@ -37,7 +37,7 @@ module.exports = {
         toPin.unpin().then(() => {
             Utils.reply(message, "Le message n'est plus épingler.");
         }).catch((e) => {
-            console.log(e);
+            Utils.log(e, true);
             Utils.reply(message, "Euh wait il c'est passé quoi la ? j'ai pas réussi à le faire :/", true);
         });
     }
