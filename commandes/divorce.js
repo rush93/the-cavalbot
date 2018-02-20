@@ -6,8 +6,8 @@ module.exports = {
     role: 'MANAGE_GUILD',
     helpCat: 'Permet de divorcer deux personnes',
     help: function (message) {
-        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande divorcer", "", message.author, [{
-            title: Constants.prefix + 'divorcer <@user> <@user>',
+        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande divorce", "", message.author, [{
+            title: Constants.prefix + 'divorce <@user> <@user>',
             text: "Permet de divorcer deux personnes",
             grid: false
         }]);
@@ -37,6 +37,6 @@ module.exports = {
             return;
         }
         Players.divorse(user1, user2);
-        Utils.reply(message, `<@!${user1.id}> et <@!${user2.id}> ont divorsés !`);
+        Utils.reply(message, `<@!${user1.id}> et <@!${user2.id}> ont divorcé !`);
     }
 }
