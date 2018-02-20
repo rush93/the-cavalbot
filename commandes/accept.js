@@ -43,6 +43,6 @@ module.exports = {
         }
         message.channel.send(str.join(', '));
         Players.setAskFor(user1, null);
-        Utils.reply(message, `<@!${message.member.id}> et <@!${user1.id}> doivent se marier! ils ont besoin d'un curé et d'une cérémonie !`);
+        Utils.reply(message, `<@!${message.member.id}> et <@!${user1.id}> doivent se marier ! Ils ont besoin d'un curé et d'une cérémonie !`);
     }
 }
