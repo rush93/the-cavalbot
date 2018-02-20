@@ -77,7 +77,7 @@ module.exports = {
             }
             Utils.reply(message, 'Votre PSN a été mis à jour.');
         }).catch((e) => {
-            console.log(e);
+            Utils.log(e, true);
             Utils.reply(message, 'Votre PSN est introuvable.');
         });
         Utils.reply(message, 'Recherche sur le Playstation network...');

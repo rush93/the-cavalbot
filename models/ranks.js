@@ -9,9 +9,9 @@ var ranks = {};
 function save() {
     fs.writeFile("./data/ranks.json", JSON.stringify(ranks), function (err) {
         if (err) {
-            return console.log(err);
+            return Utils.log(err, true);
         }
-        console.log("The file was saved!");
+        Utils.log(`The ${Utils.Color.FgYellow}ranks${Utils.Color.Reset} file was saved!`);
     });
 }
 

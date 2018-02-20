@@ -1,5 +1,32 @@
 const Discord = require('discord.js');
+const moment = require('moment');
+const Color = {
+    Reset: "\x1b[0m",
+    Bright: "\x1b[1m",
+    Dim: "\x1b[2m",
+    Underscore: "\x1b[4m",
+    Blink: "\x1b[5m",
+    Reverse: "\x1b[7m",
+    Hidden: "\x1b[8m",
 
+    FgBlack: "\x1b[30m",
+    FgRed: "\x1b[31m",
+    FgGreen: "\x1b[32m",
+    FgYellow: "\x1b[33m",
+    FgBlue: "\x1b[34m",
+    FgMagenta: "\x1b[35m",
+    FgCyan: "\x1b[36m",
+    FgWhite: "\x1b[37m",
+
+    BgBlack: "\x1b[40m",
+    BgRed: "\x1b[41m",
+    BgGreen: "\x1b[42m",
+    BgYellow: "\x1b[43m",
+    BgBlue: "\x1b[44m",
+    BgMagenta: "\x1b[45m",
+    BgCyan: "\x1b[46m",
+    BgWhite: "\x1b[47m",
+}
 module.exports = {
     reply: function (message, toSend, error) {
         var embed = new Discord.RichEmbed({});
@@ -123,5 +150,24 @@ module.exports = {
             }
         }
         return rolesWithPerm;
-    }
+    },
+    log: function(text, err = false, place = null, by = null, content = null) {
+        var toWrite = `${Color.FgCyan}[${moment().format('DD-MM-YYYY HH:mm:ss')}]:${Color.Reset}`;
+
+        if (err) {
+            toWrite += Color.BgRed;
+        }
+        toWrite += ` ${text} ${Color.Reset}`;
+        if (place) {
+            toWrite += ` in ${Color.FgYellow}${place}${Color.Reset}`;
+        }
+        if (by) {
+            toWrite += ` by ${Color.FgGreen}${by}${Color.Reset}`;
+        }
+        if (content) {
+            toWrite += `: ${Color.FgCyan}${content}${Color.Reset}`;
+        }
+        console.log(toWrite);
+    },
+    Color
 }

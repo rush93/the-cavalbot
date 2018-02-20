@@ -57,18 +57,22 @@ var commands = {
   accept: acceptCommand,
   decline: declineCommand
 }
-
-bot.on('ready', function () {
-  console.log('bot started');
-  bot.user.setActivity(globalConst.prefix + 'help pour la liste des commandes');
-});
+try {
+  bot.on('ready', function () {
+    Utils.log(Utils.Color.FgGreen + 'bot started');
+    bot.user.setActivity(globalConst.prefix + 'help pour la liste des commandes');
+  });
+} catch(e) {
+  Utils.log(e, true);
+}
+try {
 
 bot.on('message', function (message) {
   if (message.author.bot) {
     return;
   }
   if (message.channel.constructor.name === 'DMChannel') {
-    console.log(message.author.username + ' DM MESSAGE:' + message.content);
+    Utils.log('', false, 'DM message', message.author.username, message.content);
     var player = players.getPlayers()[message.author.id];
     if (player && player.tempCode) {
       if (player.tempCode === Number(message.content)) {
@@ -102,7 +106,9 @@ bot.on('message', function (message) {
   try {
     if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
       var args = message.content.split(" ");
+      Utils.log('Command detected', false, message.channel.name, message.member.user.username, message.content);
       if (args[0] === globalConst.prefix + 'help') {
+        Utils.log(`running ${Utils.Color.FgYellow}help ${Utils.Color.Reset}command`);
         if (args.length > 1) {
           if (commands[args[1]] && message.member.hasPermission(commands[args[1]].role)) {
             commands[args[1]].help(message);
@@ -128,6 +134,7 @@ bot.on('message', function (message) {
       args[0] = args[0].replace(globalConst.prefix, '');
       if (commands[args[0]]) {
         var label = args[0];
+        Utils.log(`running ${Utils.Color.FgYellow}${label} ${Utils.Color.Reset}command`);
         args.shift();
         commands[label].runCommand(args, message);
         return;
@@ -150,11 +157,13 @@ bot.on('message', function (message) {
           var result = JSON.parse(body);
           if (result.results && result.results.length > 0) {
             var gif = result.results[0].media[0].mediumgif.url;
+            Utils.log('Gif detected and found', false, message.channel.name, message.member.user.username, message.content);
             sendEmbedImage(gif);
             return;
           } 
           var gif = "https://media.tenor.com/images/00631c571898fbaf0b75cedcbaf2135e/tenor.gif";
-          sendEmbedImage(gif).then(message => {
+            Utils.log('Gif detected and not found', false, message.channel.name, message.member.user.username, message.content);
+            sendEmbedImage(gif).then(message => {
               message.delete(1000);
           });
           
@@ -162,16 +171,23 @@ bot.on('message', function (message) {
       }
     }
   } catch (e) {
-    console.error(e);
+    Utils.log(e, true);
     Utils.reply(message, 'Aie..., j\'ai bugger. <@!270268597874589696> tu fait mal ton boulot! corrige moi ce bug tout de suite!', true)
   }
 });
+} catch (e) {
+  Utils.log(e, true)
+}
 
-var guild = null;
-var api = require('./api/index');
-bot.login(token).then(token => {
-  guild = bot.guilds.first();
-  api.initServer(guild);
-}).catch((e) => {
-  console.error(e);
-});
+try {
+  var guild = null;
+  var api = require('./api/index');
+  bot.login(token).then(token => {
+    guild = bot.guilds.first();
+    api.initServer(guild);
+  }).catch((e) => {
+    Utils.log(e, true);
+  });
+} catch (err) {
+  Utils.log(err, true);
+}
