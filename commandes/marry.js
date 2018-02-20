@@ -6,8 +6,8 @@ module.exports = {
     role: 'MANAGE_GUILD',
     helpCat: 'Permet de marier deux personnes',
     help: function (message) {
-        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande marier", "", message.author, [{
-            title: Constants.prefix + 'marier <@user> <@user>',
+        Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande marry", "", message.author, [{
+            title: Constants.prefix + 'marry <@user> <@user>',
             text: "Permet de marier deux personnes",
             grid: false
         }]);
