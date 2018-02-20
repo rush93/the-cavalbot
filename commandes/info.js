@@ -32,7 +32,7 @@ var displayRoleOfClan = function (message, role) {
             grid: true
         });
     }
-    var image = Constants.domain + '/images/clan?c=' + clan.id;
+    var image = Constants.domain + '/images/clan?c=' + clan.id + '&s=' + totalPoints;
     Utils.sendEmbed(message, role.color, "Clan " + role.name, clan.description ? clan.description : '', message.author, fields, image);
     return;
 }
