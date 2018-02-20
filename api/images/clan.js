@@ -17,14 +17,15 @@ module.exports = {
             res.render('index', { message: 'Le clan est incorrect' });
             return;
         }
+        var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         var score = Utils.getScoreOfClan(Players, clan.id) + '';
         if (fs.existsSync(`img/generated/${clan.id}_${score}.png`)) {
-            Utils.log(`Image requested ${Utils.Color.FgGreen}load from cache.`);
+            Utils.log(Utils.Color.FgMagenta + ip + Utils.Color.Reset + `: Image requested ${Utils.Color.FgGreen}load from cache.`);
             var path = require(`path`);
             res.sendFile(path.resolve(`img/generated/${clan.id}_${score}.png`));
             return;
         }
-        Utils.log(`Image requested ${Utils.Color.FgYellow}generate new one.`);
+        Utils.log(Utils.Color.FgMagenta + ip + Utils.Color.Reset + `Image requested ${Utils.Color.FgYellow}generate new one.`);
         Jimp.read(`img/${clan.id}.png`).then(function (image) {
             Jimp.loadFont(`fonts/font.fnt`).then(function (font) {
                 image
