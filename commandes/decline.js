@@ -19,6 +19,10 @@ module.exports = {
             Utils.reply(message, "Vous devez mentionner un joueur", true);
             return;
         }
+        if ( message.member.id === user1.id) {
+            Utils.reply(message, `Non désolé mais le célibat à vie c'est pas possible.`, true);
+            return;
+        }
         var askfor = Players.getAskFor(user1);
         if (!askfor || message.member.id !== askfor) {
             Utils.reply(message, `Désolé mais vous n'avez pas reçu de demande en mariage de cette personne.`, true);
