@@ -63,7 +63,7 @@ try {
     bot.user.setActivity(globalConst.prefix + 'help pour la liste des commandes');
   });
 } catch(e) {
-  Utils.log(e, true);
+  Utils.log(e.stack, true);
 }
 try {
 
@@ -171,12 +171,12 @@ bot.on('message', function (message) {
       }
     }
   } catch (e) {
-    Utils.log(e, true);
+    Utils.log(e.stack, true);
     Utils.reply(message, 'Aie..., j\'ai bugger. <@!270268597874589696> tu fait mal ton boulot! corrige moi ce bug tout de suite!', true)
   }
 });
 } catch (e) {
-  Utils.log(e, true)
+  Utils.log(e.stack, true)
 }
 
 try {
@@ -189,5 +189,5 @@ try {
     Utils.log(e, true);
   });
 } catch (err) {
-  Utils.log(err, true);
+  Utils.log(err.stack, true);
 }
