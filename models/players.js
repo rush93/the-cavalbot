@@ -319,5 +319,18 @@ module.exports = {
         createUserIfNotExist(player.id);
         players[player.id].askFor = askFor ? askFor.id : null;
         save();
+    },
+    setSeasonPoints(playersId, clanId, season, withoutSave = false) {
+        createUserIfNotExist(playersId);
+        if ( !players[playersId].clans[clanId] ) {
+            return;
+        }
+        if (!players[playersId].clans[clanId].season) {
+            players[playersId].clans[clanId].season = {};
+        }
+        players[playersId].clans[clanId].season[clanId] = players[playersId].clans[clanId].points;
+        if (!withoutSave) {
+            save();
+        }
     }
 }

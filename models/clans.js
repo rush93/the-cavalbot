@@ -148,5 +148,23 @@ module.exports = {
     getRoleByName,
     get clans() {
         return clans;
+    },
+    setSeasonPoints: function (ClanId, points, season, withoutSave = false) {
+        if (!clans[ClanId]) {
+            return;
+        }
+        if (!clans[ClanId].seasons) {
+            clans[ClanId].seasons = {};
+        }
+        clans[ClanId].seasons[season] = points;
+        if(!withoutSave) {
+            save();
+        }
+    },
+    getPointsOfLastSeason: function (ClanId) {
+        if(!Constants.season || Constants.season < 0) {
+            return null;
+        }
+        return clans[ClanId].seasons[Constants.season];
     }
 }
