@@ -34,6 +34,7 @@ var divorceCommand = require('./commandes/divorce');
 var proposeCommand = require('./commandes/propose');
 var acceptCommand = require('./commandes/accept');
 var declineCommand = require('./commandes/decline');
+var seasonCommand = require('./commandes/season');
 
 var commands = {
   config: configCommands,
@@ -43,6 +44,7 @@ var commands = {
   takepoints: takepointsCommands,
   marry: marryCommand,
   divorce: divorceCommand,
+  season: seasonCommand,
   epingle: epingleCommand,
   list: listclanCommands,
   info: infoClanCommands,
@@ -62,119 +64,119 @@ try {
     Utils.log(Utils.Color.FgGreen + 'bot started');
     bot.user.setActivity(globalConst.prefix + 'help pour la liste des commandes');
   });
-} catch(e) {
+} catch (e) {
   Utils.log(e.stack, true);
 }
 try {
 
-bot.on('message', function (message) {
-  if (message.author.bot) {
-    return;
-  }
-  if (message.channel.constructor.name === 'DMChannel') {
-    Utils.log('', false, 'DM message', message.author.username, message.content);
-    var player = players.getPlayers()[message.author.id];
-    if (player && player.tempCode) {
-      if (player.tempCode === Number(message.content)) {
-        var role = clans.getRole(player.tempGuild, guild);
-        var clan = clans.addPlayer(role, guild.members.get(player.id), 'à rejoins via le site', Object.keys(players.getPsns(player.id)).length > 0);
-        players.setTempClanToJoin(message.author.id, null, null);
-        if (!clan) {
-          Utils.reply(message, 'Vous êtes deja dans un clan.', true);
-          return;
-        }
-        Utils.reply(message, 'Code de confirmation correct, Vous avez bien rejoins les ' + role.name);
-      } else {
-        Utils.reply(message, "Le code est incorrect.", true);
-      }
-    } else {
-      if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
-        return;
-      }
-      var result = /^say ([0-9]+) (.+)$/.exec(message.content);
-      if (result) {
-        var channel = guild.channels.get(result[1]);
-        if (!channel) {
-          Utils.reply(message, 'c\'est pas un channel ça', true);
-          return;
-        }
-        channel.send(result[2]);
-      }
+  bot.on('message', function (message) {
+    if (message.author.bot) {
+      return;
     }
-    return;
-  }
-  try {
-    if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
-      var args = message.content.split(" ");
-      Utils.log('Command detected', false, message.channel.name, message.member.user.username, message.content);
-      if (args[0] === globalConst.prefix + 'help') {
-        Utils.log(`running ${Utils.Color.FgYellow}help ${Utils.Color.Reset}command`);
-        if (args.length > 1) {
-          if (commands[args[1]] && message.member.hasPermission(commands[args[1]].role)) {
-            commands[args[1]].help(message);
+    if (message.channel.constructor.name === 'DMChannel') {
+      Utils.log('', false, 'DM message', message.author.username, message.content);
+      var player = players.getPlayers()[message.author.id];
+      if (player && player.tempCode) {
+        if (player.tempCode === Number(message.content)) {
+          var role = clans.getRole(player.tempGuild, guild);
+          var clan = clans.addPlayer(role, guild.members.get(player.id), 'à rejoins via le site', Object.keys(players.getPsns(player.id)).length > 0);
+          players.setTempClanToJoin(message.author.id, null, null);
+          if (!clan) {
+            Utils.reply(message, 'Vous êtes deja dans un clan.', true);
             return;
           }
-          Utils.reply(message, `Aucune commande du nom de **${args[1]}**.`, true)
+          Utils.reply(message, 'Code de confirmation correct, Vous avez bien rejoins les ' + role.name);
+        } else {
+          Utils.reply(message, "Le code est incorrect.", true);
+        }
+      } else {
+        if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
           return;
         }
-        var keys = Object.keys(commands);
-        var fields = [];
-        keys.forEach((command) => {
-          if (message.member.hasPermission(commands[command].role)) {
-            fields.push({
-              text: commands[command].helpCat,
-              title: command,
-              grid: false
-            });
-          }
-        });
-        Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes', "Pour plus d'info sur une commandes faites **" + globalConst.prefix + "help [commande]**", message.author, fields);
-        return;
-      }
-      args[0] = args[0].replace(globalConst.prefix, '');
-      if (commands[args[0]]) {
-        var label = args[0];
-        Utils.log(`running ${Utils.Color.FgYellow}${label} ${Utils.Color.Reset}command`);
-        args.shift();
-        commands[label].runCommand(args, message);
-        return;
-      }
-    } else {
-      var regex = /^(?:\*([^\*]*)\*)|^(?:\*([^ ]+))/;
-      var result = regex.exec(message.content);
-      if (result) {
-        var word = result[1] ? result[1] : result[2];
-        var url = `https://api.tenor.com/v1/random?media_filter=minimal&key=PLSS61YOD7KR&limit=1&q=anime%20${encodeURI(word)}`;
-        var sendEmbedImage = (image) => {
-          var embed = new Discord.RichEmbed({});
-          embed.setColor(0x00AFFF);
-          embed.setImage(image);
-          return message.channel.send("", embed);
-        }
-        request({
-          url: url
-        }, function (error, response, body) {
-          var result = JSON.parse(body);
-          if (result.results && result.results.length > 0) {
-            var gif = result.results[0].media[0].mediumgif.url;
-            Utils.log('Gif detected and found', false, message.channel.name, message.member.user.username, message.content);
-            sendEmbedImage(gif);
+        var result = /^say ([0-9]+) (.+)$/.exec(message.content);
+        if (result) {
+          var channel = guild.channels.get(result[1]);
+          if (!channel) {
+            Utils.reply(message, 'c\'est pas un channel ça', true);
             return;
-          } 
-          var gif = "https://media.tenor.com/images/00631c571898fbaf0b75cedcbaf2135e/tenor.gif";
+          }
+          channel.send(result[2]);
+        }
+      }
+      return;
+    }
+    try {
+      if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
+        var args = message.content.split(" ");
+        Utils.log('Command detected', false, message.channel.name, message.member.user.username, message.content);
+        if (args[0] === globalConst.prefix + 'help') {
+          Utils.log(`running ${Utils.Color.FgYellow}help ${Utils.Color.Reset}command`);
+          if (args.length > 1) {
+            if (commands[args[1]] && message.member.hasPermission(commands[args[1]].role)) {
+              commands[args[1]].help(message);
+              return;
+            }
+            Utils.reply(message, `Aucune commande du nom de **${args[1]}**.`, true)
+            return;
+          }
+          var keys = Object.keys(commands);
+          var fields = [];
+          keys.forEach((command) => {
+            if (message.member.hasPermission(commands[command].role)) {
+              fields.push({
+                text: commands[command].helpCat,
+                title: command,
+                grid: false
+              });
+            }
+          });
+          Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes', "Pour plus d'info sur une commandes faites **" + globalConst.prefix + "help [commande]**", message.author, fields);
+          return;
+        }
+        args[0] = args[0].replace(globalConst.prefix, '');
+        if (commands[args[0]]) {
+          var label = args[0];
+          Utils.log(`running ${Utils.Color.FgYellow}${label} ${Utils.Color.Reset}command`);
+          args.shift();
+          commands[label].runCommand(args, message);
+          return;
+        }
+      } else {
+        var regex = /^(?:\*([^\*]*)\*)|^(?:\*([^ ]+))/;
+        var result = regex.exec(message.content);
+        if (result) {
+          var word = result[1] ? result[1] : result[2];
+          var url = `https://api.tenor.com/v1/random?media_filter=minimal&key=PLSS61YOD7KR&limit=1&q=anime%20${encodeURI(word)}`;
+          var sendEmbedImage = (image) => {
+            var embed = new Discord.RichEmbed({});
+            embed.setColor(0x00AFFF);
+            embed.setImage(image);
+            return message.channel.send("", embed);
+          }
+          request({
+            url: url
+          }, function (error, response, body) {
+            var result = JSON.parse(body);
+            if (result.results && result.results.length > 0) {
+              var gif = result.results[0].media[0].mediumgif.url;
+              Utils.log('Gif detected and found', false, message.channel.name, message.member.user.username, message.content);
+              sendEmbedImage(gif);
+              return;
+            }
+            var gif = "https://media.tenor.com/images/00631c571898fbaf0b75cedcbaf2135e/tenor.gif";
             Utils.log('Gif detected and not found', false, message.channel.name, message.member.user.username, message.content);
             sendEmbedImage(gif).then(message => {
               message.delete(1000);
+            });
+
           });
-          
-        });
+        }
       }
+    } catch (e) {
+      Utils.log(e.stack, true);
+      Utils.reply(message, 'Aie..., j\'ai bugger. <@!270268597874589696> tu fait mal ton boulot! corrige moi ce bug tout de suite!', true)
     }
-  } catch (e) {
-    Utils.log(e.stack, true);
-    Utils.reply(message, 'Aie..., j\'ai bugger. <@!270268597874589696> tu fait mal ton boulot! corrige moi ce bug tout de suite!', true)
-  }
-});
+  });
 } catch (e) {
   Utils.log(e.stack, true)
 }
@@ -187,6 +189,9 @@ try {
     api.initServer(guild);
   }).catch((e) => {
     Utils.log(e, true);
+  })
+  bot.on('error', (err) => {
+    Utils.log(err.stack,                                                                                                                                                                                                                                                                                                       true);
   });
 } catch (err) {
   Utils.log(err.stack, true);

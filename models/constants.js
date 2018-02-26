@@ -1,5 +1,5 @@
 var fs = require('fs');
-
+var Utils = require('../utils');
 var constants = {
     prefix: "_",
     pseudoModifier: "Bonjour",
@@ -7,7 +7,8 @@ var constants = {
     leaveCooldown: 0,
     joinmessage: "no",
     leavemessage: "no",
-    PS4: "[PS4]"
+    PS4: "[PS4]",
+    season: 0
 }
 
 function save() {
@@ -62,6 +63,9 @@ module.exports = {
     get domain() {
         return constants.domain;
     },
+    get season() {
+        return constants.season ? constants.season : 0;
+    },
     set prefix(prefix) {
         constants.prefix = prefix;
         save();
@@ -101,5 +105,10 @@ module.exports = {
         constants.domain = domain;
         save();
         return constants.domain;
+    },
+    set season(season) {
+        constants.season = season;
+        save();
+        return constants.season;
     }
 };
