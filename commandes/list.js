@@ -15,22 +15,7 @@ module.exports = {
     },
     runCommand: (args, message) => {
         var fields = [];
-        var scores = {};
-        var players = Players.getPlayers();
-        var PlayerKeys = Object.keys(players);
-        for (var i = 0; i < PlayerKeys.length; i++) {
-            var objectKeys = Object.keys(players[PlayerKeys[i]].clans);
-            for (var j = 0; j < objectKeys.length; j++) {
-                if (typeof(players[PlayerKeys[i]].clans[objectKeys[j]]) === "object") {
-                    if (!scores[objectKeys[j]]) {
-                        scores[objectKeys[j]] = 0;
-                    }
-                    if (players[PlayerKeys[i]].clans[objectKeys[j]]) {
-                        scores[objectKeys[j]]+= players[PlayerKeys[i]].clans[objectKeys[j]].points;
-                    }
-                }
-            }
-        }
+        var scores = Utils.getClanScores(Players, Clans);
         var keys = Object.keys(Clans.clans);
         for (var i = 0; i < keys.length; i++) {
             var guildRole = message.guild.roles.get(keys[i])

@@ -27,6 +27,29 @@ const Color = {
     BgCyan: "\x1b[46m",
     BgWhite: "\x1b[47m",
 }
+var getClanScores = function (Players, Clans) {
+    var scores = {};
+    var players = Players.getPlayers();
+    var PlayerKeys = Object.keys(players);
+    for (var i = 0; i < PlayerKeys.length; i++) {
+        var objectKeys = Object.keys(players[PlayerKeys[i]].clans);
+        for (var j = 0; j < objectKeys.length; j++) {
+            if (typeof(players[PlayerKeys[i]].clans[objectKeys[j]]) === "object") {
+                if (!scores[objectKeys[j]]) {
+                    scores[objectKeys[j]] = 0;
+                }
+                if (players[PlayerKeys[i]].clans[objectKeys[j]]) {
+                    scores[objectKeys[j]]+= players[PlayerKeys[i]].clans[objectKeys[j]].points;
+                }
+            }
+        }
+    }
+    var scoreKeys = Object.keys(scores);
+    for (var i = 0; i < scoreKeys.length; i++) {
+        scores[scoreKeys[i]] -= Clans.getPointsOfLastSeason(scoreKeys[i]);
+    }
+    return scores;
+}
 module.exports = {
     reply: function (message, toSend, error) {
         var embed = new Discord.RichEmbed({});
@@ -119,25 +142,9 @@ module.exports = {
         }
         return input;
     },
+    getClanScores,
     getScoreOfClan: function(Players, clanId) {
-
-        var scores = {};
-        var players = Players.getPlayers();
-        var PlayerKeys = Object.keys(players);
-        for (var i = 0; i < PlayerKeys.length; i++) {
-            var objectKeys = Object.keys(players[PlayerKeys[i]].clans);
-            for (var j = 0; j < objectKeys.length; j++) {
-                if (typeof(players[PlayerKeys[i]].clans[objectKeys[j]]) === "object") {
-                    if (!scores[objectKeys[j]]) {
-                        scores[objectKeys[j]] = 0;
-                    }
-                    if (players[PlayerKeys[i]].clans[objectKeys[j]]) {
-                        scores[objectKeys[j]]+= players[PlayerKeys[i]].clans[objectKeys[j]].points;
-                    }
-                }
-            }
-        }
-
+        var scores = getClanScores(Players, Clans);
         return scores[clanId];
     },
     getRolesOfPerm: function(guild, permissions) {
