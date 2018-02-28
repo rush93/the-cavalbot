@@ -143,7 +143,7 @@ module.exports = {
         return input;
     },
     getClanScores,
-    getScoreOfClan: function(Players, clanId) {
+    getScoreOfClan: function(Players, clanId, Clans) {
         var scores = getClanScores(Players, Clans);
         return scores[clanId];
     },

@@ -89,7 +89,7 @@ var commands = {
                 Utils.reply(message, 'Aucuns clan avec ce role.', true);
                 return;
             }
-            var totalPoints = Utils.getScoreOfClan(Players, clan.id);
+            var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
             message.channel.send('L\'url de l\'image: ' + Constants.domain + '/images/clan?c=' + clan.id + '&s=' + totalPoints);
         }
     },

@@ -8,7 +8,7 @@ var Constants = require('../models/constants');
 var displayRoleOfClan = function (message, role) {
     var ranks = Ranks.getSortedKeys(role.id);
     var clan = Clans.getClan(role);
-    var totalPoints = Utils.getScoreOfClan(Players, clan.id);
+    var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
     var fields = [
         {
             title: "Nombre de personnes",
