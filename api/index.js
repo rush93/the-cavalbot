@@ -9,15 +9,15 @@ const clan = require('./clans/clan');
 const imageClan = require('./images/clan');
 
 const routes = [
-    choice,
-    clan,
+    // choice,
+    // clan,
     imageClan
 ];
 
 var initServer = function (guild) {
     app.set('view engine', 'pug')
     app.get('/', (req, res) => {
-        res.render('index', { message: 'Veuillez entrer votre username discord' })
+        res.render('index', { message: 'Désactivé à cause de petit con! (merci Nolat)' })
     })
 
     for (var i = 0; i < routes.length; i++) {
