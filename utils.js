@@ -46,7 +46,7 @@ var getClanScores = function (Players, Clans) {
     }
     var scoreKeys = Object.keys(scores);
     for (var i = 0; i < scoreKeys.length; i++) {
-        scores[scoreKeys[i]] -= Clans.getPointsOfLastSeason(scoreKeys[i]);
+        // scores[scoreKeys[i]] -= Clans.getPointsOfLastSeason(scoreKeys[i]);
     }
     return scores;
 }
