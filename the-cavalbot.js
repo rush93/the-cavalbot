@@ -6,13 +6,17 @@ var request = require('request');
 var token = require('./token');
 
 var globalConst = require('./models/constants');
+var interactions = require('./models/interactions');
 var clans = require('./models/clans');
 var players = require('./models/players');
 var ranks = require('./models/ranks');
+var event = require('./models/event');
 globalConst.init();
+interactions.init();
 clans.init();
 players.init();
 ranks.init();
+event.init();
 
 var configCommands = require('./commandes/config');
 var clanCommands = require('./commandes/clan');
@@ -35,6 +39,8 @@ var proposeCommand = require('./commandes/propose');
 var acceptCommand = require('./commandes/accept');
 var declineCommand = require('./commandes/decline');
 var seasonCommand = require('./commandes/season');
+var eventCommand = require('./commandes/event');
+var participeCommand = require('./commandes/participe');
 
 var commands = {
   config: configCommands,
@@ -45,6 +51,7 @@ var commands = {
   marry: marryCommand,
   divorce: divorceCommand,
   season: seasonCommand,
+  event: eventCommand,
   epingle: epingleCommand,
   list: listclanCommands,
   info: infoClanCommands,
@@ -57,7 +64,8 @@ var commands = {
   psn: psnCommands,
   propose: proposeCommand,
   accept: acceptCommand,
-  decline: declineCommand
+  decline: declineCommand,
+  participe: participeCommand
 }
 try {
   bot.on('ready', function () {
@@ -69,41 +77,50 @@ try {
 }
 try {
 
+  bot.on('messageReactionAdd', function (messageReaction, user) {
+    if (user.bot) {
+      return;
+    }
+    var reactInteraction = interactions.getReactInteraction(user.id);
+    if (reactInteraction) {
+      var command = eval(reactInteraction.command + 'Command');
+      if(reactInteraction.additionalArg) {
+        command[reactInteraction.functionToCall](messageReaction, user, ...reactInteraction.additionalArg);
+        return;
+      } 
+      command[reactInteraction.functionToCall](messageReaction, user);
+    }
+  });
+
   bot.on('message', function (message) {
     if (message.author.bot) {
       return;
     }
     if (message.channel.constructor.name === 'DMChannel') {
       Utils.log('', false, 'DM message', message.author.username, message.content);
-      var player = players.getPlayers()[message.author.id];
-      if (player && player.tempCode) {
-        if (player.tempCode === Number(message.content)) {
-          var role = clans.getRole(player.tempGuild, guild);
-          var clan = clans.addPlayer(role, guild.members.get(player.id), 'à rejoins via le site', Object.keys(players.getPsns(player.id)).length > 0);
-          players.setTempClanToJoin(message.author.id, null, null);
-          if (!clan) {
-            Utils.reply(message, 'Vous êtes deja dans un clan.', true);
-            return;
-          }
-          Utils.reply(message, 'Code de confirmation correct, Vous avez bien rejoins les ' + role.name);
-        } else {
-          Utils.reply(message, "Le code est incorrect.", true);
-        }
-      } else {
+      var result = /^say ([0-9]+) (.+)$/.exec(message.content);
+      if (result) {
         if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
+          Utils.reply(message, 'ptdr t ki ?', true);
           return;
         }
-        var result = /^say ([0-9]+) (.+)$/.exec(message.content);
-        if (result) {
-          var channel = guild.channels.get(result[1]);
-          if (!channel) {
-            Utils.reply(message, 'c\'est pas un channel ça', true);
+        var channel = guild.channels.get(result[1]);
+        if (!channel) {
+          Utils.reply(message, 'c\'est pas un channel ça', true);
+          return;
+        }
+        channel.send(result[2]);
+      } else {
+        var chatInteraction = interactions.getChatInteraction(message.author.id);
+        if (chatInteraction) {
+          var command = eval(chatInteraction.command + 'Command');
+          if(chatInteraction.additionalArg) {
+            command[chatInteraction.functionToCall](message, ...chatInteraction.additionalArg);
             return;
           }
-          channel.send(result[2]);
+          command[chatInteraction.functionToCall](message);
         }
       }
-      return;
     }
     try {
       if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
