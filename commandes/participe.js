@@ -19,7 +19,6 @@ module.exports = {
     runCommand: (args, message) => {
         var btags = Players.getBtags(message.author.id);
         var psns = Players.getPsns(message.author.id);
-        console.log(btags, psns);
         if((!btags || Object.keys(btags).length === 0) && (!psns || Object.keys(psns).length === 0)) {
             Utils.reply(message, `Vous devez ajouter au moins un btag ou psn pour participer au events.
 ajouter un btag: **${Constants.prefix}btag votrebtag**
@@ -52,6 +51,8 @@ ajouter un psn: **${Constants.prefix}psn votrepsn**
                 Utils.log(e, true);
             });
             Interactions.addReactInteractions('participe', 'chooseEvent', message.author.id);
+            Utils.reply(message, 'Regarde dans tes messages privés :wink:');
+            return;
         }
         var event = Events.getEvent(args.join(' '));
         if (!event) {
@@ -80,7 +81,7 @@ ou :x: pour annuler la participation`,
             Utils.log(e, true);
         });
         Interactions.addReactInteractions('participe', 'chooseTimetable', message.author.id, [event.name]);
-        Utils.reply(message, 'Regarde dans tes DM :wink:');
+        Utils.reply(message, 'Regarde dans tes messages privés :wink:');
     },
     chooseEvent: (messageReaction, user) => {
         var index = Utils.InvertedUnicodeReactMap()[messageReaction.emoji.name];

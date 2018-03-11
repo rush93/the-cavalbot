@@ -116,7 +116,7 @@ module.exports = {
             return null;
         }
         events[key].participants[userId] = {
-            timetable: {},
+            timetable: [],
             questions: {}
         };
         save();

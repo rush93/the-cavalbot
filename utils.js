@@ -110,7 +110,7 @@ var getClanScores = function (Players, Clans) {
     }
     return scores;
 }
-var sendEmbedInChannel = function (channel, color, title, content, author, fields, image = null) {
+var sendEmbedInChannel = function (channel, color, title, content, author, fields, image = null, maxField = 25) {
     var embed;
     if (fields.length === 0) {
 
@@ -125,7 +125,7 @@ var sendEmbedInChannel = function (channel, color, title, content, author, field
         return channel.send("", embed);
     }
     for (var i = 0; i < fields.length; i++) {
-        if (i % 25 === 0) {
+        if (i % maxField === 0) {
             if (embed) {
                 channel.send("", embed);
                 embed = null;
@@ -189,11 +189,11 @@ module.exports = {
     canExecuteOn: function (author, user) {
         return getHightRole(author.roles).comparePositionTo(getHightRole(user.roles)) >= 0;
     },
-    sendEmbed: function (message, color, title, content, author, fields, image = null) {
-        return sendEmbedInChannel(message.channel, color, title, content, author, fields, image);
+    sendEmbed: function (message, color, title, content, author, fields, image = null, maxField) {
+        return sendEmbedInChannel(message.channel, color, title, content, author, fields, image, maxField);
     },
-    sendDmEmbed: function(user, color, title, content, author, fields, image = null) {
-        return sendEmbedInChannel(user, color, title, content, author, fields, image);
+    sendDmEmbed: function(user, color, title, content, author, fields, image = null, maxField) {
+        return sendEmbedInChannel(user, color, title, content, author, fields, image, maxField);
     },
     replaceModifier: function (input, clan, guildMember, player, rank, isPS4, ps4text, withHightLight = true) {
         var playerName = `<@!${guildMember.id}>`;

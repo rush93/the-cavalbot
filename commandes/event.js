@@ -184,6 +184,43 @@ var commands = {
             }
             Utils.reply(message, 'Aucune question avec ce nom trouvé.', true);
         }
+    },
+    participants: {
+        help: [
+            'Permet d\'afficher la liste des participants.'
+        ],
+        args: '<name>',
+        runCommand: (args, message) => {
+            var event = Events.getEvent(args.join(' '));
+            if (!event) {
+                Utils.reply(message, 'Cet event n\'existe pas.', true);
+                return;
+            }
+            var participants = event.participants;
+            var participantsKeys = Object.keys(participants);
+            var fields = [];
+            for (var i = 0; i < participantsKeys.length; i++) {
+                var btags = Players.getBtags(participantsKeys[i])
+                var btag = btags[Object.keys(btags)[0]];
+                var psns = Players.getPsns(participantsKeys[i])
+                var psn = psns[Object.keys(psns)[0]];
+                var participation = participants[participantsKeys[i]];
+                var questions = Object.keys(participation.questions).map(function(key) {
+                    return participation.questions[key];
+                });
+                fields.push({
+                    title:  message.guild.members.get(participantsKeys[i]).displayName,
+                    text: 
+(btags && Object.keys(btags).length > 0 ? `**Btag**: ${btag.btag} (${btag.comprank ? btag.comprank : 0 })` : '' ) +
+(psns && Object.keys(psns).length > 0 ? `**PSN**: ${psn.psn} (${psn.psncomprank ? psn.psncomprank : 0 })` : '' ) + `
+**horaire**: ${participation.timetable.join(', ')}
+**réponse**: ${questions.join(' - ')}
+`,
+                    grid: true
+                });
+            }
+            Utils.sendEmbed(message, 0x00AFFF , 'Liste des participants de l\'event ' + event.name,'', message.author, fields );
+        }
     }
 }
 var help = function (message) {
