@@ -93,7 +93,7 @@ var displayRoleOfMember = function (message, member) {
         `**Clan:** ${role.name}
 **Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btagString || btagString.length <= 0 ? '' : `
 **Battle tag:** ${btagString.join(', ')}`) + (!psnString || psnString.length <= 0  ? '' : `
-**PSN:** ${psnString.join(', ')}`) + ` ${globalPlayer.epou ? `
+**PSN:** ${psnString.join(', ')}`) + ` ${globalPlayer && globalPlayer.epou ? `
 :ring: <@!${globalPlayer.epou}>` : ''} `
         , message.author, fields, clan.image);
     return;
