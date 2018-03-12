@@ -191,6 +191,7 @@ try {
       }
     } catch (e) {
       Utils.log(e.stack, true);
+      message.channel.send('<@!270268597874589696>');
       Utils.reply(message, 'Aie..., j\'ai bugger. <@!270268597874589696> tu fait mal ton boulot! corrige moi ce bug tout de suite!', true)
     }
   });
