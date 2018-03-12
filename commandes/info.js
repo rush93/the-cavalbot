@@ -89,8 +89,16 @@ var displayRoleOfMember = function (message, member) {
             }
         }
     }
+    var seasonPoints = null;
+    if ( Constants.season && Constants.season !== 0 && player.points) {
+        seasonPoints = player.points;
+        if (player.season[Constants.season]) {
+            seasonPoints -= player.season[Constants.season];
+        }
+    }
     Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
-        `**Clan:** ${role.name}
+        `**Clan:** ${role.name}` +  (seasonPoints === null ? '' : `
+**points de la saison:** ${seasonPoints}`) + `
 **Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btagString || btagString.length <= 0 ? '' : `
 **Battle tag:** ${btagString.join(', ')}`) + (!psnString || psnString.length <= 0  ? '' : `
 **PSN:** ${psnString.join(', ')}`) + ` ${globalPlayer && globalPlayer.epou ? `

@@ -27,6 +27,66 @@ const Color = {
     BgCyan: "\x1b[46m",
     BgWhite: "\x1b[47m",
 }
+const ReactMap = {
+    0: "one",
+    1: "two",
+    2: "three",
+    3: "four",
+    4: "five",
+    5: "six",
+    6: "seven",
+    7: "eight",
+    8: "nine",
+    9: "keycap_ten",
+    10: "regional_indicator_a",
+    11: "regional_indicator_b",
+    12: "regional_indicator_c",
+    13: "regional_indicator_d",
+    14: "regional_indicator_e",
+    15: "regional_indicator_f",
+    16: "regional_indicator_g",
+    17: "regional_indicator_h",
+    18: "regional_indicator_i",
+    19: "regional_indicator_j",
+    20: "regional_indicator_k",
+    21: "regional_indicator_l",
+    22: "regional_indicator_m",
+    23: "regional_indicator_n",
+    24: "regional_indicator_o",
+    25: "regional_indicator_p",
+}
+const ConfirmReact = 'white_check_mark';
+
+const UnicodeReactMap = {
+    0: `1⃣`,
+    1: `2⃣`,
+    2: `3⃣`,
+    3: `4⃣`,
+    4: `5⃣`,
+    5: `6⃣`,
+    6: `7⃣`,
+    7: `8⃣`,
+    8: `9⃣`,
+    9: `🔟`,
+    10: `🇦`,
+    11: `🇧`,
+    12: `🇨`,
+    13: `🇩`,
+    14: `🇪`,
+    15: `🇫`,
+    16: `🇬`,
+    17: `🇭`,
+    18: `🇮`,
+    19: `🇯`,
+    20: `🇰`,
+    21: `🇱`,
+    22: `🇲`,
+    23: `🇳`,
+    24: `🇴`,
+    25: `🇵`,
+}
+const UnicodeConfirmReact = '✅';
+const UnicodeCancelReact = '❌';
 var getClanScores = function (Players, Clans) {
     var scores = {};
     var players = Players.getPlayers();
@@ -50,13 +110,72 @@ var getClanScores = function (Players, Clans) {
     }
     return scores;
 }
+var sendEmbedInChannel = function (channel, color, title, content, author, fields, image = null, maxField = 25) {
+    var embed;
+    if (fields.length === 0) {
+
+        embed = new Discord.RichEmbed({});
+        embed.setColor(color);
+        embed.setTitle(title);
+        embed.setDescription(content);
+        if (image) {
+            embed.setThumbnail(image);
+        }
+        embed.setFooter(author.username + "#" + author.discriminator, author.avatarURL);
+        return channel.send("", embed);
+    }
+    for (var i = 0; i < fields.length; i++) {
+        if (i % maxField === 0) {
+            if (embed) {
+                channel.send("", embed);
+                embed = null;
+            }
+            embed = new Discord.RichEmbed({});
+            embed.setColor(color);
+            embed.setTitle(title);
+            embed.setDescription(content);
+            if (image) {
+                embed.setThumbnail(image);
+            }
+            embed.setFooter(author.username + "#" + author.discriminator, author.avatarURL);
+        }
+        embed.addField(fields[i].title, fields[i].text, fields[i].grid);
+    }
+    return channel.send("", embed);
+}
+var recurciveReactNbTime = function (message, nb, current, withConfirm = false, withCancel = false) {
+    message.react(UnicodeReactMap[current]).then(() => {
+        if(current + 1 !== nb) {
+            recurciveReactNbTime(message, nb, current + 1, withConfirm, withCancel);
+            return;
+        }
+        if (withConfirm) {
+            message.react(UnicodeConfirmReact).then(() => {
+                if (withCancel) {
+                    message.react(UnicodeCancelReact);
+                }
+            });
+            return;
+        }
+        if (withCancel) {
+            message.react(UnicodeCancelReact);
+        }
+    });
+}
 module.exports = {
     reply: function (message, toSend, error) {
         var embed = new Discord.RichEmbed({});
         embed.setColor(error ? 0xA80000 : 0x00AFFF);
         embed.setDescription(toSend);
         embed.setFooter(message.author.username + "#" + message.author.discriminator, message.author.avatarURL);
-        message.channel.send("", embed);
+        return message.channel.send("", embed);
+    },
+    sendDM: function (user, toSend, error) {
+        var embed = new Discord.RichEmbed({});
+        embed.setColor(error ? 0xA80000 : 0x00AFFF);
+        embed.setDescription(toSend);
+        embed.setFooter(user.username + "#" + user.discriminator, user.avatarURL);
+        return user.send("", embed);
     },
     getHightRole: function (roles) {
         var hight;
@@ -70,39 +189,11 @@ module.exports = {
     canExecuteOn: function (author, user) {
         return getHightRole(author.roles).comparePositionTo(getHightRole(user.roles)) >= 0;
     },
-    sendEmbed: function (message, color, title, content, author, fields, image = null) {
-        var embed;
-        if (fields.length === 0) {
-
-            embed = new Discord.RichEmbed({});
-            embed.setColor(color);
-            embed.setTitle(title);
-            embed.setDescription(content);
-            if (image) {
-                embed.setThumbnail(image);
-            }
-            embed.setFooter(author.username + "#" + author.discriminator, author.avatarURL);
-            message.channel.send("", embed);
-            return;
-        }
-        for (var i = 0; i < fields.length; i++) {
-            if (i % 10 === 0) {
-                if (embed) {
-                    message.channel.send("", embed);
-                    embed = null;
-                }
-                embed = new Discord.RichEmbed({});
-                embed.setColor(color);
-                embed.setTitle(title);
-                embed.setDescription(content);
-                if (image) {
-                    embed.setThumbnail(image);
-                }
-                embed.setFooter(author.username + "#" + author.discriminator, author.avatarURL);
-            }
-            embed.addField(fields[i].title, fields[i].text, fields[i].grid);
-        }
-        message.channel.send("", embed);
+    sendEmbed: function (message, color, title, content, author, fields, image = null, maxField) {
+        return sendEmbedInChannel(message.channel, color, title, content, author, fields, image, maxField);
+    },
+    sendDmEmbed: function(user, color, title, content, author, fields, image = null, maxField) {
+        return sendEmbedInChannel(user, color, title, content, author, fields, image, maxField);
     },
     replaceModifier: function (input, clan, guildMember, player, rank, isPS4, ps4text, withHightLight = true) {
         var playerName = `<@!${guildMember.id}>`;
@@ -176,5 +267,26 @@ module.exports = {
         }
         console.log(toWrite);
     },
-    Color
+    reactNbTime(message, nb, withConfirm = false, withCancel = false) {
+        recurciveReactNbTime(message, nb, 0, withConfirm, withCancel);
+    },
+    Color,
+    ReactMap,
+    ConfirmReact,
+    UnicodeReactMap,
+    UnicodeConfirmReact,
+    UnicodeCancelReact,
+    InvertedUnicodeReactMap: function () {
+        var ret = {};
+        for(var key in UnicodeReactMap){
+          ret[UnicodeReactMap[key]] = key;
+        }
+        return ret;
+    },
+    removeMyReact: function (message) {
+        message.reactions.forEach(reaction => {
+            reaction.remove();
+        });
+
+    }
 }

@@ -81,6 +81,6 @@ module.exports = {
         }
         var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
         var image = Constants.domain + '/images/clan?c=' + clan.id + '&s=' + totalPoints;
-        Utils.sendEmbed(message, role.color, 'Classements du clan ' + role.name, '', message.author, fields, image);
+        Utils.sendEmbed(message, role.color, 'Classements du clan ' + role.name, '', message.author, fields, image, 10);
     }
 }
