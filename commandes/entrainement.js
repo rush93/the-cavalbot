@@ -33,7 +33,7 @@ module.exports = {
 
         /**
          * Exercice 4
-         * créer une autre commande '_bonjour' qui la liste des events
+         * créer une autre commande '_bonjour' qui affiche la liste des events
          */
 
         /**
