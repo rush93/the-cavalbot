@@ -14,5 +14,31 @@ module.exports = {
     },
     runCommand: (args, message) => {
         console.log('ICI TON CODE');
+
+        /**
+         * Exercie 1 
+         * quand tu fait '_train' le bot dois répondre 'salut comment ça va' dans un embed
+         */
+
+        /**
+         * Exercice 2
+         * quand tu fait '_train bonjour' le bot répond 'bonjour'
+         */
+
+        /**
+         * Exercice 3 
+         * quand tu fait '_train @personne' afficher le nombre de points du joueur
+         */
+
+        /**
+         * Exercice 4
+         * créer une autre commande '_bonjour' qui la liste des events
+         */
+
+        /**
+         * Exercice 5
+         * coder une vrais fonctionnalitée (demander a rush) xD
+         */
+
     }
 }
