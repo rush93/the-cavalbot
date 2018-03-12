@@ -23,6 +23,7 @@ module.exports = {
         /**
          * Exercice 2
          * quand tu fait '_train bonjour' le bot répond 'bonjour'
+         * quand tu fait '_train ça va ?' le bot répond 'oui et toi ?'
          */
 
         /**
