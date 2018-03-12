@@ -328,7 +328,7 @@ module.exports = {
         if (!players[playersId].clans[clanId].season) {
             players[playersId].clans[clanId].season = {};
         }
-        players[playersId].clans[clanId].season[clanId] = players[playersId].clans[clanId].points;
+        players[playersId].clans[clanId].season[season] = players[playersId].clans[clanId].points;
         if (!withoutSave) {
             save();
         }
