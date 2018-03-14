@@ -1,3 +1,4 @@
+
 const Discord = require('discord.js');
 const moment = require('moment');
 const Color = {
@@ -266,6 +267,9 @@ module.exports = {
             toWrite += `: ${Color.FgCyan}${content}${Color.Reset}`;
         }
         console.log(toWrite);
+        // if(err) {
+        //     console.log(console.trace());
+        // }
     },
     reactNbTime(message, nb, withConfirm = false, withCancel = false) {
         recurciveReactNbTime(message, nb, 0, withConfirm, withCancel);

@@ -123,7 +123,7 @@ module.exports = {
     },
     delParticipant: function(name, userId) {
         var key = name.toLowerCase();
-        if (events[key]) {
+        if (!events[key]) {
             return null;
         }
         delete events[key].participants[userId];
