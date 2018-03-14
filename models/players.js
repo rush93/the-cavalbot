@@ -2,6 +2,8 @@ var fs = require('fs');
 var Constants = require('./constants');
 var Clans = require('./clans');
 var Utils = require('../utils');
+var oversmash = require('oversmash');
+const ow = oversmash.default()
 
 var request = require('request');
 var moment = require('moment');
@@ -38,6 +40,55 @@ function createUserIfNotExist(id) {
     }
 }
 
+function updateBtag(btag, id) {
+    return new Promise((resolve , reject) => {
+        var uncriptedbtag = encodeURI(btag.replace('#', '-'));
+        ow.playerStats(uncriptedbtag,'', 'pc').then(player => {
+            Utils.log('fin de la requete du btag ' + Utils.Color.FgYellow + btag + Utils.Color.Reset);
+            if (!player.stats.quickplay.all) {
+                reject('btag non trouvé');
+                return;
+            }
+            players[id].btags[btag] = { btag };
+            if(isNaN(player.stats.competitiveRank)) {
+                players[id].btags[btag].comprank = 0;
+                players[id].lastUpdate = new Date();
+            } else {
+                players[id].btags[btag].comprank = player.stats.competitiveRank;
+                players[id].lastUpdate = new Date();
+            }
+            save();
+            resolve(players[id].btags[btag].comprank);
+        }).catch(e => {
+            reject(e);
+        });
+    });
+}
+
+function updatePsn(psn, id) {
+    return new Promise((resolve , reject) => {
+        var uncriptedpsn = encodeURI(psn);
+        ow.playerStats(uncriptedpsn,'', 'psn').then(player => {
+            Utils.log('fin de la requete du psn ' + Utils.Color.FgYellow + psn + Utils.Color.Reset);
+            if (!player.stats.quickplay.all) {
+                reject('psn non trouvé');
+                return;
+            }
+            players[id].psns[psn] = { psn };
+            if(isNaN(player.stats.competitiveRank)) {
+                players[id].psns[psn].psncomprank = 0;
+                players[id].lastUpdate = new Date();
+            } else {
+                players[id].psns[psn].psncomprank = player.stats.competitiveRank;
+                players[id].lastUpdate = new Date();
+            }
+            save();
+            resolve(players[id].psns[psn].psncomprank);
+        }).catch(e => {
+            reject(e);
+        });
+    });
+}
 module.exports = {
     init: function () {
         return new Promise((resolve, reject) => {
@@ -160,32 +211,19 @@ module.exports = {
                 resolve(-1);
                 return;
             }
-            var uncriptedbtag = encodeURI(btag.replace('#', '-'));
-            request({
-                url: `https://owapi.net/api/v3/u/${uncriptedbtag}/blob`,
-                headers: {
-                    'User-Agent': 'the cavalry discord bot'
-                }
-            }, (error, response, body) => {
-                if (error) {
-                    reject();
-                    return;
-                }
-                var result = JSON.parse(body);
-                if (!result.eu || !result.eu.stats || !result.eu.stats) {
-                    reject();
-                    return;
-                }
-                players[id].btags[btag] = { btag };
-                save();
-                if (result.eu && result.eu.stats && result.eu.stats.competitive && result.eu.stats.competitive.overall_stats && result.eu.stats.competitive.overall_stats.comprank) {
-                    players[id].btags[btag].comprank = result.eu.stats.competitive.overall_stats.comprank;
-                    players[id].lastUpdate = new Date();
-                    save();
-                }
-                resolve(players[id].btags[btag].comprank);
-            });
+            updateBtag(btag, id).then(resolve).catch(reject);
         });
+    },
+    updateComprank: function(id) {
+        createUserIfNotExist(id);
+        var btagsKey = Object.keys(players[id].btags);
+        for(var i = 0; i < btagsKey.length; i++) {
+            updateBtag(btagsKey[i], id).catch((e) => { Utils.log(e, true) });
+        }
+        var psnsKey = Object.keys(players[id].psns);
+        for(var i = 0; i < psnsKey.length; i++) {
+            updatePsn(psnsKey[i], id).catch((e) => { Utils.log(e, true) });
+        }
     },
     getBtags: function (id) {
         createUserIfNotExist(id);
@@ -202,88 +240,12 @@ module.exports = {
                 resolve(-1);
                 return;
             }
-            var uncriptedpsn = encodeURI(psn);
-            request({
-                url: `https://owapi.net/api/v3/u/${uncriptedpsn}/blob?platform=psn`,
-                headers: {
-                    'User-Agent': 'the cavalry discord bot'
-                }
-            }, (error, response, body) => {
-                if (error) {
-                    reject();
-                    return;
-                }
-                var result = JSON.parse(body);
-                if (!result || !result.any || !result.any.stats) {
-                    reject();
-                    return;
-                }
-                players[id].psns[psn] = { psn };
-                save();
-                if (result.any && result.any.stats && result.any.stats.competitive && result.any.stats.competitive.overall_stats && result.any.stats.competitive.overall_stats.comprank) {
-                    players[id].psns[psn].psncomprank = result.any.stats.competitive.overall_stats.comprank;
-                    players[id].lastUpdate = new Date();
-                    save();
-                }
-                resolve(players[id].psns[psn].psncomprank);
-            });
+            updatePsn(psn, id).then(resolve).catch(reject);
         });
     },
     getPsns: function (id) {
         createUserIfNotExist(id);
         return players[id].psns
-    },
-    getComprank: function (id, btag) {
-        createUserIfNotExist(id);
-        if (!players[id].btags[btag]) {
-            return null;
-        }
-        var btag = players[id].btags[btag];
-        request({
-            url: `https://owapi.net/api/v3/u/${btag.replace('#', '-')}/blob`,
-            headers: {
-                'User-Agent': 'the cavalry discord bot'
-            }
-        }, function (error, response, body) {
-            if (error) {
-                return;
-            }
-            var result = JSON.parse(body);
-            if (result.eu && result.eu.stats && result.eu.stats.competitive && result.eu.stats.competitive.overall_stats && result.eu.stats.competitive.overall_stats.comprank) {
-                players[id].btags[btag].comprank = result.eu.stats.competitive.overall_stats.comprank;
-                players[id].lastUpdate = new Date();
-                save();
-            }
-        });
-        moment.locale('fr');
-        var diff = moment.duration(moment().diff(players[id].lastUpdate)).humanize();
-        return players[id].btags[btag].comprank + ` (il y a ${diff})`;
-    },
-    getPsnComprank: function (id, psn) {
-        createUserIfNotExist(id);
-        if (!players[id].psns[psn]) {
-            return null;
-        }
-        var psn = players[id].psns[psn];
-        request({
-            url: `https://owapi.net/api/v3/u/${psn}/blob?platform=psn`,
-            headers: {
-                'User-Agent': 'the cavalry discord bot'
-            }
-        }, function (error, response, body) {
-            if (error) {
-                return;
-            }
-            var result = JSON.parse(body);
-            if (result.any && result.any.stats && result.any.stats.competitive && result.any.stats.competitive.overall_stats && result.any.stats.competitive.overall_stats.comprank) {
-                players[id].psns[psn].psncomprank = result.any.stats.competitive.overall_stats.comprank;
-                players[id].lastUpdate = new Date();
-                save();
-            }
-        });
-        moment.locale('fr');
-        var diff = moment.duration(moment().diff(players[id].lastUpdate)).humanize();
-        return players[id].psns[psn].psncomprank + ` (il y a ${diff})`;
     },
     setTempClanToJoin: function (id, clan, code) {
         createUserIfNotExist(id);

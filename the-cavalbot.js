@@ -1,3 +1,4 @@
+
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const Utils = require('./utils');
@@ -84,45 +85,52 @@ try {
     var reactInteraction = interactions.getReactInteraction(user.id);
     if (reactInteraction) {
       var command = eval(reactInteraction.command + 'Command');
-      if(reactInteraction.additionalArg) {
+      if (reactInteraction.additionalArg) {
         command[reactInteraction.functionToCall](messageReaction, user, ...reactInteraction.additionalArg);
         return;
-      } 
+      }
       command[reactInteraction.functionToCall](messageReaction, user);
     }
   });
-
+  
   bot.on('message', function (message) {
-    if (message.author.bot) {
-      return;
-    }
-    if (message.channel.constructor.name === 'DMChannel') {
-      Utils.log('', false, 'DM message', message.author.username, message.content);
-      var result = /^say ([0-9]+) (.+)$/.exec(message.content);
-      if (result) {
-        if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
-          Utils.reply(message, 'ptdr t ki ?', true);
-          return;
-        }
-        var channel = guild.channels.get(result[1]);
-        if (!channel) {
-          Utils.reply(message, 'c\'est pas un channel ça', true);
-          return;
-        }
-        channel.send(result[2]);
-      } else {
-        var chatInteraction = interactions.getChatInteraction(message.author.id);
-        if (chatInteraction) {
-          var command = eval(chatInteraction.command + 'Command');
-          if(chatInteraction.additionalArg) {
-            command[chatInteraction.functionToCall](message, ...chatInteraction.additionalArg);
+    try {
+      if (message.author.bot) {
+        return;
+      }
+      if (message.channel.constructor.name === 'DMChannel') {
+        Utils.log('', false, 'DM message', message.author.username, message.content);
+        var result = /^say ([0-9]+) (.+)$/.exec(message.content);
+        if (result) {
+          if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
+            Utils.reply(message, 'ptdr t ki ?', true);
             return;
           }
-          command[chatInteraction.functionToCall](message);
+          var channel = guild.channels.get(result[1]);
+          if (!channel) {
+            Utils.reply(message, 'c\'est pas un channel ça', true);
+            return;
+          }
+          channel.send(result[2]);
+        } else {
+          var chatInteraction = interactions.getChatInteraction(message.author.id);
+          if (chatInteraction) {
+            var command = eval(chatInteraction.command + 'Command');
+            if (chatInteraction.additionalArg) {
+              command[chatInteraction.functionToCall](message, ...chatInteraction.additionalArg);
+              return;
+            }
+            command[chatInteraction.functionToCall](message);
+          }
         }
+        if (message.content.substr(0, globalConst.prefix.length) === globalConst.prefix) {
+          Utils.sendDM(message.author, `Désolé mais c'est pas encore possible d'utiliser les commandes en mp.
+C'est une fonctionalitée qui est prévu, mais comme il y a d'autre prioritée et bah ça n'a pas encore été dev.
+après tu peu toujours le dev toi même si tu veux, vue que le code est open source.
+mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${message.content} dans le channel de bot ;)`, true);
+        }
+        return;
       }
-    }
-    try {
       if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
         var args = message.content.split(" ");
         Utils.log('Command detected', false, message.channel.name, message.member.user.username, message.content);
@@ -209,7 +217,7 @@ try {
     Utils.log(e, true);
   })
   bot.on('error', (err) => {
-    Utils.log(err.stack,                                                                                                                                                                                                                                                                                                       true);
+    Utils.log(err.stack, true);
   });
 } catch (err) {
   Utils.log(err.stack, true);

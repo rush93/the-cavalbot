@@ -4,6 +4,7 @@ var Players = require('../models/players');
 var Ranks = require('../models/ranks');
 var Clans = require('../models/clans');
 var Constants = require('../models/constants');
+var moment = require('moment');
 
 var displayRoleOfClan = function (message, role) {
     var ranks = Ranks.getSortedKeys(role.id);
@@ -96,14 +97,17 @@ var displayRoleOfMember = function (message, member) {
             seasonPoints -= player.season[Constants.season];
         }
     }
+    var dif = globalPlayer && globalPlayer.lastUpdate ? moment.duration(moment().diff(globalPlayer.lastUpdate)).humanize() : null;
     Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
         `**Clan:** ${role.name}` +  (seasonPoints === null ? '' : `
 **points de la saison:** ${seasonPoints}`) + `
 **Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btagString || btagString.length <= 0 ? '' : `
 **Battle tag:** ${btagString.join(', ')}`) + (!psnString || psnString.length <= 0  ? '' : `
-**PSN:** ${psnString.join(', ')}`) + ` ${globalPlayer && globalPlayer.epou ? `
+**PSN:** ${psnString.join(', ')}`) + (!dif  ? '' : `
+**Dernière mise à jour:** ${dif}`) + ` ${globalPlayer && globalPlayer.epou ? `
 :ring: <@!${globalPlayer.epou}>` : ''} `
         , message.author, fields, clan.image);
+    Players.updateComprank(member.id);
     return;
 }
 module.exports = {
