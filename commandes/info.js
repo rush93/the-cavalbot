@@ -97,7 +97,7 @@ var displayRoleOfMember = function (message, member) {
             seasonPoints -= player.season[Constants.season];
         }
     }
-    var dif = globalPlayer && globalPlayer.lastUpdate ? moment.duration(moment().diff(globalPlayer.lastUpdate)).humanize() : null;
+    var dif = globalPlayer && globalPlayer.lastUpdate ? moment.duration(moment().diff(globalPlayer.lastUpdate)).locale("fr").humanize() : null;
     Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
         `**Clan:** ${role.name}` +  (seasonPoints === null ? '' : `
 **points de la saison:** ${seasonPoints}`) + `
