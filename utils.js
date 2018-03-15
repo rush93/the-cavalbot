@@ -196,18 +196,24 @@ module.exports = {
     sendDmEmbed: function(user, color, title, content, author, fields, image = null, maxField) {
         return sendEmbedInChannel(user, color, title, content, author, fields, image, maxField);
     },
-    replaceModifier: function (input, clan, guildMember, player, rank, isPS4, ps4text, withHightLight = true) {
+    replaceModifier: function (input, clan, guildMember, player, rank, isPS4, ps4text, withHightLight = true, withoutPlayer = false, playerNickname = null) {
         var playerName = `<@!${guildMember.id}>`;
         var clanName = clan ? guildMember.guild.roles.get(clan.id).name : null;
         if (!withHightLight) {
-            playerName = guildMember.user.username;
+            if(!playerNickname) {
+                playerName = '%player%';
+            } else {
+                playerName = playerNickname;
+            }
             clanName = clan ? guildMember.guild.roles.get(clan.id).name : null;
         }
-        input = input.replace(/%player%/gi, playerName);
+        if(!withoutPlayer) {
+            input = input.replace(/%player%/gi, playerName);
+        }
         replaceSomething = false;
         if (player) {
             input = input.replace(/%rank%/gi, player.activeRank ? player.activeRank.displayName : '');
-            replaceSomething = true;
+            replaceSomething = player.activeRank ? true : false;
         } else {
             input = input.replace(/%rank%/gi, '');
         }
@@ -231,8 +237,37 @@ module.exports = {
         input = input.replace(/%PS4%/gi, isPS4 ? ps4text : '');
         if (!withHightLight && !replaceSomething ) {
             return isPS4 ? playerName + ' ' +  ps4text : playerName;
+        } else if(!replaceSomething) {
+            return playerName
         }
         return input;
+    },
+    getUsernameRegex(patern) {
+        var restrictedChar = ["\\","^","$","(",")","|","+",".","*","[","]","-","?","/"]
+        var result = "";
+        var paternArr = patern.split('%player%');
+        for (var i = 0; i < paternArr[0].length; i++) {
+            var char = paternArr[0].charAt(i);
+            if (restrictedChar.indexOf(char) > -1) {
+                char = '\\' + char;
+            }
+            char = `(?:${char}|$)`
+            result+=char;
+        }
+        result+='(.+)';
+        if(paternArr[1]) {
+            for (var i = 0; i < paternArr[1].length; i++) {
+                var char = paternArr[1].charAt(i);
+                if (restrictedChar.indexOf(char) > -1) {
+                    char = '\\' + char;
+                }
+                if (i>=3) {
+                    char = `(?:${char}|$)`
+                }
+                result+=char;
+            }
+        }
+        return result;
     },
     getClanScores,
     getScoreOfClan: function(Players, clanId, Clans) {

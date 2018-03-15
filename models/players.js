@@ -126,6 +126,28 @@ module.exports = {
                 id: id
             };
         }
+        var curentPlayerName = guildMember.displayName;
+        var curentNameWithoutReplace = Utils.replaceModifier(
+            Constants.pseudoModifier,
+            Clans.getPlayerClan(guildMember),
+            guildMember,
+            players[guildMember.id].clans[clanId],
+            players[guildMember.id].clans[clanId].activeRank,
+            Object.keys(players[guildMember.id].psns).length > 0,
+            Constants.PS4,
+            false,
+            true
+        );
+
+        var sregex = Utils.getUsernameRegex(curentNameWithoutReplace);
+        Utils.log('Regex created: ' + Utils.Color.FgYellow + sregex);
+        var exec = RegExp(sregex, 'g').exec(curentPlayerName);
+        if(!exec || exec.length < 2 ) {
+            var name = guildMember.displayName;
+        } else {
+            var name = exec[1];
+        }
+
         players[guildMember.id].clans[clanId].activeRank = {
             name: rank.name,
             displayName: rank.name
@@ -140,7 +162,9 @@ module.exports = {
                 rank,
                 Object.keys(players[guildMember.id].psns).length > 0,
                 Constants.PS4,
-                false
+                false,
+                false,
+                name
             );
             if (nickname.length > 32) {
                 nickname = nickname.substr(0, 32);
@@ -154,6 +178,29 @@ module.exports = {
         if (!players[guildMember.id] || !players[guildMember.id].clans[clanId] || !players[guildMember.id].clans[clanId].activeRank) {
             return;
         }
+
+        var curentPlayerName = guildMember.displayName;
+        var curentNameWithoutReplace = Utils.replaceModifier(
+            Constants.pseudoModifier,
+            Clans.getPlayerClan(guildMember),
+            guildMember,
+            players[guildMember.id].clans[clanId],
+            players[guildMember.id].clans[clanId].activeRank,
+            Object.keys(players[guildMember.id].psns).length > 0,
+            Constants.PS4,
+            false,
+            true
+        );
+
+        var sregex = Utils.getUsernameRegex(curentNameWithoutReplace);
+        Utils.log('Regex created: ' + Utils.Color.FgYellow + sregex);
+        var exec = RegExp(sregex, 'g').exec(curentPlayerName);
+        if(!exec || exec.length < 2 ) {
+            var name = guildMember.displayName;
+        } else {
+            var name = exec[1];
+        }
+
         players[guildMember.id].clans[clanId].activeRank.displayName = displayName;
         save();
         if (Constants.pseudoModifier !== 'no') {
@@ -165,7 +212,9 @@ module.exports = {
                 rank,
                 Object.keys(players[guildMember.id].psns).length > 0,
                 Constants.PS4,
-                false
+                false,
+                false, 
+                name
             );
             if (nickname.length > 32) {
                 nickname = nickname.substr(0, 32);
@@ -180,6 +229,28 @@ module.exports = {
             return;
         }
         
+
+        var curentPlayerName = guildMember.displayName;
+        var curentNameWithoutReplace = Utils.replaceModifier(
+            Constants.pseudoModifier,
+            Clans.getPlayerClan(guildMember),
+            guildMember,
+            players[guildMember.id].clans[clanId],
+            players[guildMember.id].clans[clanId].activeRank,
+            Object.keys(players[guildMember.id].psns).length > 0,
+            Constants.PS4,
+            false,
+            true
+        );
+
+        var sregex = Utils.getUsernameRegex(curentNameWithoutReplace);
+        Utils.log('Regex created: ' + Utils.Color.FgYellow + sregex);
+        var exec = RegExp(sregex, 'g').exec(curentPlayerName);
+        if(!exec || exec.length < 2 ) {
+            var name = guildMember.displayName;
+        } else {
+            var name = exec[1];
+        }
         players[guildMember.id].clans[clanId].activeRank = null;
         save();
         if (Constants.pseudoModifier !== 'no') {
@@ -191,7 +262,9 @@ module.exports = {
                 null,
                 Object.keys(players[guildMember.id].psns).length > 0,
                 Constants.PS4,
-                false
+                false,
+                false,
+                name
             );
             if (nickname.length > 32) {
                 nickname = nickname.substr(0, 32);
