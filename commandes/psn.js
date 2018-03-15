@@ -21,13 +21,31 @@ module.exports = {
         }
 
         var psns = Players.getPsns(message.member.id)
+
+        var clan = Clans.getPlayerClan(message.member);
+        var player = clan ? Players.getPlayer(message.member.id, clan.id): null;
+        var rank =  player ? player.activeRank: null;
+        var curentPlayerName = message.member.displayName;
+        var curentNameWithoutReplace = Utils.replaceModifier(
+            Constants.pseudoModifier,
+            clan,
+            message.member,
+            player,
+            rank,
+            Object.keys(psns).length > 0,
+            Constants.PS4,
+            false,
+            true
+        );
+        var sregex = Utils.getUsernameRegex(curentNameWithoutReplace);
+        Utils.log('Regex created: ' + Utils.Color.FgYellow + sregex);
+        var regex = RegExp(sregex, 'g');
+        var name = regex.exec(curentPlayerName)[1];
         if(psns && psns[args.join(' ')]) {
+
             Players.setPsn(message.member.id, args.join(' '));
             Utils.reply(message, 'Votre PSN a bien été supprimé.');
             if ( Object.keys(Players.getPsns(message.member.id)).length === 0) {
-                var clan = Clans.getPlayerClan(message.member);
-                var player = clan ? Players.getPlayer(message.member.id, clan.id): null;
-                var rank =  player ? player.activeRank: null;
                 var nickname = Utils.replaceModifier(
                     Constants.pseudoModifier,
                     clan,
@@ -36,7 +54,9 @@ module.exports = {
                     rank,
                     false,
                     Constants.PS4,
-                    false
+                    false,
+                    false,
+                    name
                 );
                 if (nickname.length > 32) {
                     nickname = nickname.substr(0, 32);
@@ -63,7 +83,9 @@ module.exports = {
                     rank,
                     true,
                     Constants.PS4,
-                    false
+                    false,
+                    false,
+                    name
                 );
                 if (nickname.length > 32) {
                     nickname = nickname.substr(0, 32);
