@@ -13,7 +13,15 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        console.log('ICI TON CODE');
+        console.log(args)
+        if (args[0]==='bonjour') {
+            Utils.reply(message, "bonjour")
+            return;
+        }
+        if (args[0]=== 'ça'  && args[1]==='va' && args[2]==='?') {
+            Utils.reply(message, "oui et toi ?")
+            return;
+        }
 
         /**
          * Exercie 1 
