@@ -13,7 +13,8 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        console.log('ICI TON CODE');
+        console.log();
+        Utils.reply(message, "salut comment ça va",);
 
         /**
          * Exercie 1 
