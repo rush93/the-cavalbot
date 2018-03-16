@@ -7,7 +7,7 @@ var Utils = require('../utils');
 var ranks = {};
 
 function save() {
-    fs.writeFile("./data/ranks.json", JSON.stringify(ranks), function (err) {
+    fs.writeFile(__dirname + "/../data/ranks.json", JSON.stringify(ranks), function (err) {
         if (err) {
             return Utils.log(err, true);
         }
@@ -18,7 +18,7 @@ function save() {
 function load() {
     return new Promise((resolve, reject) => {
 
-        fs.readFile('./data/ranks.json', (err, data) => {
+        fs.readFile(__dirname + '/../data/ranks.json', (err, data) => {
             if (err) return;
             ranks = JSON.parse(data);
             resolve(ranks);

@@ -12,7 +12,7 @@ var constants = {
 }
 
 function save() {
-    fs.writeFile("./data/constants.json", JSON.stringify(constants), function (err) {
+    fs.writeFile(__dirname + "/../data/constants.json", JSON.stringify(constants), function (err) {
         if (err) {
             return Utils.log(err, true);
         }
@@ -23,7 +23,7 @@ function save() {
 function load() {
     return new Promise((resolve, reject) => {
 
-        fs.readFile('./data/constants.json', (err, data) => {
+        fs.readFile(__dirname + '/../data/constants.json', (err, data) => {
             if (err) return;
             constants = JSON.parse(data);
             resolve(constants);

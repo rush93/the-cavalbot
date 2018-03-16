@@ -5,7 +5,7 @@ var Utils = require('../utils');
 var events = {};
 
 function save() {
-    fs.writeFile("./data/events.json", JSON.stringify(events), function (err) {
+    fs.writeFile(__dirname + "/../data/events.json", JSON.stringify(events), function (err) {
         if (err) {
             return Utils.log(err, true);
         }
@@ -16,7 +16,7 @@ function save() {
 function load() {
     return new Promise((resolve, reject) => {
 
-        fs.readFile('./data/events.json', (err, data) => {
+        fs.readFile(__dirname + '/../data/events.json', (err, data) => {
             if (err) return;
             events = JSON.parse(data);
             resolve(events);
