@@ -10,7 +10,7 @@ var moment = require('moment');
 var players = {};
 
 function save() {
-    fs.writeFile("./data/players.json", JSON.stringify(players), function (err) {
+    fs.writeFile(__dirname + "/../data/players.json", JSON.stringify(players), function (err) {
         if (err) {
             return Utils.log(err, true);
         }
@@ -21,7 +21,7 @@ function save() {
 function load() {
     return new Promise((resolve, reject) => {
 
-        fs.readFile('./data/players.json', (err, data) => {
+        fs.readFile(__dirname + '/../data/players.json', (err, data) => {
             if (err) return;
             players = JSON.parse(data);
             resolve(players);
