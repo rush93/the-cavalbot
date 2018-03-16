@@ -1,12 +1,13 @@
 var fs = require('fs');
 var Constants = require('./constants');
 var Utils = require('../utils');
+var path = require(`path`);
 
 var clans = {};
 var clansMap = {};
 
 function save() {
-    fs.writeFile("./data/clans.json", JSON.stringify(clans), function (err) {
+    fs.writeFile(path.resolve(__dirname + '/../data/clans.json'), JSON.stringify(clans), function (err) {
         if (err) {
             return Utils.log(err, true);
         }
@@ -16,8 +17,7 @@ function save() {
 
 function load() {
     return new Promise((resolve, reject) => {
-
-        fs.readFile('./data/clans.json', (err, data) => {
+        fs.readFile(__dirname + '/../data/clans.json', (err, data) => {
             if (err) return;
             clans = JSON.parse(data);
             resolve(clans);

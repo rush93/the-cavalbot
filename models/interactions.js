@@ -6,7 +6,7 @@ var chatInteractions = {};
 var reactInteractions = {};
 
 function saveChat() {
-    fs.writeFile("./data/chatInteractions.json", JSON.stringify(chatInteractions), function (err) {
+    fs.writeFile(__dirname + "/../data/chatInteractions.json", JSON.stringify(chatInteractions), function (err) {
         if (err) {
             return Utils.log(err, true);
         }
@@ -15,7 +15,7 @@ function saveChat() {
 }
 
 function saveReaction() {
-    fs.writeFile("./data/reactInteractions.json", JSON.stringify(reactInteractions), function (err) {
+    fs.writeFile(__dirname + "/../data/reactInteractions.json", JSON.stringify(reactInteractions), function (err) {
         if (err) {
             return Utils.log(err, true);
         }
@@ -26,7 +26,7 @@ function saveReaction() {
 function loadChat() {
     return new Promise((resolve, reject) => {
 
-        fs.readFile('./data/chatInteractions.json', (err, data) => {
+        fs.readFile(__dirname + '/../data/chatInteractions.json', (err, data) => {
             if (err) return;
             chatInteractions = JSON.parse(data);
             resolve(chatInteractions);
@@ -37,7 +37,7 @@ function loadChat() {
 function loadReact() {
     return new Promise((resolve, reject) => {
 
-        fs.readFile('./data/reactInteractions.json', (err, data) => {
+        fs.readFile(__dirname + '/../data/reactInteractions.json', (err, data) => {
             if (err) return;
             reactInteractions = JSON.parse(data);
             resolve(reactInteractions);
