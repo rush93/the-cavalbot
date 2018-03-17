@@ -237,8 +237,6 @@ module.exports = {
         input = input.replace(/%PS4%/gi, isPS4 ? ps4text : '');
         if (!withHightLight && !replaceSomething ) {
             return isPS4 ? playerName + ' ' +  ps4text : playerName;
-        } else if(!replaceSomething) {
-            return playerName
         }
         return input;
     },
