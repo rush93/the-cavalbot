@@ -133,7 +133,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
       }
       if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
         var args = message.content.split(" ");
-        Utils.log('Command detected', false, message.channel.name, message.member.user.username, message.content);
+        Utils.log('Command detected', false, message.channel.name, message.author.username, message.content);
         if (args[0] === globalConst.prefix + 'help') {
           Utils.log(`running ${Utils.Color.FgYellow}help ${Utils.Color.Reset}command`);
           if (args.length > 1) {
