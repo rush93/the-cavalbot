@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const Utils = require('../utils');
 var Constants = require('../models/constants');
 module.exports = {
-    role: 'MANAGE_ROLES',
+    role: 'MANAGE_NICKNAMES',
     helpCat: 'Permet d\'épingler un message',
     help: function (message) {
         Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande epingle", "", message.author, [{
@@ -12,7 +12,7 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_ROLES")) {
+        if (!message.member.hasPermission("MANAGE_NICKNAMES")) {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour epingler un message", true);
             return;
         }
