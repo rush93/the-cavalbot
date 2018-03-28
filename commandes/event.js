@@ -236,11 +236,11 @@ var help = function (message) {
     Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des events', "", message.author, fields);
 }
 module.exports = {
-    role: 'MANAGE_ROLES',
+    role: 'MANAGE_NICKNAMES',
     helpCat: 'Permet d\'administrer les events',
     help,
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_ROLES")) {
+        if (!message.member.hasPermission("MANAGE_NICKNAMES")) {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour toucher au events", true);
             return;
         }
