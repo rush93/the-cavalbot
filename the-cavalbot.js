@@ -166,7 +166,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
           commands[label].runCommand(args, message);
           return;
         }
-      } else if(/^\*tori( |$)/.exec(message.content)) {
+      } else if(/^\*tori( |$)/i.exec(message.content)) {
         var embed = new Discord.RichEmbed({});
         embed.setColor(0x4169E1);
         embed.setTitle("Tori veut dire oiseau en Japonais (et pas Tori Black.)");
