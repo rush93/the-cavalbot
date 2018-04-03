@@ -165,6 +165,9 @@ module.exports = {
         if(!Constants.season || Constants.season < 0) {
             return null;
         }
+        if(!clans[ClanId]) {
+            return null;
+        }
         return clans[ClanId].seasons[Constants.season];
     }
 }
