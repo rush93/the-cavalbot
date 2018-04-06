@@ -91,9 +91,9 @@ var displayRoleOfMember = function (message, member) {
         }
     }
     var seasonPoints = null;
-    if ( Constants.season && Constants.season !== 0 && player && player.points && player.season) {
+    if ( Constants.season && Constants.season !== 0 && player && player.points) {
         seasonPoints = player.points;
-        if (player.season[Constants.season]) {
+        if (player.season && player.season[Constants.season]) {
             seasonPoints -= player.season[Constants.season];
         }
     }
