@@ -82,7 +82,7 @@ try {
     if (user.bot) {
       return;
     }
-    var reactInteraction = interactions.getReactInteraction(user.id);
+    var reactInteraction = interactions.getReactInteraction(messageReaction.message.id);
     if (reactInteraction) {
       var command = eval(reactInteraction.command + 'Command');
       if (reactInteraction.additionalArg) {
@@ -113,7 +113,7 @@ try {
           }
           channel.send(result[2]);
         } else {
-          var chatInteraction = interactions.getChatInteraction(message.author.id);
+          var chatInteraction = interactions.getChatInteraction(message.author.id, null);
           if (chatInteraction) {
             var command = eval(chatInteraction.command + 'Command');
             if (chatInteraction.additionalArg) {
