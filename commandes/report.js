@@ -4,7 +4,7 @@ var Constants = require('../models/constants');
 var Interactions = require('../models/interactions');
 var reportMessage = (message, reporter) => {
     var channel = message.channel.guild.channels.get(Constants.reportChannel);
-    Utils.sendEmbedInChannel(channel, 0xE8C408, 'Report d\'un message', '', reporter, [
+    var fields = [
         {
             title: 'ki ka écrit',
             text: `${message.member}`,
@@ -25,7 +25,9 @@ var reportMessage = (message, reporter) => {
             text: message.content,
             grid: true
         }
-    ]);
+    ]
+    Utils.sendEmbedInChannel(channel, 0xE8C408, 'Report d\'un message', '', reporter, fields);
+    Utils.sendDmEmbed(reporter, 0xE8C408, 'Vous avez report', 'Ce meme message cera envoyer au administrateur.', reporter, fields);
 }
 module.exports = {
     role: 'SEND_MESSAGES',
@@ -46,18 +48,19 @@ module.exports = {
         }
         if(args.length === 0) {
             Interactions.addReactInteractions('report', 'reactReportMessage', null, message.author.id);
-            Utils.reply(message, `Réagis avec ${Utils.UnicodeCancelReact} sur le message que tu veux report`);
+            message.delete().catch((e) => { Utils.log(e, true) });
+            Utils.sendDM(message.author,`Réagis avec ${Utils.UnicodeCancelReact} sur le message que tu veux report`);
             return;
         }
         message.channel.fetchMessage(args[0]).then((reportedMessage) => {
             reportMessage(reportedMessage, message.author);
-            Utils.reply(message, 'Le message a bien été report.');
         }).catch(() => {
             Utils.reply(message, 'Désolé je n\'ai pas trouvé de message avec cet id dans ce channel.', true);
-        })
+        });
+        message.delete().catch((e) => { Utils.log(e, true) });
     },
     reactReportMessage: (messageReaction, user) => {
         reportMessage(messageReaction.message, user);
-        Utils.reply(messageReaction.message, "Le message a été report!");
+        messageReaction.remove(user).catch((e) => { Utils.log(e, true) });
     }
 }
