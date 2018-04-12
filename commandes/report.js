@@ -61,6 +61,7 @@ module.exports = {
     },
     reactReportMessage: (messageReaction, user) => {
         reportMessage(messageReaction.message, user);
+        Interactions.delReactInteractions(user.id);
         messageReaction.remove(user).catch((e) => { Utils.log(e, true) });
     }
 }
