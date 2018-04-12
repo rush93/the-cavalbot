@@ -58,26 +58,40 @@ module.exports = {
         saveChat();
         saveReaction();
     },
-    addChatInteractions: function (command, functionToCall, userID, additionalArg = null) {
-        chatInteractions[userID] = { command, functionToCall, additionalArg };
+    addChatInteractions: function (command, functionToCall, userID, channelId = null,additionalArg = null) {
+        chatInteractions[userID] = { command, functionToCall, channelId, additionalArg };
         saveChat();
     },
-    addReactInteractions: function (command, functionToCall, userID, additionalArg = null) {
-        reactInteractions[userID] = { command, functionToCall, additionalArg };
+    addReactInteractions: function (command, functionToCall, messageId, userId = null, additionalArg = null) {
+        if (!messageId) {
+            reactInteractions[userId] = { command, functionToCall, additionalArg };
+        } else {
+            reactInteractions[messageId] = { command, functionToCall, additionalArg, userId };
+        }
         saveReaction();
     },
     delChatInteractions: function (userId) {
         delete chatInteractions[userId];
         saveChat();
     },
-    delReactInteractions: function (userId) {
-        delete reactInteractions[userId];
+    delReactInteractions: function (id) {
+        delete reactInteractions[id];
         saveReaction();
     },
-    getChatInteraction: function (userID) {
-        return chatInteractions[userID];
+    getChatInteraction: function (userID, channelId = null) {
+        var interaction = chatInteractions[userID];
+        if(!interaction) {
+            return null;
+        }
+        if (!channelId && !interaction.channelId) {
+            return interaction;
+        }
+        if (channelId === interaction.channelId) {
+            return interaction;
+        }
+        return null;
     },
-    getReactInteraction: function (userID) {
-        return reactInteractions[userID];
+    getReactInteraction: function (id) {
+        return reactInteractions[id];
     }
 }

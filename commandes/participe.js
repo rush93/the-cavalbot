@@ -41,16 +41,17 @@ ajouter un psn: **${Constants.prefix}psn votrepsn**
                     grid: true
                 });
             }
+            var authorId = message.author.id;
             Utils.sendDmEmbed(message.author, 0x00AFFF,
                 'Veuillez choisir un event.',
                 `Vous devez réagir suivant ce que vous voulez`,
                 message.author, fields
             ).then((message) => {
+                Interactions.addReactInteractions('participe', 'chooseEvent', message.id, authorId);
                 Utils.reactNbTime(message, eventsKey.length);
             }).catch((e) => {
                 Utils.log(e, true);
             });
-            Interactions.addReactInteractions('participe', 'chooseEvent', message.author.id);
             Utils.reply(message, 'Regarde dans tes messages privés :wink:');
             return;
         }
@@ -69,6 +70,7 @@ ajouter un psn: **${Constants.prefix}psn votrepsn**
                 grid: true
             });
         }
+        var authorId = message.author.id;
         Utils.sendDmEmbed(message.author, 0x00AFFF,
             `Veuillez choisir un horaire pour l\'event ${event.name}.`,
             `Vous devez réagir à un ou plusieurs horaires
@@ -76,11 +78,11 @@ puis réagir avec :white_check_mark: pour valider
 ou :x: pour annuler la participation`,
             message.author, fields
         ).then((message) => {
+            Interactions.addReactInteractions('participe', 'chooseTimetable', message.id, authorId, [event.name]);
             Utils.reactNbTime(message, event.timetable.length, true, true);
         }).catch((e) => {
             Utils.log(e, true);
         });
-        Interactions.addReactInteractions('participe', 'chooseTimetable', message.author.id, [event.name]);
         Utils.reply(message, 'Regarde dans tes messages privés :wink:');
     },
     chooseEvent: (messageReaction, user) => {
@@ -96,7 +98,7 @@ ou :x: pour annuler la participation`,
             Utils.sendDM(user, 'Aucuns event attribué à cette réaction.', true);
             return;
         }
-        Interactions.delReactInteractions(user.id);
+        Interactions.delReactInteractions(message.id);
         Utils.removeMyReact(message);
         var event = Events.getEvent(key);
         Events.addParticipant(key, user.id);
@@ -115,11 +117,11 @@ puis réagir avec :white_check_mark: pour valider
 ou :x: pour annuler la participation`,
             user, fields
         ).then((message) => {
+            Interactions.addReactInteractions('participe', 'chooseTimetable', message.id, user.id, [key]);
             Utils.reactNbTime(message, event.timetable.length, true, true);
         }).catch((e) => {
             Utils.log(e, true);
         });
-        Interactions.addReactInteractions('participe', 'chooseTimetable', user.id, [key]);
     },
     chooseTimetable: (messageReaction, user, eventKey) => {
         if ( messageReaction.emoji.name !== Utils.UnicodeConfirmReact && messageReaction.emoji.name !== Utils.UnicodeCancelReact ) {
@@ -127,7 +129,7 @@ ou :x: pour annuler la participation`,
         }
         if (messageReaction.emoji.name === Utils.UnicodeCancelReact) {
             Events.delParticipant(eventKey, user.id);
-            Interactions.delReactInteractions(user.id);
+            Interactions.delReactInteractions(messageReaction.message.id);
             Utils.removeMyReact(messageReaction.message);
             Utils.sendDM(user, `Votre participation à l'event ${Events.getEvent(eventKey).name} a été annuler.`);
             return;
@@ -150,7 +152,7 @@ ou :x: pour annuler la participation`,
             return;
         }
         Utils.removeMyReact(messageReaction.message);
-        Interactions.delReactInteractions(user.id);
+        Interactions.delReactInteractions(messageReaction.message.id);
         Events.setParticiapantTimetable(eventKey, user.id, choosenTime);
         if (!event.questions || event.questions.length <= 0) {
             Utils.sendDM(user, 'Votre participation à bien été pris en compte.');
@@ -159,7 +161,7 @@ ou :x: pour annuler la participation`,
         questionLeft = event.questions.slice(0);;
         Utils.sendDmEmbed(user, 0x00AFFF, questionLeft[0], 'Répondez à l\'écrit.', user, []);
         questionLeft.shift();
-        Interactions.addChatInteractions('participe', 'answerQuestion', user.id, [event.name, event.questions[0], questionLeft]);
+        Interactions.addChatInteractions('participe', 'answerQuestion', user.id, null, [event.name, event.questions[0], questionLeft]);
     },
     answerQuestion: function (message, eventKey, question, questionLeft) {
         var event = Events.getEvent(eventKey);
@@ -177,6 +179,6 @@ ou :x: pour annuler la participation`,
         }
         var nextQuestion = questionLeft.shift();
         Utils.sendDmEmbed(user, 0x00AFFF, nextQuestion, 'Répondez à l\'écrit.', user, []);
-        Interactions.addChatInteractions('participe', 'answerQuestion', user.id, [event.name, nextQuestion, questionLeft]);
+        Interactions.addChatInteractions('participe', 'answerQuestion', user.id, null, [event.name, nextQuestion, questionLeft]);
     }
 }

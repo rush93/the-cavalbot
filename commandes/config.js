@@ -137,6 +137,24 @@ var commands = {
             constants.domain = args.join(' ');
             Utils.reply(message, 'Le nom de domaine à bien été modifié.');
         }
+    },
+    reportChannel: {
+        help: [
+            'le channel ou seront report les messages.',
+        ],
+        args: '[url]',
+        runCommand: (args, message) => {
+            if (args.length === 0) {
+                Utils.reply(message, "**channel: **: <#" + constants.reportChannel + ">");
+                return;
+            }
+            if (!message.mentions.channels && !message.mentions.channels.first()) {
+                Utils.reply(message,"il faut mentioner un message.",true);
+                return;
+            }
+            constants.reportChannel = message.mentions.channels.first().id;
+            Utils.reply(message, 'Le channel de report à bien été modifié.');
+        }
     }
 }
 

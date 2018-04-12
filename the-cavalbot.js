@@ -42,6 +42,7 @@ var declineCommand = require('./commandes/decline');
 var seasonCommand = require('./commandes/season');
 var eventCommand = require('./commandes/event');
 var participeCommand = require('./commandes/participe');
+var reportCommand = require('./commandes/report');
 
 var commands = {
   config: configCommands,
@@ -66,7 +67,8 @@ var commands = {
   propose: proposeCommand,
   accept: acceptCommand,
   decline: declineCommand,
-  participe: participeCommand
+  participe: participeCommand,
+  report: reportCommand
 }
 try {
   bot.on('ready', function () {
@@ -82,7 +84,7 @@ try {
     if (user.bot) {
       return;
     }
-    var reactInteraction = interactions.getReactInteraction(user.id);
+    var reactInteraction = interactions.getReactInteraction(messageReaction.message.id);
     if (reactInteraction) {
       var command = eval(reactInteraction.command + 'Command');
       if (reactInteraction.additionalArg) {
@@ -90,9 +92,19 @@ try {
         return;
       }
       command[reactInteraction.functionToCall](messageReaction, user);
+    } else {
+      reactInteraction = interactions.getReactInteraction(user.id);
+      if (reactInteraction) {
+        var command = eval(reactInteraction.command + 'Command');
+        if (reactInteraction.additionalArg) {
+          command[reactInteraction.functionToCall](messageReaction, user, ...reactInteraction.additionalArg);
+          return;
+        }
+        command[reactInteraction.functionToCall](messageReaction, user);
+      }
     }
   });
-  
+
   bot.on('message', function (message) {
     try {
       if (message.author.bot) {
@@ -113,7 +125,7 @@ try {
           }
           channel.send(result[2]);
         } else {
-          var chatInteraction = interactions.getChatInteraction(message.author.id);
+          var chatInteraction = interactions.getChatInteraction(message.author.id, null);
           if (chatInteraction) {
             var command = eval(chatInteraction.command + 'Command');
             if (chatInteraction.additionalArg) {
@@ -166,7 +178,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
           commands[label].runCommand(args, message);
           return;
         }
-      } else if(/^\*tori( |$)/i.exec(message.content)) {
+      } else if (/^\*tori( |$)/i.exec(message.content)) {
         var embed = new Discord.RichEmbed({});
         embed.setColor(0x4169E1);
         embed.setTitle("Tori veut dire oiseau en Japonais (et pas Tori Black.)");
