@@ -63,15 +63,19 @@ module.exports = {
         saveChat();
     },
     addReactInteractions: function (command, functionToCall, messageId, userId = null, additionalArg = null) {
-        reactInteractions[messageId] = { command, functionToCall, additionalArg, userId };
+        if (!messageId) {
+            reactInteractions[userId] = { command, functionToCall, additionalArg };
+        } else {
+            reactInteractions[messageId] = { command, functionToCall, additionalArg, userId };
+        }
         saveReaction();
     },
     delChatInteractions: function (userId) {
         delete chatInteractions[userId];
         saveChat();
     },
-    delReactInteractions: function (messageId) {
-        delete reactInteractions[messageId];
+    delReactInteractions: function (id) {
+        delete reactInteractions[id];
         saveReaction();
     },
     getChatInteraction: function (userID, channelId = null) {
@@ -87,7 +91,7 @@ module.exports = {
         }
         return null;
     },
-    getReactInteraction: function (messageId) {
-        return reactInteractions[messageId];
+    getReactInteraction: function (id) {
+        return reactInteractions[id];
     }
 }

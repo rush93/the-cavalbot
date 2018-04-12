@@ -196,6 +196,7 @@ module.exports = {
     sendDmEmbed: function(user, color, title, content, author, fields, image = null, maxField) {
         return sendEmbedInChannel(user, color, title, content, author, fields, image, maxField);
     },
+    sendEmbedInChannel,
     replaceModifier: function (input, clan, guildMember, player, rank, isPS4, ps4text, withHightLight = true, withoutPlayer = false, playerNickname = null) {
         var playerName = `<@!${guildMember.id}>`;
         var clanName = clan ? guildMember.guild.roles.get(clan.id).name : null;

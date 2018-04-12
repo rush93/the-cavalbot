@@ -8,7 +8,8 @@ var constants = {
     joinmessage: "no",
     leavemessage: "no",
     PS4: "[PS4]",
-    season: 0
+    season: 0,
+    reportChannel: null
 }
 
 function save() {
@@ -66,6 +67,9 @@ module.exports = {
     get season() {
         return constants.season ? constants.season : 0;
     },
+    get reportChannel() {
+        return constants.reportChannel;
+    },
     set prefix(prefix) {
         constants.prefix = prefix;
         save();
@@ -110,5 +114,10 @@ module.exports = {
         constants.season = season;
         save();
         return constants.season;
+    },
+    set reportChannel(reportChannel) {
+        constants.reportChannel = reportChannel;
+        save();
+        return constants.reportChannel;
     }
 };
