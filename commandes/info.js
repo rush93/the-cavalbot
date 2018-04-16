@@ -16,8 +16,12 @@ var displayRoleOfClan = function (message, role) {
             text: role.members.array().length,
             grid: true
         }, {
-            title: "Total de points",
+            title: "Points de la saison",
             text: totalPoints,
+            grid: true
+        }, {
+            title: "Total de points",
+            text: totalPoints + Clans.getPointsOfLastSeason(clan.id),
             grid: true
         }, {
             title: "Rangs",
