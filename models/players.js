@@ -109,6 +109,7 @@ module.exports = {
         return players[id] ? players[id].clans[clanId] : null;
     },
     setPoints: function (id, clanId, points) {
+        clanId = Clans.getClanById(clanId).id;
         createUserIfNotExist(id);
         if (!players[id].clans[clanId]) {
             players[id].clans[clanId] = {
@@ -224,7 +225,7 @@ module.exports = {
     },
     resetRank: function (guildMember, clan) {
         createUserIfNotExist(guildMember.id);
-        clanId = clan.id;
+        clanId = Clans.getClanById(clan.id).id;
         if (!players[guildMember.id] || !players[guildMember.id].clans[clanId]) {
             return;
         }
@@ -357,6 +358,7 @@ module.exports = {
     },
     setSeasonPoints(playersId, clanId, season, withoutSave = false) {
         createUserIfNotExist(playersId);
+        clanId = Clans.getClanById(clanId).id;
         if ( !players[playersId].clans[clanId] ) {
             return;
         }

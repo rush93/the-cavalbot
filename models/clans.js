@@ -80,8 +80,10 @@ module.exports = {
         var playerRole = null;
         roles.forEach((role) => {
             if (playerRole) return;
-            if (clans[role.id] || clansPs4Map[role.id]) {
+            if (clans[role.id]) {
                 playerRole = role;
+            } else if(clansPs4Map[role.id]) {
+                playerRole = guildMember.guild.roles.get(clansPs4Map[role.id]);
             }
         });
         return playerRole;
