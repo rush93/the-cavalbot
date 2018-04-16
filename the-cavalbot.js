@@ -105,6 +105,41 @@ try {
     }
   });
 
+  var runCommand = (args, message) => {
+    if (args[0] === globalConst.prefix + 'help') {
+      Utils.log(`running ${Utils.Color.FgYellow}help ${Utils.Color.Reset}command`);
+      if (args.length > 1) {
+        if (commands[args[1]] && message.member.hasPermission(commands[args[1]].role)) {
+          commands[args[1]].help(message);
+          return;
+        }
+        Utils.reply(message, `Aucune commande du nom de **${args[1]}**.`, true)
+        return;
+      }
+      var keys = Object.keys(commands);
+      var fields = [];
+      keys.forEach((command) => {
+        if (message.member.hasPermission(commands[command].role)) {
+          fields.push({
+            text: commands[command].helpCat,
+            title: command,
+            grid: false
+          });
+        }
+      });
+      Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes', "Pour plus d'info sur une commandes faites **" + globalConst.prefix + "help [commande]**", message.author, fields);
+      return;
+    }
+    args[0] = args[0].replace(globalConst.prefix, '');
+    if (commands[args[0]]) {
+      var label = args[0];
+      Utils.log(`running ${Utils.Color.FgYellow}${label} ${Utils.Color.Reset}command`);
+      args.shift();
+      commands[label].runCommand(args, message);
+      return;
+    }
+  }
+
   bot.on('message', function (message) {
     try {
       if (message.author.bot) {
@@ -146,38 +181,17 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
       if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
         var args = message.content.split(" ");
         Utils.log('Command detected', false, message.channel.name, message.author.username, message.content);
-        if (args[0] === globalConst.prefix + 'help') {
-          Utils.log(`running ${Utils.Color.FgYellow}help ${Utils.Color.Reset}command`);
-          if (args.length > 1) {
-            if (commands[args[1]] && message.member.hasPermission(commands[args[1]].role)) {
-              commands[args[1]].help(message);
-              return;
-            }
-            Utils.reply(message, `Aucune commande du nom de **${args[1]}**.`, true)
-            return;
-          }
-          var keys = Object.keys(commands);
-          var fields = [];
-          keys.forEach((command) => {
-            if (message.member.hasPermission(commands[command].role)) {
-              fields.push({
-                text: commands[command].helpCat,
-                title: command,
-                grid: false
-              });
-            }
+        if (!message.member) {
+          Utils.log(`No member found fetching for ${Utils.Color.FgYellow}${message.author.username}${Utils.Color.Reset}`);
+          message.channel.guild.fetchMember(message.author.id).then(member => {
+            message.member = member
+            runCommand(args, message);
+          }).catch((e) => {
+            Utils.log(e.stack, true);
           });
-          Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes', "Pour plus d'info sur une commandes faites **" + globalConst.prefix + "help [commande]**", message.author, fields);
           return;
         }
-        args[0] = args[0].replace(globalConst.prefix, '');
-        if (commands[args[0]]) {
-          var label = args[0];
-          Utils.log(`running ${Utils.Color.FgYellow}${label} ${Utils.Color.Reset}command`);
-          args.shift();
-          commands[label].runCommand(args, message);
-          return;
-        }
+        runCommand(args, message);
       } else if (/^\*tori( |$)/i.exec(message.content)) {
         var embed = new Discord.RichEmbed({});
         embed.setColor(0x4169E1);
