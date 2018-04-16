@@ -157,6 +157,25 @@ var commands = {
             Players.resetRank(user.id, clanRemoved);
             Utils.reply(message, 'Le joueur a bien été supprimé du clan.');
         }
+    },
+    setPs4Role: {
+        help: [
+            'Permet d\'ajouter le role ps4 au clan.'
+        ],
+        args: '<@role>',
+        runCommand: (clan, args, message) => {
+            if (!Clans.getClan(clan)) {
+                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                return;
+            }
+            var role = message.mentions.roles.first();
+            if (!role) {
+                Utils.reply(message, 'Vous devez menstionner un role.', true);
+                return;
+            }
+            Clans.setPs4Role(clan.id, role);
+            Utils.reply(message,"Le role ps4 du clan a bien été modifier.");
+        }
     }
 }
 var help = function (message) {

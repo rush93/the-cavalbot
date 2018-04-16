@@ -5,6 +5,7 @@ var path = require(`path`);
 
 var clans = {};
 var clansMap = {};
+var clansPs4Map = {};
 
 function save() {
     fs.writeFile(path.resolve(__dirname + '/../data/clans.json'), JSON.stringify(clans), function (err) {
@@ -43,6 +44,11 @@ module.exports = {
                 .then(r => {
                     resolve(r)
                     var ids = Object.keys(clans);
+                    for (var i = 0; i < ids.length; i++) {
+                        if (clans[ids[i]] && clans[ids[i]].ps4Role) {
+                            clansPs4Map[clans[ids[i]].ps4Role] = ids[i];
+                        }
+                    }
                 })
                 .catch(e => reject(e));
         });
@@ -51,9 +57,15 @@ module.exports = {
         save();
     },
     getClan: function (guildRole) {
+        if (!clans[guildRole.id] && clansPs4Map[guildRole.id]) {
+            return clans[clansPs4Map[guildRole.id]];
+        }
         return clans[guildRole.id];
     },
     getClanById: function (id) {
+        if (!clans[id] && clansPs4Map[id]) {
+            return clans[clansPs4Map[id]];
+        }
         return clans[id];
     },
     createClan: function (guildRole) {
@@ -68,16 +80,16 @@ module.exports = {
         var playerRole = null;
         roles.forEach((role) => {
             if (playerRole) return;
-            var keys = Object.keys(clans);
-            for (var i = 0; i < keys.length; i++) {
-                if (role.id === keys[i]) {
-                    playerRole = clans[keys[i]];
-                }
+            if (clans[role.id] || clansPs4Map[role.id]) {
+                playerRole = role;
             }
         });
         return playerRole;
     },
     deleteClan: function (guildRole) {
+        if(clansPs4Map[clans[guildRole.id].ps4Role]) {
+            delete clansPs4Map[clans[guildRole.id].ps4Role];
+        }
         delete clans[guildRole.id];
         save();
     },
@@ -104,15 +116,18 @@ module.exports = {
         roles.forEach((role) => {
             if (fail) return;
             var keys = Object.keys(clans);
-            for (var i = 0; i < keys.length; i++) {
-                if (role.id === keys[i]) {
-                    fail = true;
-                }
+            if (clans[role.id] || clansPs4Map[role.id]) {
+                fail = true;
             }
         });
         if (!fail) {
             var GuestRole = getRoleByName('Guests', guildRole.guild);
-            player.addRole(guildRole, reason);
+            if (isPS4) {
+                var ps4Role = guildRole.guild.roles.get(clans[guildRole.id].ps4Role);
+                player.addRole(ps4Role, reason);
+            } else {
+                player.addRole(guildRole, reason);
+            }
             if (GuestRole) {
                 player.removeRole(GuestRole, reason);
             }
@@ -127,10 +142,15 @@ module.exports = {
         var fail = true;
         player.roles.forEach((role) => {
             if (!fail) return;
-            if (role.id === guildRole.id) {
+            if (role.id === guildRole.id || role.id === clans[guildRole.id].ps4Role) {
                 fail = false;
                 var GuestRole = getRoleByName('Guests', guildRole.guild);
-                player.removeRole(guildRole, reason);
+                if (isPS4) {
+                    var ps4Role = guildRole.guild.roles.get(clans[guildRole.id].ps4Role);
+                    player.removeRole(ps4Role, reason);
+                } else {
+                    player.removeRole(guildRole, reason);
+                }
                 if (GuestRole) {
                     player.addRole(GuestRole, reason);
                 }
@@ -143,7 +163,27 @@ module.exports = {
         return fail ? null : clans[guildRole.id];
     },
     getRole: function (clanId, guild) {
+        if (clansPs4Map[clanId]) {
+            clanId = clansPs4Map[clanId];
+        }
         return guild.roles.get(clanId);
+    },
+    setPs4Role: function (clanId, role) {
+        if (!clans[clanId]) {
+            return;
+        }
+        if (clans[clanId].ps4Role && clansPs4Map[clans[clanId].ps4Role]) {
+            delete clansPs4Map[clans[clanId].ps4Role];
+        }
+        clans[clanId].ps4Role = role.id;
+        clansPs4Map[role.id] = clanId;
+        save();
+    },
+    getPs4Role: function (clanId) {
+        if (!clans[clanId]) {
+            return null;
+        }
+        return clans[clanId].ps4Role;
     },
     getRoleByName,
     get clans() {

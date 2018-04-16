@@ -24,15 +24,6 @@ module.exports = {
             Utils.reply(message, "Aucuns clan pour ce role.", true);
             return;
         }
-        if (!message.member) {
-            message.channel.send("<@270268597874589696>...")
-            Utils.reply(message, `Alors alors comment dire... enfait c'est un bug chelou que j'ai pas encore compris... du coup ça a pas marché donc tu as 3 choix:
- - tu appel un admin/ gestionaire
- - tu refait la commande (ça peu marcher par chance)
- - tu dis a rush qu'il sais pas coder
-ou alors tu fait les 3.`, true);
-            return;
-        }
         clan = Clans.addPlayer(role, message.member, "rejoins le clan avec la commande join", Object.keys(Players.getPsns(message.member.id)).length > 0);
         if (!clan) {
             Utils.reply(message, "Vous êtes déjà dans un clan.", true);

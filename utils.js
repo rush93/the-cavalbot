@@ -107,6 +107,9 @@ var getClanScores = function (Players, Clans) {
     }
     var scoreKeys = Object.keys(scores);
     for (var i = 0; i < scoreKeys.length; i++) {
+        if ( Clans.getClanById(scoreKeys[i]).ps4Role && Clans.getClanById(scoreKeys[i]).ps4Role != scoreKeys[i] ) {
+            scores[scoreKeys[i]] += scores[Clans.getClanById(scoreKeys[i]).ps4Role];
+        }
         scores[scoreKeys[i]] -= Clans.getPointsOfLastSeason(scoreKeys[i]);
     }
     return scores;
@@ -271,6 +274,9 @@ module.exports = {
     getClanScores,
     getScoreOfClan: function(Players, clanId, Clans) {
         var scores = getClanScores(Players, Clans);
+        if (Clans.getClanById(clanId).ps4Role === clanId) {
+            clanId = Clans.getClanById(clanId).id;
+        }
         return scores[clanId];
     },
     getRolesOfPerm: function(guild, permissions) {
