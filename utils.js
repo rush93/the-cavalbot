@@ -107,7 +107,7 @@ var getClanScores = function (Players, Clans) {
     }
     var scoreKeys = Object.keys(scores);
     for (var i = 0; i < scoreKeys.length; i++) {
-        if ( Clans.getClanById(scoreKeys[i]).ps4Role && Clans.getClanById(scoreKeys[i]).ps4Role != scoreKeys[i] ) {
+        if ( Clans.getClanById(scoreKeys[i]) && Clans.getClanById(scoreKeys[i]).ps4Role && Clans.getClanById(scoreKeys[i]).ps4Role != scoreKeys[i] ) {
             scores[scoreKeys[i]] += scores[Clans.getClanById(scoreKeys[i]).ps4Role];
         }
         scores[scoreKeys[i]] -= Clans.getPointsOfLastSeason(scoreKeys[i]);
