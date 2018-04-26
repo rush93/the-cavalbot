@@ -181,17 +181,14 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
       if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
         var args = message.content.split(" ");
         Utils.log('Command detected', false, message.channel.name, message.author.username, message.content);
-        if (!message.member) {
-          Utils.log(`No member found fetching for ${Utils.Color.FgYellow}${message.author.username}${Utils.Color.Reset}`);
-          message.channel.guild.fetchMember(message.author.id).then(member => {
-            message.member = member
-            runCommand(args, message);
-          }).catch((e) => {
-            Utils.log(e.stack, true);
-          });
-          return;
-        }
-        runCommand(args, message);
+        Utils.log(`fetching for ${Utils.Color.FgYellow}${message.author.username}${Utils.Color.Reset}`);
+        message.channel.guild.fetchMember(message.author.id).then(member => {
+          message.member = member
+          runCommand(args, message);
+        }).catch((e) => {
+          Utils.log(e.stack, true);
+        });
+        return;
       } else if (/^\*tori( |$)/i.exec(message.content)) {
         var embed = new Discord.RichEmbed({});
         embed.setColor(0x4169E1);

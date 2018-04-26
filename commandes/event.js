@@ -208,6 +208,10 @@ var commands = {
                 var questions = Object.keys(participation.questions).map(function(key) {
                     return participation.questions[key];
                 });
+                let member = message.guild.members.get(participantsKeys[i]);
+                if (!member) {
+                    continue;
+                }
                 fields.push({
                     title:  message.guild.members.get(participantsKeys[i]).displayName,
                     text: 
