@@ -24,19 +24,19 @@ module.exports = {
             return;
         }
         if (!Players.hasEpou(user1)) {
-            Utils.reply(message, `<@!${user1.id}> n'as pas d'épou !`, true);
+            Utils.reply(message, `<@!${user1.id}> n'a pas d'époux !`, true);
             return;
         }
 
         if (!Players.hasEpou(user2)) {
-            Utils.reply(message, `<@!${user2.id}> n'as pas d'épou !`, true);
+            Utils.reply(message, `<@!${user2.id}> n'a pas d'époux !`, true);
             return;
         }
         if (Players.getEpou(user1) !== Players.getEpou(user1)) {
-            Utils.reply(message, `Les deux joueurs ne sont pas marié.`, true);
+            Utils.reply(message, `Les deux joueurs ne sont pas mariés.`, true);
             return;
         }
         Players.divorse(user1, user2);
-        Utils.reply(message, `<@!${user1.id}> et <@!${user2.id}> ont divorcé !`);
+        Utils.reply(message, `<@!${user1.id}> et <@!${user2.id}> ont divorcés !`);
     }
 }

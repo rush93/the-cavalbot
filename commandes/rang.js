@@ -11,7 +11,7 @@ var commands = {
         args: '',
         runCommand: (role, name, args, message) => {
             if (Ranks.getRank(role.id, name)) {
-                Utils.reply(message, 'Ce rang pour ce clan à déjà été créé.', true);
+                Utils.reply(message, 'Ce rang pour ce clan a déjà été créé.', true);
                 return;
             }
             Ranks.create(role.id, name);
@@ -25,7 +25,7 @@ var commands = {
         args: '',
         runCommand: (role, name, args, message) => {
             if (!Ranks.getRank(role.id, name)) {
-                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                Utils.reply(message, 'Aucun rang avec ce nom pour ce clan.', true);
                 return;
             }
             Ranks.delete(role.id, name);
@@ -39,12 +39,12 @@ var commands = {
         args: '<points>',
         runCommand: (role, name, args, message) => {
             if (!Ranks.getRank(role.id, name)) {
-                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                Utils.reply(message, 'Aucun rang avec ce nom pour ce clan.', true);
                 return;
             }
             var points = Number(args[0]);
             if (isNaN(points)) {
-                Utils.reply(message, 'Le nombre de points dois être un nombre.', true);
+                Utils.reply(message, 'Le nombre de points doit être un nombre.', true);
                 return;
             }
             Ranks.setPoints(role.id, name, points);
@@ -59,7 +59,7 @@ var commands = {
         args: '<:smiley:>',
         runCommand: (role, name, args, message) => {
             if (!Ranks.getRank(role.id, name)) {
-                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                Utils.reply(message, 'Aucun rang avec ce nom pour ce clan.', true);
                 return;
             }
             if (!args[0]) {
@@ -73,16 +73,16 @@ var commands = {
     },
     setiscustomable: {
         help: [
-            'Si a \'true\' le nom du rang pourras être modifié par les utilisateurs.'
+            'Si a \'true\' le nom du rang pourra être modifié par les utilisateurs.'
         ],
         args: '[true|false]',
         runCommand: (role, name, args, message) => {
             if (!Ranks.getRank(role.id, name)) {
-                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                Utils.reply(message, 'Aucun rang avec ce nom pour ce clan.', true);
                 return;
             }
             if (args[0].toLowerCase() !== "true" && args[0].toLowerCase() !== "false") {
-                Utils.reply(message, "la valeur dois être 'true' ou 'false'.", true);
+                Utils.reply(message, "la valeur doit être 'true' ou 'false'.", true);
                 return;
             }
             Ranks.setIsCustomable(role.id, name, args[0].toLowerCase() === "true");
@@ -92,21 +92,21 @@ var commands = {
     },
     setrole: {
         help: [
-            'attache un role au rang.'
+            'attache un rôle au rang.'
         ],
         args: '<@role>',
         runCommand: (role, name, args, message) => {
             if (!Ranks.getRank(role.id, name)) {
-                Utils.reply(message, 'Aucuns rang avec ce nom pour ce clan.', true);
+                Utils.reply(message, 'Aucun rang avec ce nom pour ce clan.', true);
                 return;
             }
             var attachRole = message.mentions.roles.last();
             if (!attachRole) {
-                Utils.reply(message, "Vous devez mentionner un role a attacher.", true);
+                Utils.reply(message, "Vous devez mentionner un rôle à attacher.", true);
                 return;
             }
             Ranks.setRole(role.id, name, attachRole);
-            Utils.reply(message, "Le role à bien été attacher au role.");
+            Utils.reply(message, "Le rôle a bien été attaché au rôle.");
             return;
         }
     }
@@ -141,7 +141,7 @@ module.exports = {
         var roleName = reg[1].replace(/"/g, '');
         var role = Clans.getRoleByName(roleName, message.channel.guild);
         if (!role) {
-            Utils.reply(message, "Aucuns role avec ce nom", true);
+            Utils.reply(message, "Aucun rôle avec ce nom", true);
             return;
         }
         var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));

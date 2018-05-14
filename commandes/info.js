@@ -50,7 +50,7 @@ var displayRoleOfMember = function (message, member) {
     }
     var player = Players.getPlayer(member.id, clan.id);
     if (!clan) {
-        Utils.reply(message, 'Cet personne n\'as pas de clan !');
+        Utils.reply(message, 'Cette personne n\'a pas de clan !');
         return
     }
     var role = Clans.getRole(clan.id, member.guild);

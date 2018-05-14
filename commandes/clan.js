@@ -11,7 +11,7 @@ var commands = {
         args: '',
         runCommand: (clan, args, message) => {
             if (Clans.getClan(clan)) {
-                Utils.reply(message, 'Un clan avec ce role à déjà été créé.', true);
+                Utils.reply(message, 'Un clan avec ce rôle a déjà été créé.', true);
                 return;
             }
             Clans.createClan(clan);
@@ -25,7 +25,7 @@ var commands = {
         args: '',
         runCommand: (clan, args, message) => {
             if (!Clans.getClan(clan)) {
-                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
             Clans.deleteClan(clan);
@@ -39,7 +39,7 @@ var commands = {
         args: '<description>',
         runCommand: (clan, args, message) => {
             if (!Clans.getClan(clan)) {
-                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
             Clans.setDescription(clan, args.join(' '));
@@ -53,7 +53,7 @@ var commands = {
         args: '<url>',
         runCommand: (clan, args, message) => {
             if (!Clans.getClan(clan)) {
-                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
             Clans.setImage(clan, args.join(' '));
@@ -62,12 +62,12 @@ var commands = {
     },
     setchannel: {
         help: [
-            'Permet de modifier le channel ou le bot peu parler d\'un clan.'
+            'Permet de modifier le channel ou le bot peut parler d\'un clan.'
         ],
         args: '<#channel>',
         runCommand: (clan, args, message) => {
             if (!Clans.getClan(clan)) {
-                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
             var channel = message.mentions.channels.first();
@@ -86,7 +86,7 @@ var commands = {
         args: '<Clan>',
         runCommand: (clan, args, message) => {
             if (!Clans.getClan(clan)) {
-                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
             var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
@@ -100,11 +100,11 @@ var commands = {
         args: '<:smiley:>',
         runCommand: (clan, args, message) => {
             if (!Clans.getClan(clan)) {
-                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
             Clans.setSmiley(clan, args.join(' '));
-            Utils.reply(message, 'Le smiley a bien été changée.');
+            Utils.reply(message, 'Le smiley a bien été changé.');
         }
     },
     addplayer: {
@@ -114,7 +114,7 @@ var commands = {
         args: '<@player>',
         runCommand: (clan, args, message) => {
             if (!Clans.getClan(clan)) {
-                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
             var user = message.mentions.members.first();
@@ -138,7 +138,7 @@ var commands = {
         args: '<@player>',
         runCommand: (clan, args, message) => {
             if (!Clans.getClan(clan)) {
-                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
             var user = message.mentions.members.first();
@@ -160,21 +160,21 @@ var commands = {
     },
     setPs4Role: {
         help: [
-            'Permet d\'ajouter le role ps4 au clan.'
+            'Permet d\'ajouter le rôle ps4 au clan.'
         ],
         args: '<@role>',
         runCommand: (clan, args, message) => {
             if (!Clans.getClan(clan)) {
-                Utils.reply(message, 'Aucuns clan avec ce role.', true);
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
             var role = message.mentions.roles.first();
             if (!role) {
-                Utils.reply(message, 'Vous devez menstionner un role.', true);
+                Utils.reply(message, 'Vous devez mentionner un rôle.', true);
                 return;
             }
             Clans.setPs4Role(clan.id, role);
-            Utils.reply(message,"Le role ps4 du clan a bien été modifier.");
+            Utils.reply(message,"Le rôle ps4 du clan a bien été modifié.");
         }
     }
 }
@@ -208,7 +208,7 @@ module.exports = {
         var name = reg[1].replace(/"/g, '');
         var role = Clans.getRoleByName(name, message.channel.guild);
         if (!role) {
-            Utils.reply(message, "Aucuns role avec ce nom", true);
+            Utils.reply(message, "Aucun rôle avec ce nom", true);
             return;
         }
         if (commands[args[0]]) {

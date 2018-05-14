@@ -16,12 +16,12 @@ module.exports = {
     runCommand: (args, message) => {
         var role = Clans.getRoleByName(args.join(' '), message.channel.guild);
         if (!role) {
-            Utils.reply(message, "Aucuns role avec ce nom", true);
+            Utils.reply(message, "Aucun rôle avec ce nom", true);
             return;
         }
         var clan = Clans.getClan(role);
         if (!clan) {
-            Utils.reply(message, "Aucuns clan pour ce role.", true);
+            Utils.reply(message, "Aucun clan pour ce rôle.", true);
             return;
         }
         clan = Clans.addPlayer(role, message.member, "rejoins le clan avec la commande join", Object.keys(Players.getPsns(message.member.id)).length > 0);

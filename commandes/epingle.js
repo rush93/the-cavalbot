@@ -13,7 +13,7 @@ module.exports = {
     },
     runCommand: (args, message) => {
         if (!message.member.hasPermission("MANAGE_NICKNAMES")) {
-            Utils.reply(message, "Vous n'avez pas assez de couilles pour epingler un message", true);
+            Utils.reply(message, "Vous n'avez pas assez de couilles pour épingler un message", true);
             return;
         }
         if(args.length === 0) {
@@ -22,23 +22,23 @@ module.exports = {
         }
         var toPin = message.channel.messages.get(args[0]);
         if (!toPin) {
-            Utils.reply(message, "aucuns message avec cet id dans ce channel.", true);
+            Utils.reply(message, "aucun message avec cet id dans ce channel.", true);
             return;
         }
         if (!toPin.pinned) {
             toPin.pin().then(() => {
-                Utils.reply(message, "Le message à bien été épingler.");
+                Utils.reply(message, "Le message à bien été épinglé.");
             }).catch((e) => {
                 Utils.log(e, true);
-                Utils.reply(message, "Euh wait il c'est passé quoi la ? j'ai pas réussi à le faire :/", true);
+                Utils.reply(message, "Euh wait il s'est passé quoi là ? J'ai pas réussi à le faire :/", true);
             });
             return;
         }
         toPin.unpin().then(() => {
-            Utils.reply(message, "Le message n'est plus épingler.");
+            Utils.reply(message, "Le message n'est plus épinglé.");
         }).catch((e) => {
             Utils.log(e, true);
-            Utils.reply(message, "Euh wait il c'est passé quoi la ? j'ai pas réussi à le faire :/", true);
+            Utils.reply(message, "Euh wait il s'est passé quoi là ? J'ai pas réussi à le faire :/", true);
         });
     }
 }

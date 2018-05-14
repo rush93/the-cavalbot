@@ -20,16 +20,16 @@ module.exports = {
         var user1 = message.mentions.members.first();
         var user2 = message.mentions.members.last();
         if (!user1 || !user2 || user1.id === user2.id) {
-            Utils.reply(message, "Vous devez mentionner 2 joueurs", true);
+            Utils.reply(message, "Vous devez mentionner deux joueurs", true);
             return;
         }
         if (Players.hasEpou(user1)) {
-            Utils.reply(message, `<@!${user1.id}> à déjà un épou !`, true);
+            Utils.reply(message, `<@!${user1.id}> a déjà un époux !`, true);
             return;
         }
 
         if (Players.hasEpou(user2)) {
-            Utils.reply(message, `<@!${user2.id}> à déjà un épou !`, true);
+            Utils.reply(message, `<@!${user2.id}> a déjà un époux !`, true);
             return;
         }
         Players.setEpou(user1, user2);
