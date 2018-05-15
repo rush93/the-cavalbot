@@ -101,6 +101,8 @@ var displayRoleOfMember = function (message, member) {
             seasonPoints -= player.season[Constants.season];
         }
     }
+    var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
+    var image = Constants.domain + '/images/clan?c=' + clan.id + '&s=' + totalPoints;
     var dif = globalPlayer && globalPlayer.lastUpdate ? moment.duration(moment().diff(globalPlayer.lastUpdate)).locale("fr").humanize() : null;
     Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
         `**Clan:** ${role.name}` +  (seasonPoints === null ? '' : `
@@ -110,7 +112,7 @@ var displayRoleOfMember = function (message, member) {
 **PSN:** ${psnString.join(', ')}`) + (!dif  ? '' : `
 **Dernière mise à jour:** ${dif}`) + ` ${globalPlayer && globalPlayer.epou ? `
 :ring: <@!${globalPlayer.epou}>` : ''} `
-        , message.author, fields, clan.image);
+        , message.author, fields, image);
     Players.updateComprank(member.id);
     return;
 }
