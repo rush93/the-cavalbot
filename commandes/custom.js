@@ -37,7 +37,7 @@ module.exports = {
         var promise = Players.setDisplayRank(message.member, rank, args.join(' '));
         if (promise) {
             promise.catch(() => {
-                Utils.reply(message, 'Aie tu est trop puissant pour moi, je peu pas changer ton pseudo.', true);
+                Utils.reply(message, 'Aïe tu es trop puissant pour moi, je peux pas changer ton pseudo.', true);
             });
         }
         Utils.reply(message, 'Votre rang actif est maintenant **' + args.join(' ') + '**.');

@@ -28,12 +28,12 @@ module.exports = {
             args.push(page);
             var role = Clans.getRoleByName(args.join(' '), message.channel.guild);
             if (!role) {
-                Utils.reply(message, "Aucuns clans avec ce nom.", true);
+                Utils.reply(message, "Aucun clan avec ce nom.", true);
                 return;
             }
             page = 1;
         } else if(!role) {
-            Utils.reply(message, "Aucuns clans avec ce nom.", true);
+            Utils.reply(message, "Aucun clan avec ce nom.", true);
             return;
         }
         if (!page) {
@@ -41,7 +41,7 @@ module.exports = {
         }
         var clan = Clans.getClan(role);
         if (!clan) {
-            Utils.reply(message, "Aucuns clan pour ce role.", true);
+            Utils.reply(message, "Aucun clan pour ce rôle.", true);
             return;
         }
         var players = Players.getPlayers();
@@ -94,6 +94,6 @@ module.exports = {
         }
         var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
         var image = Constants.domain + '/images/clan?c=' + clan.id + '&s=' + totalPoints;
-        Utils.sendEmbed(message, role.color, 'Classements du clan ' + role.name, '', message.author, fields, image, 10);
+        Utils.sendEmbed(message, role.color, 'Classement du clan ' + role.name, '', message.author, fields, image, 10);
     }
 }

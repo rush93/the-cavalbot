@@ -1,19 +1,17 @@
-# the-cavalbot
+# The-Cavalbot
 ## PREREQUIS
   - node
   - npm
 
 ## INSTALLATION
-  - create app & bot discord https://discordapp.com/developers/applications/me
-  - invite him to discord
-  - create token.js
+  - Create app & bot discord https://discordapp.com/developers/applications/me
+  - Invite him to discord
+  - Create token.js
   ```js
   var token = 'BOT TOKEN'
-
   module.exports = token;
 ```
-  - install modules `npm i`
-  - run bot `node the-cavalbot.js`
+  - Install modules `npm i`
+  - Run bot `node the-cavalbot.js`
 ## USAGE
-to view all commands `_help`
-and `_help <command>` for more info 
+To view all commands `_help` and `_help <command>` for more info 

@@ -23,13 +23,13 @@ module.exports = {
 		
 		var members = message.mentions.members;
 		if (members.array().length === 0) {
-			Utils.reply(message, "Vous devez mensionnez au moins un utilisateur", true);
+			Utils.reply(message, "Vous devez mentionnez au moins un utilisateur", true);
 			return;
 		}
 
 		var points = Number(args[args.length - 1]);
 		if (isNaN(points)) {
-			Utils.reply(message, 'Le nombre de points dois être un nombre.', true);
+			Utils.reply(message, 'Le nombre de points doit être un nombre.', true);
 			return;
 		}
 

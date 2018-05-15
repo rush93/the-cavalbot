@@ -34,13 +34,13 @@ var commands = {
                 Clans.setSeasonPoints(scoreKeys[i], scores[scoreKeys[i]], season, true);
             }
             Clans.save();
-            Utils.reply(message, 'Une nouvelle saison à été créé.');
+            Utils.reply(message, 'Une nouvelle saison a été créée.');
             Constants.season = season;
         }
     },
     rollback: {
         help: [
-            'Permet de supprimé le changement de saison.'
+            'Permet de supprimer le changement de saison.'
         ],
         args: '',
         runCommand: (args, message) => {
@@ -49,7 +49,7 @@ var commands = {
                 return;
             }
             Constants.season = Constants.season - 1;
-            Utils.reply(message, 'le rollback a bien été pris en compte.');
+            Utils.reply(message, 'Le rollback a bien été pris en compte.');
         }
     },
 }
@@ -71,7 +71,7 @@ module.exports = {
     help,
     runCommand: (args, message) => {
         if (!message.member.hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, "Vous n'avez pas assez de couilles pour toucher au saisons", true);
+            Utils.reply(message, "Vous n'avez pas assez de couilles pour toucher aux saisons", true);
             return;
         }
         if (args.length < 1) {

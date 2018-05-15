@@ -6,28 +6,28 @@ var reportMessage = (message, reporter) => {
     var channel = message.channel.guild.channels.get(Constants.reportChannel);
     var fields = [
         {
-            title: 'ki ka écrit',
+            title: 'Qui est-ce qui a écrit ?',
             text: `${message.member}`,
             grid: true
         },
         {
-            title: 'ki ka report',
+            title: 'Qui est-ce qui a report ?',
             text: `<@!${reporter.id}>`,
             grid: true
         },
         {
-            title: 'ou cé',
+            title: 'Dans quel channel cela s\'est-il passé ?',
             text: `<#${message.channel.id}>`,
             grid: true
         },
         {
-            title: 'il a di kwa',
+            title: 'Qu\'est ce qui a été dit ?',
             text: message.content,
             grid: true
         }
     ]
     Utils.sendEmbedInChannel(channel, 0xE8C408, 'Report d\'un message', '', reporter, fields);
-    Utils.sendDmEmbed(reporter, 0xE8C408, 'Vous avez report', 'Ce meme message cera envoyer au administrateur.', reporter, fields);
+    Utils.sendDmEmbed(reporter, 0xE8C408, 'Vous avez report', 'Ce même message sera envoyé aux administrateurs.', reporter, fields);
 }
 module.exports = {
     role: 'SEND_MESSAGES',
@@ -42,7 +42,7 @@ module.exports = {
     runCommand: (args, message) => {
         if (!Constants.reportChannel) {
             Utils.reply(message,
-                "Alors t'es bien gentil mais enfait ya pas de channel ou je peux dire que ta report le message. Donc appel un admin et dis lui de bouger ces fesses !",
+                "Alors t'es bien gentil mais en fait y'a pas de channel où je peux dire que t'as report le message... Donc appelle un admin et dis lui de bouger ces fesses !",
                 true);
             return;
         }

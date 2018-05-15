@@ -21,12 +21,12 @@ module.exports = {
         }
         var member = message.mentions.members.first();
         if (!member) {
-            Utils.reply(message, "Vous devez mensionnez un utilisateur", true);
+            Utils.reply(message, "Vous devez mentionner un utilisateur", true);
             return;
         }
         var points = Number(args[1]);
         if (isNaN(points)) {
-            Utils.reply(message, 'Le nombre de points dois être un nombre.', true);
+            Utils.reply(message, 'Le nombre de points doit être un nombre.', true);
             return;
         }
 
@@ -36,7 +36,7 @@ module.exports = {
         var oldPoints = player.points;
         var newPoints = oldPoints - points
         Players.setPoints(member.id, clanId, newPoints);
-        Utils.reply(message, 'Les points du joueur on bien été modifier.');
+        Utils.reply(message, 'Les points du joueur ont bien été modifiés.');
         var playerClan = Clans.getPlayerClan(member);
         var avaliabeRanks = Ranks.getRanks(playerClan.id);
         var keys = Ranks.getSortedKeys(playerClan.id);

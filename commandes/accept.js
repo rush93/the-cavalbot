@@ -5,18 +5,18 @@ var Players = require('../models/players');
 
 module.exports = {
     role: 'SEND_MESSAGES',
-    helpCat: 'Permet d\'accepter une demande en marriage',
+    helpCat: 'Permet d\'accepter une demande en mariage',
     help: function (message) {
         Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande accept", "", message.author, [{
             title: Constants.prefix + 'accept <@user>',
-            text: "Permet d\'accepter une demande en marriage",
+            text: "Permet d\'accepter une demande en mariage.",
             grid: false
         }]);
     },
     runCommand: (args, message) => {
         var user1 = message.mentions.members.first();
         if (!user1) {
-            Utils.reply(message, "Vous devez mentionner un joueur", true);
+            Utils.reply(message, "Vous devez mentionner un joueur.", true);
             return;
         }
         if ( message.member.id === user1.id) {
@@ -29,11 +29,11 @@ module.exports = {
             return;
         }
         if (Players.hasEpou(message.member)) {
-            Utils.reply(message, `Vous êtes déjà marié !`, true);
+            Utils.reply(message, `Vous êtes déjà mariés !`, true);
             return;
         }
         if (Players.hasEpou(user1)) {
-            Utils.reply(message, `<@!${user1.id}> à déjà un épou !`, true);
+            Utils.reply(message, `<@!${user1.id}> a déjà un époux !`, true);
             return;
         }
         var roles = Utils.getRolesOfPerm(message.guild, 'MANAGE_GUILD');
