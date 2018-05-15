@@ -5,28 +5,28 @@ var constants = require('../models/constants');
 var commands = {
     prefix: {
         help: [
-            'Permet de changer le préfix des commandes du bot.'
+            'Permet de changer le préfixe des commandes du bot.'
         ],
         args: '[prefix]',
         runCommand: (args, message) => {
             if (args.length === 0) {
-                Utils.reply(message, "**Préfix**: " + constants.prefix);
+                Utils.reply(message, "**Préfixe**: " + constants.prefix);
                 return;
             }
             constants.prefix = args.join(' ');
-            Utils.reply(message, 'Le préfix a bien été modifié.');
+            Utils.reply(message, 'Le préfixe a bien été modifié.');
         }
     },
     pseudoModifier: {
         help: [
-            'Permet de changer le pseudo des joueurs en fonction de leurs rank',
-            '**%rank%**le nom du rank',
-            '**%srank%** le smiley du rank',
+            'Permet de changer le pseudo des joueurs en fonction de leurs rangs',
+            '**%rank%**le nom du rang',
+            '**%srank%** le smiley du rang',
             '**%clan%** le nom du clan',
             '**%sclan%** le smiley du clan',
             '**%player%** le nom du joueur',
-            '**%PS4%** si il s\'agit d\'un joueur ps4',
-            'pour que le bot ne modifie pas les nom mettre \'no\''
+            '**%PS4%** s\'il s\'agit d\'un joueur ps4',
+            'pour que le bot ne modifie pas les noms mettez \'no\''
         ],
         args: '[modifier]',
         runCommand: (args, message) => {
@@ -35,12 +35,12 @@ var commands = {
                 return;
             }
             constants.pseudoModifier = args.join(' ');
-            Utils.reply(message, 'Le pseudo modifier a bien été modifié.');
+            Utils.reply(message, 'Le pseudo a bien été modifié.');
         }
     },
     resetRankWhenChangeClan: {
         help: [
-            'Est-ce que le rank sera reset lors du changement de clan ?'
+            'Est-ce que le rang sera reset lors du changement de clan ?'
         ],
         args: '[true|false]',
         runCommand: (args, message) => {
@@ -49,16 +49,16 @@ var commands = {
                 return;
             }
             if (args[0].toLowerCase() !== "true" && args[0].toLowerCase() !== "false") {
-                Utils.reply(message, "la valeur dois être 'true' ou 'false'.", true);
+                Utils.reply(message, "la valeur doit être 'true' ou 'false'.", true);
                 return;
             }
             constants.resetRankWhenChangeClan = args[0].toLowerCase() === "true";
-            Utils.reply(message, 'Le resetRankWhenChangeClan a bien été modifier.');
+            Utils.reply(message, 'Le resetRankWhenChangeClan a bien été modifiée.');
         }
     },
     leaveCooldown: {
         help: [
-            'Au bout de combiens de minutes est-il possible de faire !leave après un join.',
+            'Au bout de combien de minutes est-il possible de faire !leave après un join.',
             'mettre à -1 pour que le leave soit désactivé.'
         ],
         args: '[minutes]',
@@ -69,7 +69,7 @@ var commands = {
             }
             var num = Number(args[0]);
             if (isNaN(num)) {
-                Utils.reply(message, "la valeur dois être nombre.", true);
+                Utils.reply(message, "la valeur doit être nombre.", true);
                 return;
             }
             constants.leaveCooldown = num;
@@ -78,8 +78,8 @@ var commands = {
     },
     joinmessage: {
         help: [
-            'Le message qui sera afficher quand un nouveau membre rejoins le clan',
-            'mettre à \'no\' pour que le message soit désactiver.',
+            'Le message qui sera affiché quand un nouveau membre rejoinds le clan',
+            'mettre à \'no\' pour que le message soit désactivé.',
             '**%clan%** le nom du clan',
             '**%player%** le nom du joueur'
         ],
@@ -95,8 +95,8 @@ var commands = {
     },
     leavemessage: {
         help: [
-            'Le message qui sera afficher quand un membre quitte le clan',
-            'mettre à \'no\' pour que le message soit désactiver.',
+            'Le message qui sera affiché quand un membre quitte le clan',
+            'mettre à \'no\' pour que le message soit désactivé.',
             '**%clan%** le nom du clan',
             '**%player%** le nom du joueur'
         ],
@@ -112,7 +112,7 @@ var commands = {
     },
     ps4: {
         help: [
-            'les lettres qui seron ajouter au pseudo du joueur si c\'est un joueur ps4',
+            'les lettres qui seront ajoutées au pseudo du joueur si c\'est un joueur ps4',
         ],
         args: '[lettres]',
         runCommand: (args, message) => {
@@ -121,7 +121,7 @@ var commands = {
                 return;
             }
             constants.PS4 = args.join(' ');
-            Utils.reply(message, 'Le ps4 a bien été modifié.');
+            Utils.reply(message, 'Le ps4 a bien été modifiée.');
         }
     },
     domain: {
@@ -135,12 +135,12 @@ var commands = {
                 return;
             }
             constants.domain = args.join(' ');
-            Utils.reply(message, 'Le nom de domaine à bien été modifié.');
+            Utils.reply(message, 'Le nom de domaine a bien été modifié.');
         }
     },
     reportChannel: {
         help: [
-            'le channel ou seront report les messages.',
+            'le channel où seront report les messages.',
         ],
         args: '[url]',
         runCommand: (args, message) => {
@@ -149,11 +149,11 @@ var commands = {
                 return;
             }
             if (!message.mentions.channels && !message.mentions.channels.first()) {
-                Utils.reply(message,"il faut mentioner un message.",true);
+                Utils.reply(message,"il faut mentionner un message.",true);
                 return;
             }
             constants.reportChannel = message.mentions.channels.first().id;
-            Utils.reply(message, 'Le channel de report à bien été modifié.');
+            Utils.reply(message, 'Le channel de report a bien été modifié.');
         }
     }
 }

@@ -29,7 +29,7 @@ ajouter un psn: **${Constants.prefix}psn votrepsn**
         if ( args.length <= 0) {
             var events = Events.events;
             if (events.length <= 0) {
-                Utils.reply(message, 'Aucuns event en cours.', true);
+                Utils.reply(message, 'Aucun évent en cours.', true);
                 return;
             }
             var fields = [];
@@ -43,7 +43,7 @@ ajouter un psn: **${Constants.prefix}psn votrepsn**
             }
             var authorId = message.author.id;
             Utils.sendDmEmbed(message.author, 0x00AFFF,
-                'Veuillez choisir un event.',
+                'Veuillez choisir un évent.',
                 `Vous devez réagir suivant ce que vous voulez`,
                 message.author, fields
             ).then((message) => {
@@ -57,7 +57,7 @@ ajouter un psn: **${Constants.prefix}psn votrepsn**
         }
         var event = Events.getEvent(args.join(' '));
         if (!event) {
-            Utils.reply(message, 'Aucuns event avec ce nom.');
+            Utils.reply(message, 'Aucun évent avec ce nom.');
             return;
         }
 
@@ -72,7 +72,7 @@ ajouter un psn: **${Constants.prefix}psn votrepsn**
         }
         var authorId = message.author.id;
         Utils.sendDmEmbed(message.author, 0x00AFFF,
-            `Veuillez choisir un horaire pour l\'event ${event.name}.`,
+            `Veuillez choisir un horaire pour l\'évent ${event.name}.`,
             `Vous devez réagir à un ou plusieurs horaires
 puis réagir avec :white_check_mark: pour valider
 ou :x: pour annuler la participation`,
@@ -95,7 +95,7 @@ ou :x: pour annuler la participation`,
         var eventsKey = Object.keys(events);
         var key = eventsKey[index];
         if (!key) {
-            Utils.sendDM(user, 'Aucuns event attribué à cette réaction.', true);
+            Utils.sendDM(user, 'Aucun évent attribué à cette réaction.', true);
             return;
         }
         Interactions.delReactInteractions(message.id);
@@ -111,7 +111,7 @@ ou :x: pour annuler la participation`,
             });
         }
         Utils.sendDmEmbed(user, 0x00AFFF,
-            `Veuillez choisir un horaire pour l\'event ${event.name}.`,
+            `Veuillez choisir un horaire pour l\'évent ${event.name}.`,
             `Vous devez réagir à un ou plusieurs horaires
 puis réagir avec :white_check_mark: pour valider
 ou :x: pour annuler la participation`,
@@ -131,13 +131,13 @@ ou :x: pour annuler la participation`,
             Events.delParticipant(eventKey, user.id);
             Interactions.delReactInteractions(messageReaction.message.id);
             Utils.removeMyReact(messageReaction.message);
-            Utils.sendDM(user, `Votre participation à l'event ${Events.getEvent(eventKey).name} a été annuler.`);
+            Utils.sendDM(user, `Votre participation à l'évent ${Events.getEvent(eventKey).name} a été annulé.`);
             return;
         }
         var reactions = messageReaction.message.reactions.array();
         var event = Events.getEvent(eventKey);
         if (!event) {
-            Utils.sendDM(user, 'Cet event n\'existe plus', true);
+            Utils.sendDM(user, 'Cet évent n\'existe plus', true);
             return;
         }
         var choosenTime = [];
@@ -148,14 +148,14 @@ ou :x: pour annuler la participation`,
             }
         }
         if (choosenTime.length === 0) {
-            Utils.sendDM(user, 'Vous devez choisir au moins un horraire.', true);
+            Utils.sendDM(user, 'Vous devez choisir au moins un horaire.', true);
             return;
         }
         Utils.removeMyReact(messageReaction.message);
         Interactions.delReactInteractions(messageReaction.message.id);
         Events.setParticiapantTimetable(eventKey, user.id, choosenTime);
         if (!event.questions || event.questions.length <= 0) {
-            Utils.sendDM(user, 'Votre participation à bien été pris en compte.');
+            Utils.sendDM(user, 'Votre participation a bien été pris en compte.');
             return;
         }
         questionLeft = event.questions.slice(0);;
@@ -167,14 +167,14 @@ ou :x: pour annuler la participation`,
         var event = Events.getEvent(eventKey);
         var user = message.author;
         if (!event) {
-            Utils.sendDM(user, 'Cet event n\'exite plus.', true);
+            Utils.sendDM(user, 'Cet évent n\'existe plus.', true);
             return;
         }
         Events.setParticiapantQuestion(eventKey, message.author.id, question, message.content);
         Interactions.delChatInteractions(user.id);
 
         if (!questionLeft || questionLeft.length <= 0) {
-            Utils.sendDM(user, 'Votre participation à bien été pris en compte.');
+            Utils.sendDM(user, 'Votre participation a bien été prise en compte.');
             return;
         }
         var nextQuestion = questionLeft.shift();
