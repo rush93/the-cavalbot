@@ -36,6 +36,7 @@ var psnCommands = require('./commandes/psn');
 var epingleCommand = require('./commandes/epingle');
 var marryCommand = require('./commandes/marry');
 var divorceCommand = require('./commandes/divorce');
+var forcedivorceCommand = require('./commandes/forcedivorce');
 var proposeCommand = require('./commandes/propose');
 var acceptCommand = require('./commandes/accept');
 var declineCommand = require('./commandes/decline');
@@ -52,6 +53,7 @@ var commands = {
   takepoints: takepointsCommands,
   marry: marryCommand,
   divorce: divorceCommand,
+  forcedivorce: forcedivorceCommand,
   season: seasonCommand,
   event: eventCommand,
   epingle: epingleCommand,
