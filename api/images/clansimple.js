@@ -18,6 +18,7 @@ module.exports = {
             return;
         }
         var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        Utils.log(Utils.Color.FgMagenta + ip + Utils.Color.Reset + `: test ${Utils.Color.FgGreen}load from cache.`);
         if (fs.existsSync(`${__dirname}/../../img/${clan.id}.png`)) {
             Utils.log(Utils.Color.FgMagenta + ip + Utils.Color.Reset + `: Image requested ${Utils.Color.FgGreen}load from cache.`);
             var path = require(`path`);
