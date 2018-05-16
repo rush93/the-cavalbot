@@ -95,7 +95,7 @@ var commands = {
     },
     getimageclan: {
         help: [
-            'Permet d\'afficher l\'image dynamique du clan.'
+            'Permet d\'afficher l\'image du clan.'
         ],
         args: '<Clan>',
         runCommand: (clan, args, message) => {
