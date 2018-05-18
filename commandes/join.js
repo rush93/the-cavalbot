@@ -14,7 +14,8 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        var role = Clans.getRoleByName(args.join(' '), message.channel.guild);
+        var nomClan = args.join(' ');
+        var role = Clans.getRoleByName(nomClan.charAt(0).toUpperCase() + nomClan.slice(1), message.channel.guild);
         if (!role) {
             Utils.reply(message, "Aucun rôle avec ce nom", true);
             return;
