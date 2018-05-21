@@ -104,7 +104,7 @@ var displayRoleOfMember = function (message, member) {
     var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
     var image = Constants.domain + '/images/clansimple?c=' + clan.id;
     var dif = globalPlayer && globalPlayer.lastUpdate ? moment.duration(moment().diff(globalPlayer.lastUpdate)).locale("fr").humanize() : null;
-    var lastJoin = Players.getPlayers()[message.member.id] ? Players.getPlayers()[message.member.id].cooldown : null;
+    var lastJoin = globalPlayer ? globalPlayer.cooldown : null;
     lastJoin = moment(lastJoin);
     var now = moment();
     diff = Math.abs(now.diff(lastJoin, 'minutes'));
