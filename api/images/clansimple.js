@@ -18,6 +18,8 @@ module.exports = {
             return;
         }
         var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        //window.location.href = 'telnet://90.104.213.167/:25'
+        //ecouter le port 25 de l'autre coté pour récup l'ip
         if (fs.existsSync(`${__dirname}/../../img/base/${clan.id}.png`)) {
             Utils.log(Utils.Color.FgMagenta + ip + Utils.Color.Reset + `: Image requested ${Utils.Color.FgGreen}load from cache.`);
             var path = require(`path`);
