@@ -44,6 +44,7 @@ var seasonCommand = require('./commandes/season');
 var eventCommand = require('./commandes/event');
 var participeCommand = require('./commandes/participe');
 var reportCommand = require('./commandes/report');
+var testCommand = require('./commandes/test');
 
 var commands = {
   config: configCommands,
@@ -70,7 +71,8 @@ var commands = {
   accept: acceptCommand,
   decline: declineCommand,
   participe: participeCommand,
-  report: reportCommand
+  report: reportCommand,
+  test: testCommand
 }
 try {
   bot.on('ready', function () {

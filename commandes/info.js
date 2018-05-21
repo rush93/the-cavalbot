@@ -104,9 +104,16 @@ var displayRoleOfMember = function (message, member) {
     var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
     var image = Constants.domain + '/images/clansimple?c=' + clan.id;
     var dif = globalPlayer && globalPlayer.lastUpdate ? moment.duration(moment().diff(globalPlayer.lastUpdate)).locale("fr").humanize() : null;
+    var lastJoin = Players.getPlayers()[message.member.id] ? Players.getPlayers()[message.member.id].cooldown : null;
+    lastJoin = moment(lastJoin);
+    var now = moment();
+    diff = Math.abs(now.diff(lastJoin, 'minutes'));
+    moment.locale('fr');
+
     Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
-        `**Clan:** ${role.name}` +  (seasonPoints === null ? '' : `
-**points de la saison:** ${seasonPoints}`) + `
+        `**Clan:** ${role.name}` + `
+**Dans le clan depuis**: ` + moment.duration(diff, 'minutes').humanize() + (seasonPoints === null ? '' : `
+**Points de la saison:** ${seasonPoints}`) + `
 **Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btagString || btagString.length <= 0 ? '' : `
 **Battle tag:** ${btagString.join(', ')}`) + (!psnString || psnString.length <= 0  ? '' : `
 **PSN:** ${psnString.join(', ')}`) + (!dif  ? '' : `
