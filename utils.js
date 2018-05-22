@@ -108,11 +108,14 @@ var getClanScores = function (Players, Clans) {
     var scoreKeys = Object.keys(scores);
     for (var i = 0; i < scoreKeys.length; i++) {
         var clan = Clans.getClanById(scoreKeys[i]);
-        if ( clan && clan.ps4Role && clan.ps4Role != scoreKeys[i] && scores[clan.ps4Role]) {
-            scores[scoreKeys[i]] += scores[clan.ps4Role];
+        if (clan != undefined) {
+            if ( clan && clan.ps4Role && clan.ps4Role != scoreKeys[i] && scores[clan.ps4Role]) {
+                scores[scoreKeys[i]] += scores[clan.ps4Role];
+            }
+            
+            var tmp = Clans.getPointsOfLastSeason(scoreKeys[i]);
+            scores[scoreKeys[i]] -= tmp;
         }
-        console.log("scoreKeys : "+scoreKeys[i]);
-        scores[scoreKeys[i]] -= Clans.getPointsOfLastSeason(scoreKeys[i]);
     }
     return scores;
 }
@@ -309,6 +312,14 @@ module.exports = {
             toWrite += `: ${Color.FgCyan}${content}${Color.Reset}`;
         }
         console.log(toWrite);
+        var fields = [
+        {
+            title: 'log',
+            text: `toWrite`,
+            grid: true
+        }
+    ]
+        //sendEmbedInChannel(448515012441669632, 0xE8C408, 'Report d\'un message', '', 445983067044052992, fields);//448515012441669632//448527311336112139
         // if(err) {
         //     console.log(console.trace());
         // }

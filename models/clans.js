@@ -210,7 +210,6 @@ module.exports = {
         if(!clans[ClanId]) {
             return null;
         }
-        Utils.log("ClanId : "+ClanI +" Constants.season : "+Constants.season);
         return clans[ClanId].seasons[Constants.season];
     }
 }
