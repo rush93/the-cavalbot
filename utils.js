@@ -295,7 +295,7 @@ module.exports = {
         }
         return rolesWithPerm;
     },
-    log: function(text, err = false, place = null, by = null, content = null) {
+    log: function(text, err = false, place = null, by = null, content = null, guild = null) {
         var toWrite = `${Color.FgCyan}[${moment().format('DD-MM-YYYY HH:mm:ss')}]:${Color.Reset}`;
 
         if (err) {
@@ -312,14 +312,11 @@ module.exports = {
             toWrite += `: ${Color.FgCyan}${content}${Color.Reset}`;
         }
         console.log(toWrite);
-        var fields = [
-        {
-            title: 'log',
-            text: `toWrite`,
-            grid: true
-        }
-    ]
-        //sendEmbedInChannel(448515012441669632, 0xE8C408, 'Report d\'un message', '', 445983067044052992, fields);//448515012441669632//448527311336112139
+        
+        //if(guild != null){
+        //    var channel = guild.channels.get("448515012441669632");
+        //    channel.send(toWrite);
+        //}
         // if(err) {
         //     console.log(console.trace());
         // }

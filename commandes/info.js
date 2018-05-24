@@ -121,6 +121,11 @@ var displayRoleOfMember = function (message, member) {
 :ring: <@!${globalPlayer.epou}>` : ''} `
         , message.author, fields, image);
     Players.updateComprank(member.id);
+    if(moment.duration(diff, 'minutes').humanize() == "quelques secondes"){
+        message.channel.send('<@!227441303527489537> encore un qui préviens pas :tada:');
+    }else{
+        
+    }
     return;
 }
 module.exports = {
