@@ -184,7 +184,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
       }
       if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
         var args = message.content.split(" ");
-        Utils.log('Command detected', false, message.channel.name, message.author.username, message.content);
+        Utils.log('Command detected', false, message.channel.name, message.author.username, message.content, guild);
         Utils.log(`fetching for ${Utils.Color.FgYellow}${message.author.username}${Utils.Color.Reset}`);
         message.channel.guild.fetchMember(message.author.id).then(member => {
           message.member = member
@@ -217,12 +217,12 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
             var result = JSON.parse(body);
             if (result.results && result.results.length > 0) {
               var gif = result.results[0].media[0].mediumgif.url;
-              Utils.log('Gif detected and found', false, message.channel.name, message.member.user.username, message.content);
+              Utils.log('Gif detected and found', false, message.channel.name, message.member.user.username, message.content, guild);
               sendEmbedImage(gif);
               return;
             }
             var gif = "https://media.tenor.com/images/00631c571898fbaf0b75cedcbaf2135e/tenor.gif";
-            Utils.log('Gif detected and not found', false, message.channel.name, message.member.user.username, message.content);
+            Utils.log('Gif detected and not found', false, message.channel.name, message.member.user.username, message.content, guild);
             sendEmbedImage(gif).then(message => {
               message.delete(1000);
             });
