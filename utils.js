@@ -313,10 +313,20 @@ module.exports = {
         }
         console.log(toWrite);
         
-        //if(guild != null){
-        //    var channel = guild.channels.get("448515012441669632");
-        //    channel.send(toWrite);
-        //}
+        if(guild){
+            var channel = guild.channels.get("448515012441669632");//salon test : 448515012441669632 //vrai salon : 
+            var chaine = text;
+            if (place) {
+                chaine += ` in `+place;
+            }
+            if (by) {
+                chaine += ` by `+by;
+            }
+            if (content) {
+                chaine += ` : `+content;
+            }
+            channel.send(chaine);
+        }
         // if(err) {
         //     console.log(console.trace());
         // }
