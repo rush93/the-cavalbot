@@ -314,7 +314,7 @@ module.exports = {
         console.log(toWrite);
         
         if(guild){
-            var channel = guild.channels.get("448515012441669632");//salon test : 448515012441669632 //vrai salon : 
+            var channel = guild.channels.get("448527311336112139");//salon test : 448515012441669632 //vrai salon : 448527311336112139
             var chaine = text;
             if (place) {
                 chaine += ` in `+place;
