@@ -109,6 +109,11 @@ try {
     }
   });
 
+  bot.on("guildMemberRemove", (member) => {
+  //console.log(`${member.user.username} a ragekiet "${member.guild.name}"` );
+  member.guild.channels.get("448527311336112139").send(`${member.user.username} a ragekiet`);
+});
+
   var runCommand = (args, message) => {
     if (args[0] === globalConst.prefix + 'help') {
       Utils.log(`running ${Utils.Color.FgYellow}help ${Utils.Color.Reset}command`);
@@ -193,11 +198,10 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
           Utils.log(e.stack, true);
         });
         return;
-      } else if (/^\*tori( |$)/i.exec(message.content)) {
+      } else if (/^\*sucide( |$)/i.exec(message.content)) {//https://giphy.com/gifs/season-9-episode-15-bravo-xUA7b4ALChx9x5kJ8c
         var embed = new Discord.RichEmbed({});
-        embed.setColor(0x4169E1);
-        embed.setTitle("Tori veut dire oiseau en Japonais (et pas Tori Black.)");
-        embed.setImage("https://media.discordapp.net/attachments/417978225726193665/429351151134310421/Birdoo.gif");
+        embed.setColor(0x00AFFF);
+        embed.setImage("https://cdn.discordapp.com/attachments/327039523156656128/451056132182769675/giphy.gif");
         return message.channel.send("", embed);
       } else {
         var regex = /^(?:\*([^\*]*)\*)|^(?:\*([^ ]+))/;
