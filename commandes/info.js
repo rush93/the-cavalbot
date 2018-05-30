@@ -122,7 +122,7 @@ var displayRoleOfMember = function (message, member) {
         , message.author, fields, image);
     Players.updateComprank(member.id);
     if(moment.duration(diff, 'minutes').humanize() == "quelques secondes"){
-        message.channel.send('<@!227441303527489537> encore un qui préviens pas :tada:');
+        message.channel.send('<@!115565608577400838> encore un qui préviens pas :tada:');
     }else{
         
     }
