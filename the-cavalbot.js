@@ -180,7 +180,7 @@ try {
             command[chatInteraction.functionToCall](message);
           } else {
             // DIALOG FLOW
-            dialog(message.author.id, message.content)
+            dialog(message.author, message.content)
               .then((response) => {
                 message.channel.send(response);
               })
