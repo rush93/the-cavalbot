@@ -122,7 +122,7 @@ var displayRoleOfMember = function (message, member) {
         , message.author, fields, image);
     Players.updateComprank(member.id);
     if(moment.duration(diff, 'minutes').humanize() == "quelques secondes"){
-        message.channel.send('<@!227441303527489537> encore un qui préviens pas :tada:');
+        message.channel.send('<@!'+member.id+'> envoi un mp a <@!227441303527489537> avec ta date d\'arriver dans ton clan');
     }else{
         
     }
