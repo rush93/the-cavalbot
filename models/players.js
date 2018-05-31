@@ -345,6 +345,10 @@ module.exports = {
         players[user2.id].epou = null;
         save();
     },
+    divorse: function (user) {
+        players[user.id].epou = null;
+        save();
+    },
     hasAskFor: function (player) {
         return players[player.id] && players[player.id].askFor;
     },

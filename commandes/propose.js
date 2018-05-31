@@ -4,11 +4,11 @@ var Constants = require('../models/constants');
 var Players = require('../models/players');
 module.exports = {
     role: 'SEND_MESSAGES',
-    helpCat: 'Permet de demander une personne en marriage',
+    helpCat: 'Permet de demander une personne en mariage',
     help: function (message) {
         Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande propose", "", message.author, [{
             title: Constants.prefix + 'propose <@user>',
-            text: "Permet de demander une personne en marriage",
+            text: "Permet de demander une personne en mariage",
             grid: false
         }]);
     },
@@ -27,7 +27,7 @@ module.exports = {
             return;
         }
         if (Players.hasEpou(user1)) {
-            Utils.reply(message, `<@!${user1.id}> à déjà un(e) épou(se) !`, true);
+            Utils.reply(message, `<@!${user1.id}> a déjà un(e) épou(se) !`, true);
             return;
         }
 

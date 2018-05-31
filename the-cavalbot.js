@@ -36,6 +36,7 @@ var psnCommands = require('./commandes/psn');
 var epingleCommand = require('./commandes/epingle');
 var marryCommand = require('./commandes/marry');
 var divorceCommand = require('./commandes/divorce');
+var forcedivorceCommand = require('./commandes/forcedivorce');
 var proposeCommand = require('./commandes/propose');
 var acceptCommand = require('./commandes/accept');
 var declineCommand = require('./commandes/decline');
@@ -43,6 +44,7 @@ var seasonCommand = require('./commandes/season');
 var eventCommand = require('./commandes/event');
 var participeCommand = require('./commandes/participe');
 var reportCommand = require('./commandes/report');
+var testCommand = require('./commandes/test');
 
 var commands = {
   config: configCommands,
@@ -52,6 +54,7 @@ var commands = {
   takepoints: takepointsCommands,
   marry: marryCommand,
   divorce: divorceCommand,
+  forcedivorce: forcedivorceCommand,
   season: seasonCommand,
   event: eventCommand,
   epingle: epingleCommand,
@@ -68,7 +71,8 @@ var commands = {
   accept: acceptCommand,
   decline: declineCommand,
   participe: participeCommand,
-  report: reportCommand
+  report: reportCommand,
+  test: testCommand
 }
 try {
   bot.on('ready', function () {
@@ -104,6 +108,11 @@ try {
       }
     }
   });
+
+  bot.on("guildMemberRemove", (member) => {
+  //console.log(`${member.user.username} a ragekiet "${member.guild.name}"` );
+  member.guild.channels.get("448527311336112139").send(`${member.user.username} a ragekiet`);
+});
 
   var runCommand = (args, message) => {
     if (args[0] === globalConst.prefix + 'help') {
@@ -180,7 +189,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
       }
       if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
         var args = message.content.split(" ");
-        Utils.log('Command detected', false, message.channel.name, message.author.username, message.content);
+        Utils.log('Command detected', false, message.channel.name, message.author.username, message.content, guild);
         Utils.log(`fetching for ${Utils.Color.FgYellow}${message.author.username}${Utils.Color.Reset}`);
         message.channel.guild.fetchMember(message.author.id).then(member => {
           message.member = member
@@ -189,11 +198,10 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
           Utils.log(e.stack, true);
         });
         return;
-      } else if (/^\*tori( |$)/i.exec(message.content)) {
+      } else if (/^\*sucide( |$)/i.exec(message.content)) {//https://giphy.com/gifs/season-9-episode-15-bravo-xUA7b4ALChx9x5kJ8c
         var embed = new Discord.RichEmbed({});
-        embed.setColor(0x4169E1);
-        embed.setTitle("Tori veut dire oiseau en Japonais (et pas Tori Black.)");
-        embed.setImage("https://media.discordapp.net/attachments/417978225726193665/429351151134310421/Birdoo.gif");
+        embed.setColor(0x00AFFF);
+        embed.setImage("https://cdn.discordapp.com/attachments/327039523156656128/451056132182769675/giphy.gif");
         return message.channel.send("", embed);
       } else {
         var regex = /^(?:\*([^\*]*)\*)|^(?:\*([^ ]+))/;
@@ -213,12 +221,12 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
             var result = JSON.parse(body);
             if (result.results && result.results.length > 0) {
               var gif = result.results[0].media[0].mediumgif.url;
-              Utils.log('Gif detected and found', false, message.channel.name, message.member.user.username, message.content);
+              Utils.log('Gif detected and found', false, message.channel.name, message.member.user.username, message.content, guild);
               sendEmbedImage(gif);
               return;
             }
             var gif = "https://media.tenor.com/images/00631c571898fbaf0b75cedcbaf2135e/tenor.gif";
-            Utils.log('Gif detected and not found', false, message.channel.name, message.member.user.username, message.content);
+            Utils.log('Gif detected and not found', false, message.channel.name, message.member.user.username, message.content, guild);
             sendEmbedImage(gif).then(message => {
               message.delete(1000);
             });

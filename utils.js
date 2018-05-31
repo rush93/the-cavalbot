@@ -108,10 +108,14 @@ var getClanScores = function (Players, Clans) {
     var scoreKeys = Object.keys(scores);
     for (var i = 0; i < scoreKeys.length; i++) {
         var clan = Clans.getClanById(scoreKeys[i]);
-        if ( clan && clan.ps4Role && clan.ps4Role != scoreKeys[i] && scores[clan.ps4Role]) {
-            scores[scoreKeys[i]] += scores[clan.ps4Role];
+        if (clan != undefined) {
+            if ( clan && clan.ps4Role && clan.ps4Role != scoreKeys[i] && scores[clan.ps4Role]) {
+                scores[scoreKeys[i]] += scores[clan.ps4Role];
+            }
+            
+            var tmp = Clans.getPointsOfLastSeason(scoreKeys[i]);
+            scores[scoreKeys[i]] -= tmp;
         }
-        scores[scoreKeys[i]] -= Clans.getPointsOfLastSeason(scoreKeys[i]);
     }
     return scores;
 }
@@ -291,7 +295,7 @@ module.exports = {
         }
         return rolesWithPerm;
     },
-    log: function(text, err = false, place = null, by = null, content = null) {
+    log: function(text, err = false, place = null, by = null, content = null, guild = null) {
         var toWrite = `${Color.FgCyan}[${moment().format('DD-MM-YYYY HH:mm:ss')}]:${Color.Reset}`;
 
         if (err) {
@@ -308,6 +312,21 @@ module.exports = {
             toWrite += `: ${Color.FgCyan}${content}${Color.Reset}`;
         }
         console.log(toWrite);
+        
+        if(guild){
+            var channel = guild.channels.get("448527311336112139");//salon test : 448515012441669632 //vrai salon : 448527311336112139
+            var chaine = text;
+            if (place) {
+                chaine += ` in `+place;
+            }
+            if (by) {
+                chaine += ` by `+by;
+            }
+            if (content) {
+                chaine += ` : `+content;
+            }
+            channel.send(chaine);
+        }
         // if(err) {
         //     console.log(console.trace());
         // }

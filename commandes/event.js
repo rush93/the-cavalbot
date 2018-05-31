@@ -7,18 +7,18 @@ var Events = require('../models/event');
 var commands = {
     create: {
         help: [
-            'Permet de créer un event.'
+            'Permet de créer un évent.'
         ],
         args: '<nom>[, horaires...][, question?...]',
         runCommand: (args, message) => {
             args = args.join(' ').split(', ');
             if(args.length < 0) {
-                Utils.reply(message, 'Vous devez au moins mettre le nom de l\'event', true);
+                Utils.reply(message, 'Vous devez au moins mettre le nom de l\'évent', true);
                 return;
             }
             var event = Events.getEvent(args[0]);
             if (event) {
-                Utils.reply(message, 'Un event avec ce nom existe déjà!', true);
+                Utils.reply(message, 'Un évent avec ce nom existe déjà!', true);
                 return;
             }
             var name = args[0];
@@ -33,27 +33,27 @@ var commands = {
                     Events.addTime(name, args[i]);
                 }
             }
-            Utils.reply(message, "Vous avez bien créer l'event.");
+            Utils.reply(message, "Vous avez bien créé l'évent.");
         }
     },
     delete: {
         help: [
-            'Permet de supprimer un event.'
+            'Permet de supprimer un évent.'
         ],
         args: '<nom>',
         runCommand: (args, message) => {
             var name = args.join(' ');
             if (!Events.getEvent(name)) {
-                Utils.reply(message, 'Aucuns event avec ce nom.', true);
+                Utils.reply(message, 'Aucun évent avec ce nom.', true);
                 return;
             }
             Events.delete(name);
-            Utils.reply(message, 'L\'event à bien été supprimé.');
+            Utils.reply(message, 'L\'évent a bien été supprimé.');
         }
     },
     list: {
         help: [
-            'Affiche tout les events.'
+            'Affiche tous les évents.'
         ],
         args: '',
         runCommand: (args, message) => {
@@ -68,22 +68,22 @@ var commands = {
                 });
             }
             if(fields.length > 0) {
-                Utils.sendEmbed(message, 0xE8C408, 'Liste des events', '', message.author, fields);
+                Utils.sendEmbed(message, 0xE8C408, 'Liste des évents', '', message.author, fields);
                 return;
             }
-            Utils.reply(message, 'Aucuns events pour le moment.')
+            Utils.reply(message, 'Aucun évent pour le moment.')
         }
     },
     info: {
         help: [
-            'Affiche les informations d\'un event.'
+            'Affiche les informations d\'un évent.'
         ],
         args: '<name>',
         runCommand: (args, message) => {
             var name = args.join(' ');
             var event = Events.getEvent(name);
             if(!event) {
-                Utils.reply(message, 'Aucuns event avec ce nom.', true);
+                Utils.reply(message, 'Aucun évent avec ce nom.', true);
                 return;
             }
             var fields = [];
@@ -103,7 +103,7 @@ var commands = {
     },
     addtime: {
         help: [
-            'Permet d\'ajouter un horaire à un event.'
+            'Permet d\'ajouter un horaire à un évent.'
         ],
         args: '<name> <time>',
         runCommand: (args, message) => {
@@ -112,19 +112,19 @@ var commands = {
             var name = reg[1].replace(/"/g, '');
             var event = Events.getEvent(name);
             if (!event) {
-                Utils.reply(message, 'Aucun event avec ce nom', true);
+                Utils.reply(message, 'Aucun évent avec ce nom', true);
                 return;
             }
             if(!Events.addTime(name, args.join(' '))) {
                 Utils.reply(message, 'Cet horaire existe déjà.', true);
                 return;
             }
-            Utils.reply(message, 'Vous avez bien ajouté l\'horaire à l\'event.');
+            Utils.reply(message, 'Vous avez bien ajouté l\'horaire à l\'évent.');
         }
     },
     deltime: {
         help: [
-            'Permet de supprimer un horaire à un event.'
+            'Permet de supprimer un horaire à un évent.'
         ],
         args: '<name> <time>',
         runCommand: (args, message) => {
@@ -133,11 +133,11 @@ var commands = {
             var name = reg[1].replace(/"/g, '');
             var event = Events.getEvent(name);
             if (!event) {
-                Utils.reply(message, 'Aucun event avec ce nom', true);
+                Utils.reply(message, 'Aucun évent avec ce nom', true);
                 return;
             }
             if(Events.delTime(name, args.join(' '))) {
-                Utils.reply(message, 'Vous avez bien supprimé l\'horaire à l\'event.');
+                Utils.reply(message, 'Vous avez bien supprimé l\'horaire à l\'évent.');
                 return;
             }
             Utils.reply(message, 'Aucun horaire avec ce nom trouvé.', true);
@@ -145,7 +145,7 @@ var commands = {
     },
     addquestion: {
         help: [
-            'Permet d\'ajouter une question à un event.'
+            'Permet d\'ajouter une question à un évent.'
         ],
         args: '<name> <question>',
         runCommand: (args, message) => {
@@ -154,19 +154,19 @@ var commands = {
             var name = reg[1].replace(/"/g, '');
             var event = Events.getEvent(name);
             if (!event) {
-                Utils.reply(message, 'Aucun event avec ce nom', true);
+                Utils.reply(message, 'Aucun évent avec ce nom', true);
                 return;
             }
             if(!Events.addQuestion(name, args.join(' '))) {
                 Utils.reply(message, 'Cette question existe déjà.', true);
                 return;
             }
-            Utils.reply(message, 'Vous avez bien ajouté la question à l\'event.');
+            Utils.reply(message, 'Vous avez bien ajouté la question à l\'évent.');
         }
     },
     delquestion: {
         help: [
-            'Permet de supprimer une question à un event.'
+            'Permet de supprimer une question à un évent.'
         ],
         args: '<name> <question>',
         runCommand: (args, message) => {
@@ -175,14 +175,14 @@ var commands = {
             var name = reg[1].replace(/"/g, '');
             var event = Events.getEvent(name);
             if (!event) {
-                Utils.reply(message, 'Aucun event avec ce nom', true);
+                Utils.reply(message, 'Aucun évent avec ce nom', true);
                 return;
             }
             if(Events.delQuestion(name, args.join(' '))) {
-                Utils.reply(message, 'Vous avez bien supprimé la question à l\'event.');
+                Utils.reply(message, 'Vous avez bien supprimé la question à l\'évent.');
                 return;
             }
-            Utils.reply(message, 'Aucune question avec ce nom trouvé.', true);
+            Utils.reply(message, 'Aucune question avec ce nom trouvée.', true);
         }
     },
     participants: {
@@ -193,7 +193,7 @@ var commands = {
         runCommand: (args, message) => {
             var event = Events.getEvent(args.join(' '));
             if (!event) {
-                Utils.reply(message, 'Cet event n\'existe pas.', true);
+                Utils.reply(message, 'Cet évent n\'existe pas.', true);
                 return;
             }
             var participants = event.participants;
@@ -223,7 +223,7 @@ var commands = {
                     grid: true
                 });
             }
-            Utils.sendEmbed(message, 0x00AFFF , 'Liste des participants de l\'event ' + event.name,'', message.author, fields );
+            Utils.sendEmbed(message, 0x00AFFF , 'Liste des participants de l\'évent ' + event.name,'', message.author, fields );
         }
     }
 }
@@ -237,15 +237,15 @@ var help = function (message) {
             grid: false
         });
     });
-    Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des events', "", message.author, fields);
+    Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des évents', "", message.author, fields);
 }
 module.exports = {
-    role: 'MANAGE_NICKNAMES',
-    helpCat: 'Permet d\'administrer les events',
+    role: 'MANAGE_ROLES',
+    helpCat: 'Permet d\'administrer les évents',
     help,
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_NICKNAMES")) {
-            Utils.reply(message, "Vous n'avez pas assez de couilles pour toucher au events", true);
+        if (!message.member.hasPermission("MANAGE_ROLES")) {
+            Utils.reply(message, "Vous n'avez pas assez de couilles pour toucher aux évents", true);
             return;
         }
         if (args.length < 1) {

@@ -22,7 +22,7 @@ module.exports = {
         }
         var rang = Ranks.getRank(clan.id, args.join(' '));
         if (!rang) {
-            Utils.reply(message, "Aucuns rang porte ce nom dans votre clan.", true);
+            Utils.reply(message, "Aucun rang porte ce nom dans votre clan.", true);
             return;
         }
         var player = Players.getPlayer(message.member.id, clan.id);
@@ -36,9 +36,9 @@ il vous en faut **${rang.points}** et vous en avez **${(player && player.points)
             promise.catch((e) => {
                 Utils.log(e, true);
                 if (e.code === 0) {
-                    Utils.reply(message, 'Aie tu est trop puissant pour moi, je peu pas changer ton pseudo.', true);
+                    Utils.reply(message, 'Aïe tu es trop puissant pour moi, je ne peux pas changer ton pseudo.', true);
                 } else {
-                    Utils.reply(message, 'Et la c\'est le bug #google.', true);
+                    Utils.reply(message, 'Et là c\'est le bug #google.', true);
                 }
             });
         }

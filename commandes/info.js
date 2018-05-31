@@ -50,7 +50,7 @@ var displayRoleOfMember = function (message, member) {
     }
     var player = Players.getPlayer(member.id, clan.id);
     if (!clan) {
-        Utils.reply(message, 'Cet personne n\'as pas de clan !');
+        Utils.reply(message, 'Cette personne n\'a pas de clan !');
         return
     }
     var role = Clans.getRole(clan.id, member.guild);
@@ -101,17 +101,31 @@ var displayRoleOfMember = function (message, member) {
             seasonPoints -= player.season[Constants.season];
         }
     }
+    var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
+    var image = Constants.domain + '/images/clansimple?c=' + clan.id;
     var dif = globalPlayer && globalPlayer.lastUpdate ? moment.duration(moment().diff(globalPlayer.lastUpdate)).locale("fr").humanize() : null;
+    var lastJoin = globalPlayer ? globalPlayer.cooldown : null;
+    lastJoin = moment(lastJoin);
+    var now = moment();
+    diff = Math.abs(now.diff(lastJoin, 'minutes'));
+    moment.locale('fr');
+
     Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
-        `**Clan:** ${role.name}` +  (seasonPoints === null ? '' : `
-**points de la saison:** ${seasonPoints}`) + `
+        `**Clan:** ${role.name}` + `
+**Dans le clan depuis**: ` + moment.duration(diff, 'minutes').humanize() + (seasonPoints === null ? '' : `
+**Points de la saison:** ${seasonPoints}`) + `
 **Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btagString || btagString.length <= 0 ? '' : `
 **Battle tag:** ${btagString.join(', ')}`) + (!psnString || psnString.length <= 0  ? '' : `
 **PSN:** ${psnString.join(', ')}`) + (!dif  ? '' : `
 **Dernière mise à jour:** ${dif}`) + ` ${globalPlayer && globalPlayer.epou ? `
 :ring: <@!${globalPlayer.epou}>` : ''} `
-        , message.author, fields, clan.image);
+        , message.author, fields, image);
     Players.updateComprank(member.id);
+    if(moment.duration(diff, 'minutes').humanize() == "quelques secondes"){
+        message.channel.send('<@!115565608577400838> encore un qui préviens pas :tada:');
+    }else{
+        
+    }
     return;
 }
 module.exports = {

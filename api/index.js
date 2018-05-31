@@ -7,11 +7,13 @@ const app = express()
 const choice = require('./clans/choice');
 const clan = require('./clans/clan');
 const imageClan = require('./images/clan');
+const imageClanSimple = require('./images/clansimple');
 
 const routes = [
     // choice,
     // clan,
-    imageClan
+    imageClan,
+    imageClanSimple
 ];
 
 var initServer = function (guild) {
