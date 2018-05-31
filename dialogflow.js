@@ -1,4 +1,4 @@
-const projectId = 'small-talk-9b89f';
+const projectId = 'small-talk-9b89f'; // mon id a remplacer si vous faites votre agent
 const sessionId = 'quickstart-session-id';
 const languageCode = 'fr-FR';
 
@@ -28,7 +28,6 @@ module.exports =  (userId, message) => {
         .detectIntent(request)
         .then(responses => {
             const result = responses[0].queryResult;
-            console.log(result);
             resolve(result.fulfillmentText);
         })
         .catch(err => {
