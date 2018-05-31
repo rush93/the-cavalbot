@@ -7,3 +7,4 @@ pistore.desktop
 .DS_Store
 nohup.out
 players.json
+dialogflow-credentials.json
