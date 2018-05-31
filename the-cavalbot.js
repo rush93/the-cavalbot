@@ -182,7 +182,13 @@ try {
             // DIALOG FLOW
             dialog(message.author, message.content)
               .then((response) => {
-                message.channel.send(response);
+                if(typeof response === "string") {
+                  Utils.log('', false, 'DM message of ' + message.author.username, 'The-cavalbot', response);
+                  message.channel.send(response);
+                } else {
+                  Utils.log('', false, 'DM message of ' + message.author.username, 'The-cavalbot', '_' + response.fields.command.stringValue, guild);
+                  runCommand(('_' + response.fields.command.stringValue).split(' '), message)
+                }
               })
               .catch((err) => {
                 Utils.log(err, true);
