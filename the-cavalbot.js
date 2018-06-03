@@ -46,6 +46,7 @@ var eventCommand = require('./commandes/event');
 var participeCommand = require('./commandes/participe');
 var reportCommand = require('./commandes/report');
 var testCommand = require('./commandes/test');
+var roleCommand = require('./commandes/role');
 
 var commands = {
   config: configCommands,
@@ -73,7 +74,8 @@ var commands = {
   decline: declineCommand,
   participe: participeCommand,
   report: reportCommand,
-  test: testCommand
+  test: testCommand,
+  role: roleCommand
 }
 try {
   bot.on('ready', function () {
@@ -111,9 +113,12 @@ try {
   });
 
   bot.on("guildMemberRemove", (member) => {
-  //console.log(`${member.user.username} a ragekiet "${member.guild.name}"` );
-  member.guild.channels.get("448527311336112139").send(`${member.user.username} a ragekiet`);
-});
+    member.guild.channels.get("448527311336112139").send(`${member.user.username} a ragekiet`);
+  });
+
+  bot.on('guildMemberAdd', member => {
+    member.setNickname(member.displayName + ' |');
+  });
 
   var runCommand = (args, message) => {
     if (args[0] === globalConst.prefix + 'help') {
