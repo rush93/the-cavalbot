@@ -5,6 +5,7 @@ const Utils = require('./utils');
 var request = require('request');
 
 var token = require('./token');
+var dialog = require('./dialogflow.js');
 
 var globalConst = require('./models/constants');
 var interactions = require('./models/interactions');
@@ -182,6 +183,16 @@ try {
               return;
             }
             command[chatInteraction.functionToCall](message);
+          } else {
+            // DIALOG FLOW
+            dialog(message.author, message.content)
+              .then((response) => {
+                message.channel.send(response);
+              })
+              .catch((err) => {
+                Utils.log(err, true);
+              })
+            //FIN DIALOGFLOW
           }
         }
         if (message.content.substr(0, globalConst.prefix.length) === globalConst.prefix) {
