@@ -113,7 +113,11 @@ try {
   });
 
   bot.on("guildMemberRemove", (member) => {
-    member.guild.channels.get("448527311336112139").send(`${member.user.username} a ragekiet`);
+    var joinAT = moment(member.joinedAt);
+    var now = moment();
+    var diff = Math.abs(now.diff(joinAT, 'minutes'));
+    moment.locale('fr');
+    member.guild.channels.get("402965157011128323").send(`${member.user.username} nous a quitté, il a été avec nous pendant `+ moment.duration(diff, 'minutes').humanize() );
   });
 
   bot.on('guildMemberAdd', member => {
