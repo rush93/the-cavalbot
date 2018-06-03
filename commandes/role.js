@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const Utils = require('../utils');
 var Constants = require('../models/constants');
-var moment = require('moment');
 module.exports = {
     role: 'SEND_MESSAGES',
     helpCat: 'Permet de s\'ajouter un role',

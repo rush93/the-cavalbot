@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const Utils = require('./utils');
 var request = require('request');
+var moment = require('moment');
 
 var token = require('./token');
 var dialog = require('./dialogflow.js');
