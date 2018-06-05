@@ -127,7 +127,7 @@ try {
     var player = players.getPlayer(message.member.id, clanId);
     players.resetRank(message.member, clan);
     players.setPoints(message.member.id, clanId, 0);
-    
+
   });
 
   bot.on('guildMemberAdd', member => {
@@ -201,7 +201,13 @@ try {
             // DIALOG FLOW
             dialog(message.author, message.content)
               .then((response) => {
-                message.channel.send(response);
+                if(typeof response === "string") {
+                  Utils.log('', false, 'DM message of ' + message.author.username, 'The-cavalbot', response);
+                  message.channel.send(response);
+                } else {
+                  Utils.log('', false, 'DM message of ' + message.author.username, 'The-cavalbot', '_' + response.fields.command.stringValue, guild);
+                  runCommand(('_' + response.fields.command.stringValue).split(' '), message)
+                }
               })
               .catch((err) => {
                 Utils.log(err, true);
@@ -228,7 +234,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
           Utils.log(e.stack, true);
         });
         return;
-      } else if (/^\*sucide( |$)/i.exec(message.content)) {//https://giphy.com/gifs/season-9-episode-15-bravo-xUA7b4ALChx9x5kJ8c
+      } else if (/^\*suicide( |$)/i.exec(message.content)) {//https://giphy.com/gifs/season-9-episode-15-bravo-xUA7b4ALChx9x5kJ8c
         var embed = new Discord.RichEmbed({});
         embed.setColor(0x00AFFF);
         embed.setImage("https://cdn.discordapp.com/attachments/327039523156656128/451056132182769675/giphy.gif");
