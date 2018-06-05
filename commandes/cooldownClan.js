@@ -14,11 +14,18 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
+        if (!message.member.hasPermission("MANAGE_GUILD")) {
+            Utils.reply(message, "Mais arrete tu te fais du mal.", true);
+            return;
+        }
         var members = message.mentions.members;
         if (members.array().length === 1) {
             members.forEach((member) => {
                 Players.setCooldownAdmin(member);
+                Utils.reply(message, ":ok_hand:", true);
             });
+        }else{
+            Utils.reply(message, "faut @ quelqu'un (et seulement 1)", true);
         }
     }
 }
