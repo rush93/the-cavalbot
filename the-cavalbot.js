@@ -48,6 +48,7 @@ var participeCommand = require('./commandes/participe');
 var reportCommand = require('./commandes/report');
 var testCommand = require('./commandes/test');
 var roleCommand = require('./commandes/role');
+var cooldownClanCommand = require('./commandes/cooldownClan');
 
 var commands = {
   config: configCommands,
@@ -76,7 +77,8 @@ var commands = {
   participe: participeCommand,
   report: reportCommand,
   test: testCommand,
-  role: roleCommand
+  role: roleCommand,
+  cooldownClan: cooldownClanCommand
 }
 try {
   bot.on('ready', function () {

@@ -105,6 +105,11 @@ module.exports = {
         players[guildMember.id].cooldown = new Date();
         save();
     },
+    setCooldownAdmin: function (guildMember) {
+        createUserIfNotExist(guildMember.id);
+        players[guildMember.id].cooldown = guildMember.joinedAt;
+        save();
+    },
     getPlayer: function (id, clanId) {
         return players[id] ? players[id].clans[clanId] : null;
     },
