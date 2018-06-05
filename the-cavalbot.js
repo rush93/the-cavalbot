@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const Utils = require('./utils');
@@ -179,7 +178,7 @@ try {
         var result = /^say ([0-9]+) (.+)$/.exec(message.content);
         if (result) {
           if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, 'ptdr t ki ?', true);
+            Utils.reply(message, 'ptdr t ki ?', true);
             return;
           }
           var channel = guild.channels.get(result[1]);
@@ -201,7 +200,13 @@ try {
             // DIALOG FLOW
             dialog(message.author, message.content)
               .then((response) => {
-                message.channel.send(response);
+                if(typeof response === "string") {
+                  Utils.log('', false, 'DM message of ' + message.author.username, 'The-cavalbot', response);
+                  message.channel.send(response);
+                } else {
+                  Utils.log('', false, 'DM message of ' + message.author.username, 'The-cavalbot', '_' + response.fields.command.stringValue, guild);
+                  runCommand(('_' + response.fields.command.stringValue).split(' '), message)
+                }
               })
               .catch((err) => {
                 Utils.log(err, true);
@@ -228,7 +233,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
           Utils.log(e.stack, true);
         });
         return;
-      } else if (/^\*sucide( |$)/i.exec(message.content)) {//https://giphy.com/gifs/season-9-episode-15-bravo-xUA7b4ALChx9x5kJ8c
+      } else if (/^\*suicide( |$)/i.exec(message.content)) {//https://giphy.com/gifs/season-9-episode-15-bravo-xUA7b4ALChx9x5kJ8c
         var embed = new Discord.RichEmbed({});
         embed.setColor(0x00AFFF);
         embed.setImage("https://cdn.discordapp.com/attachments/327039523156656128/451056132182769675/giphy.gif");

@@ -16,10 +16,6 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        var clanId = clans.getPlayerClan(message.member).id;
-        var clan = clans.getPlayerClan(message.member);
-        var player = players.getPlayer(message.member.id, clanId);
-        players.resetRank(message.member, clan);
-        players.setPoints(message.member.id, clanId, 0);
+        
     }
 }

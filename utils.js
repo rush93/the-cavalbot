@@ -325,7 +325,7 @@ module.exports = {
             if (content) {
                 chaine += ` : `+content;
             }
-            //channel.send(chaine);
+            channel.send(chaine);
         }
         // if(err) {
         //     console.log(console.trace());
