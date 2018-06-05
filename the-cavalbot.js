@@ -1,4 +1,3 @@
-
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const Utils = require('./utils');
@@ -122,11 +121,11 @@ try {
     moment.locale('fr');
     member.guild.channels.get("402965157011128323").send(`${member.user.username} nous a quitté, il a été avec nous pendant `+ moment.duration(diff, 'minutes').humanize() );
 
-    var clanId = clans.getPlayerClan(message.member).id;
-    var clan = clans.getPlayerClan(message.member);
-    var player = players.getPlayer(message.member.id, clanId);
-    players.resetRank(message.member, clan);
-    players.setPoints(message.member.id, clanId, 0);
+    var clanId = clans.getPlayerClan(member).id;
+    var clan = clans.getPlayerClan(member);
+    var player = players.getPlayer(member.id, clanId);
+    players.resetRank(member, clan);
+    players.setPoints(member.id, clanId, 0);
 
   });
 
@@ -179,7 +178,7 @@ try {
         var result = /^say ([0-9]+) (.+)$/.exec(message.content);
         if (result) {
           if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, 'ptdr t ki ?', true);
+            Utils.reply(message, 'ptdr t ki ?', true);
             return;
           }
           var channel = guild.channels.get(result[1]);
