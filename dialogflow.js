@@ -1,7 +1,6 @@
 const projectId = 'small-talk-9b89f'; // mon id a remplacer si vous faites votre agent
 const sessionId = 'quickstart-session-id';
 const languageCode = 'fr';
-const Utils = require('./utils');
 
 // Instantiate a DialogFlow client.
 const dialogflow = require('dialogflow');
@@ -29,9 +28,12 @@ module.exports =  (author, message) => {
         .detectIntent(request)
         .then(responses => {
             const result = responses[0].queryResult;
-            Utils.log('', false, 'DM message of ' + author.username, 'The-cavalbot', result.fulfillmentText);
+            var payload = result.fulfillmentMessages[result.fulfillmentMessages.length - 1].payload;
+            if (typeof payload === "object") {
+                resolve(payload);
+                return;
+            }
             resolve(result.fulfillmentText);
-            
         })
         .catch(err => {
             reject(err);

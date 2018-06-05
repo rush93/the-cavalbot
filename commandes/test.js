@@ -2,7 +2,9 @@ const Discord = require('discord.js');
 var moment = require('moment');
 const Utils = require('../utils');
 var Constants = require('../models/constants');
-var Players = require('../models/players');
+var players = require('../models/players');
+var clans = require('../models/clans');
+
 module.exports = {
     role: 'MANAGE_GUILD',
     helpCat: 'Permet de tester des commande',
@@ -14,19 +16,10 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, "ptdr t ki ?", true);
-            return;
-        }
-        var lastJoin = Players.getPlayers()[message.member.id] ? Players.getPlayers()[message.member.id].cooldown : null;
-        if (lastJoin) {
-            lastJoin = moment(lastJoin);
-            var now = moment();
-            diff = Math.abs(now.diff(lastJoin, 'minutes'));
-            moment.locale('fr');
-
-            Utils.reply(message, `Dans le clan depuis :  `+ moment.duration(diff, 'minutes').humanize());
-        }
-        
+        var clanId = clans.getPlayerClan(message.member).id;
+        var clan = clans.getPlayerClan(message.member);
+        var player = players.getPlayer(message.member.id, clanId);
+        players.resetRank(message.member, clan);
+        players.setPoints(message.member.id, clanId, 0);
     }
 }
