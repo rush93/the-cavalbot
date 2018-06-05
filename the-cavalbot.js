@@ -225,7 +225,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
           Utils.log(e.stack, true);
         });
         return;
-      } else if (/^\*sucide( |$)/i.exec(message.content)) {//https://giphy.com/gifs/season-9-episode-15-bravo-xUA7b4ALChx9x5kJ8c
+      } else if (/^\*suicide( |$)/i.exec(message.content)) {//https://giphy.com/gifs/season-9-episode-15-bravo-xUA7b4ALChx9x5kJ8c
         var embed = new Discord.RichEmbed({});
         embed.setColor(0x00AFFF);
         embed.setImage("https://cdn.discordapp.com/attachments/327039523156656128/451056132182769675/giphy.gif");
