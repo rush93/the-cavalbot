@@ -121,6 +121,13 @@ try {
     var diff = Math.abs(now.diff(joinAT, 'minutes'));
     moment.locale('fr');
     member.guild.channels.get("402965157011128323").send(`${member.user.username} nous a quitté, il a été avec nous pendant `+ moment.duration(diff, 'minutes').humanize() );
+
+    var clanId = clans.getPlayerClan(message.member).id;
+    var clan = clans.getPlayerClan(message.member);
+    var player = players.getPlayer(message.member.id, clanId);
+    players.resetRank(message.member, clan);
+    players.setPoints(message.member.id, clanId, 0);
+
   });
 
   bot.on('guildMemberAdd', member => {
