@@ -129,7 +129,7 @@ try {
       players.setPoints(member.id, clanId, 0);
     }
     catch(error) {
-      Utils.log("Erreur : "+error, true);
+      Utils.log(error, true);
     }
 
   });
