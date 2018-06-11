@@ -200,10 +200,12 @@ var commands = {
             var participantsKeys = Object.keys(participants);
             var fields = [];
             for (var i = 0; i < participantsKeys.length; i++) {
+                var globalPlayer = Players.getPlayers()[participantsKeys[i]];
                 var btags = Players.getBtags(participantsKeys[i])
                 var btag = btags[Object.keys(btags)[0]];
                 var psns = Players.getPsns(participantsKeys[i])
                 var psn = psns[Object.keys(psns)[0]];
+
                 var participation = participants[participantsKeys[i]];
                 var questions = Object.keys(participation.questions).map(function(key) {
                     return participation.questions[key];
@@ -216,7 +218,9 @@ var commands = {
                     title:  message.guild.members.get(participantsKeys[i]).displayName,
                     text: 
 (btags && Object.keys(btags).length > 0 ? `**Btag**: ${btag.btag} (${btag.comprank ? btag.comprank : 0 })` : '' ) +
-(psns && Object.keys(psns).length > 0 ? `**PSN**: ${psn.psn} (${psn.psncomprank ? psn.psncomprank : 0 })` : '' ) + `
+(psns && Object.keys(psns).length > 0 ? `**PSN**: ${psn.psn} (${psn.psncomprank ? psn.psncomprank : 0 })` : '' ) + 
+` ${globalPlayer && globalPlayer.epou ? `
+:ring: <@!${globalPlayer.epou}>` : ''} `+`
 **horaire**: ${participation.timetable.join(', ')}
 **réponse**: ${questions.join(' - ')}
 `,
