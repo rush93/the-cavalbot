@@ -136,15 +136,15 @@ try {
 
   bot.on('guildMemberAdd', member => {
     member.setNickname(member.displayName + ' |');
-    member.guild.channels.get("402965157011128323").send(`Bonjour et bienvenue ${member.user.username} ! 
+    member.guild.channels.get("402965157011128323").send(`Bonjour et bienvenue ***${member.user.username}*** ! 
 
 Vous voilà à présent sur les contrées de The Cavalry, et déjà un choix vous fait face. Ici, le monde est divisé en clan : 
-- Overwatch, la célèbre organisation connu de tous pour son bien fondé. Pour les rejoindre et participer à leur réussite, marquez _join Overwatch.
-- Blackwatch, l'ombre d'Overwatch, l'organisation qui n'existe pas, dont on ne parle pas. Pour rejoindre l'obscurité et appliquer leur propre justice, marquez _join Blackwatch.
-- Shimada, le grand clan qui domine la pègre nippone, même si il fut affaiblit par Overwatch, on ne peut tuer un dragon. Pour rejoindre cette famille et la protéger avec son sabre, marquez _join Shimada.
-- Talon, l'organisation controversée  qui lutte pour le monde qu'ils ont décidés de forger. Pour rejoindre les rangs de celle-ci et hacker la terre, marquez _join Talon.
-- Junkers, l'Australie refusera toujours de s'éteindre, même après les bombes nucléaires, les junkers sont toujours là, pillards fou, rien ne les arrête. Pour suivre leurs pas et faire parti de la communauté, marquez _join Junkers.
-- MEKA, les troupes spéciales coréennes sont à l'affut, rien ni personne ne pourra faire tomber cette unité d'élite. Pour en faire parti, il faut marquer _join MEKA.
+- Overwatch, la célèbre organisation connu de tous pour son bien fondé. Pour les rejoindre et participer à leur réussite, écrivez _join Overwatch.
+- Blackwatch, l'ombre d'Overwatch, l'organisation qui n'existe pas, dont on ne parle pas. Pour rejoindre l'obscurité et appliquer leur propre justice, entrez _join Blackwatch.
+- Shimada, le grand clan qui domine la pègre nippone, même si il fut affaiblit par Overwatch, on ne peut tuer un dragon. Pour rejoindre cette famille et la protéger avec son sabre, écrivez _join Shimada.
+- Talon, l'organisation controversée  qui lutte pour le monde qu'ils ont décidés de forger. Pour rejoindre les rangs de celle-ci et hacker la terre, écrivez _join Talon.
+- Junkers, l'Australie refusera toujours de s'éteindre, même après les bombes nucléaires, les junkers sont toujours là, pillards fou, rien ne les arrête. Pour suivre leurs pas et faire parti de la communauté, entrez _join Junkers.
+- MEKA, les troupes spéciales coréennes sont à l'affut, rien ni personne ne pourra faire tomber cette unité d'élite. Pour en faire parti, il faut entrez _join MEKA.
 
 A présent, bonne chance aventurier, aventurière.`);
   });
