@@ -125,7 +125,7 @@ try {
       var clanId = clans.getPlayerClan(member).id;
       var clan = clans.getPlayerClan(member);
       var player = players.getPlayer(member.id, clanId);
-      if (clanId != 435735914501767169) {//=clainid vagabond
+      if (clanId != "435735914501767169") {//=clainid vagabond
         players.resetRank(member, clan);
         players.setPoints(member.id, clanId, 0);
       }
