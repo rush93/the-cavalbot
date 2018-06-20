@@ -110,7 +110,11 @@ var displayRoleOfMember = function (message, member) {
     diff = Math.abs(now.diff(lastJoin, 'minutes'));
     moment.locale('fr');
 
-    Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
+    
+    if(moment.duration(diff, 'minutes').humanize() == "quelques secondes"){
+        message.channel.send('<@!'+member.id+'> envoi un mp a <@!227441303527489537> avec ta date d\'arriver dans ton clan ou attend 2 minutes si tu viens juste d\'arriver dans ton clan');
+    }else{
+        Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
         `**Clan:** ${role.name}` + `
 **Dans le clan depuis**: ` + moment.duration(diff, 'minutes').humanize() + (seasonPoints === null ? '' : `
 **Points de la saison:** ${seasonPoints}`) + `
@@ -121,10 +125,6 @@ var displayRoleOfMember = function (message, member) {
 :ring: <@!${globalPlayer.epou}>` : ''} `
         , message.author, fields, image);
     Players.updateComprank(member.id);
-    if(moment.duration(diff, 'minutes').humanize() == "quelques secondes"){
-        message.channel.send('<@!'+member.id+'> envoi un mp a <@!227441303527489537> avec ta date d\'arriver dans ton clan');
-    }else{
-        
     }
     return;
 }
