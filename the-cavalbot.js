@@ -48,6 +48,7 @@ var reportCommand = require('./commandes/report');
 var testCommand = require('./commandes/test');
 var roleCommand = require('./commandes/role');
 var cooldownClanCommand = require('./commandes/cooldownClan');
+var pingCommand = require('./commandes/ping');
 
 var commands = {
   config: configCommands,
@@ -77,7 +78,8 @@ var commands = {
   report: reportCommand,
   test: testCommand,
   role: roleCommand,
-  cooldownClan: cooldownClanCommand
+  cooldownClan: cooldownClanCommand,
+  ping: pingCommand
 }
 try {
   bot.on('ready', function () {
