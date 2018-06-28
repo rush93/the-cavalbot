@@ -244,7 +244,7 @@ var help = function (message) {
     Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des évents', "", message.author, fields);
 }
 module.exports = {
-    role: 'MANAGE_ROLES',
+    role: 'CHANGE_NICKNAME',
     helpCat: 'Permet d\'administrer les évents',
     help,
     runCommand: (args, message) => {
