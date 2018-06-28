@@ -55,6 +55,9 @@ module.exports = {
     get joinmessage() {
         return constants.joinmessage;
     },
+    get mariageCooldown() {
+        return constants.mariageCooldown;
+    },
     get leavemessage() {
         return constants.leavemessage;
     },

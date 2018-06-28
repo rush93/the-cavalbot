@@ -65,6 +65,7 @@ function updateBtag(btag, id) {
     });
 }
 
+
 function updatePsn(psn, id) {
     return new Promise((resolve , reject) => {
         var uncriptedpsn = encodeURI(psn);
@@ -98,6 +99,11 @@ module.exports = {
         });
     },
     save: function () {
+        save();
+    },
+    setCooldownMariage: function (guildMember) {
+        createUserIfNotExist(guildMember.id);
+        players[guildMember.id].cooldownMariage = new Date();
         save();
     },
     setCooldown: function (guildMember) {
