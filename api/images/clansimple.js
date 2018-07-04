@@ -11,7 +11,6 @@ module.exports = {
         guild = discordGuild;
     },
     exec: (req, res) => {
-        Utils.log('slt');
         var clan = Clans.getRole(req.query.c, guild);
         if (!clan) {
             res.render('index', { message: 'Le clan est incorrect' });
