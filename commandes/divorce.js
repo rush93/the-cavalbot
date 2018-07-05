@@ -33,6 +33,8 @@ module.exports = {
             return;
         }
         if (Players.getEpou(user1) !== Players.getEpou(user1)) {
+            Players.setCooldownMariage(user1);
+            Players.setCooldownMariage(user2);
             Utils.reply(message, `Les deux joueurs ne sont pas mariés.`, true);
             return;
         }

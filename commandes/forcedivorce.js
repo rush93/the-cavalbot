@@ -26,7 +26,7 @@ module.exports = {
             Utils.reply(message, `<@!${user.id}> n'a pas d'époux !`, true);
             return;
         }
-
+        Players.setCooldownMariage(user);
         Players.divorse(user);
         Utils.reply(message, `<@!${user.id}> n'est plus marié !`);
     }

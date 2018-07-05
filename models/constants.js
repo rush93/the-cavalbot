@@ -1,9 +1,11 @@
 var fs = require('fs');
-var Utils = require('../utils');
+
 var constants = {
     prefix: "_",
     pseudoModifier: "Bonjour",
     resetRankWhenChangeClan: true,
+    guildID: "",
+    logChannel: "",
     leaveCooldown: 0,
     joinmessage: "no",
     leavemessage: "no",
@@ -15,9 +17,9 @@ var constants = {
 function save() {
     fs.writeFile(__dirname + "/../data/constants.json", JSON.stringify(constants), function (err) {
         if (err) {
-            return Utils.log(err, true);
+            return console.log(err, true);
         }
-        Utils.log(`The ${Utils.Color.FgYellow}constants${Utils.Color.Reset} file was saved!`);
+        console.log(`The constants file was saved!`);
     });
 }
 
@@ -42,6 +44,12 @@ module.exports = {
     },
     get prefix() {
         return constants.prefix;
+    },
+    get guildID() {
+        return constants.guildID;
+    },
+    get logChannel() {
+        return constants.logChannel;
     },
     get pseudoModifier() {
         return constants.pseudoModifier;
@@ -82,6 +90,16 @@ module.exports = {
         constants.pseudoModifier = pseudoModifier;
         save();
         return constants.pseudoModifier;
+    },
+    set guildID(guildID) {
+        constants.guildID = guildID;
+        save();
+        return constants.guildID;
+    },
+    set logChannel(logChannel) {
+        constants.logChannel = logChannel;
+        save();
+        return constants.logChannel;
     },
     set resetRankWhenChangeClan(resetRankWhenChangeClan) {
         constants.resetRankWhenChangeClan = resetRankWhenChangeClan;
