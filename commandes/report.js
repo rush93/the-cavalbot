@@ -2,6 +2,8 @@ const Discord = require('discord.js');
 const Utils = require('../utils');
 var Constants = require('../models/constants');
 var Interactions = require('../models/interactions');
+const moment = require('moment');
+
 var reportMessage = (message, reporter) => {
     var channel = message.channel.guild.channels.get(Constants.reportChannel);
     var fields = [
@@ -18,6 +20,11 @@ var reportMessage = (message, reporter) => {
         {
             title: 'Dans quel channel cela s\'est-il passé ?',
             text: `<#${message.channel.id}>`,
+            grid: true
+        },
+        {
+            title: 'Quand le message a été posté ?',
+            text: moment(message.createdTimestamp).format("DD MMM YYYY hh:mm a"),
             grid: true
         },
         {

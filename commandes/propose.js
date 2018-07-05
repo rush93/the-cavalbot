@@ -49,8 +49,7 @@ module.exports = {
                 Utils.reply(message, 'Après une longue et douloureuse séparation vous avez besoin de temps pour vous remettre encore ' + moment.duration(timeLeft, 'minutes').humanize()) + ")";
                 return;
             }
-        }   
-        Players.setCooldownMariage(message.member);
+        }
         Players.setAskFor(message.member, user1);
         Utils.reply(message, `<@!${user1.id}>, <@!${message.member.id}> vous demande en mariage:
     - Voulez-vous accepter ? ( **${Constants.prefix}accept <@!${message.member.id}>** )
