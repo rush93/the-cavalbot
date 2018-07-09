@@ -248,7 +248,7 @@ module.exports = {
     helpCat: 'Permet d\'administrer les évents',
     help,
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_ROLES")) {
+        if (!message.member.hasPermission("CHANGE_NICKNAME")) {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour toucher aux évents", true);
             return;
         }
