@@ -25,6 +25,10 @@ module.exports = {
             Utils.reply(message, "Aucun clan pour ce rôle.", true);
             return;
         }
+        if (Clans.getJoin(role) == "false") {
+            Utils.reply(message, "Désolé ce clan est fermé", true);
+            return;
+        }
         clan = Clans.addPlayer(role, message.member, "rejoins le clan avec la commande join", Object.keys(Players.getPsns(message.member.id)).length > 0);
         if (!clan) {
             Utils.reply(message, "Vous êtes déjà dans un clan.", true);
