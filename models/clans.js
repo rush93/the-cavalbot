@@ -56,6 +56,17 @@ module.exports = {
     save: function () {
         save();
     },
+    setJoin: function (guildRole, bool) {
+        clans[guildRole.id].IsJoinable = bool;
+        save();
+    },
+    getJoin: function (guildRole) {
+        if(clans[guildRole.id].IsJoinable == "true"){
+            return "true";
+        }else{
+            return "false";
+        }
+    },
     getClan: function (guildRole) {
         if (!clans[guildRole.id] && clansPs4Map[guildRole.id]) {
             return clans[clansPs4Map[guildRole.id]];

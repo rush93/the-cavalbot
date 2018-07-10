@@ -18,6 +18,20 @@ var commands = {
             Utils.reply(message, 'Le clan a bien été créé.')
         }
     },
+    setJoin: {
+        help: [
+            'Permet d\'ouvrir ou non un clan.'
+        ],
+        args: 'true(ouvert) ou false(fermé)',
+        runCommand: (clan, args, message) => {
+            if (!Clans.getClan(clan)) {
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
+                return;
+            }
+            Clans.setJoin(clan, args.join(' '));
+            Utils.reply(message, 'Les portes du clan on bien été modifié. : '+args.join(' '));
+        }
+    },
     delete: {
         help: [
             'Permet de supprimer un clan.'
