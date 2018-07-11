@@ -123,7 +123,7 @@ module.exports = {
             }
         });
         if (!fail) {
-            var GuestRole = getRoleByName('Guests', guildRole.guild);
+            var GuestRole = getRoleByName('Membres', guildRole.guild);
             if (isPS4) {
                 var ps4Role = guildRole.guild.roles.get(clans[guildRole.id].ps4Role);
                 player.addRole(ps4Role, reason);
@@ -146,7 +146,7 @@ module.exports = {
             if (!fail) return;
             if (role.id === guildRole.id || role.id === clans[guildRole.id].ps4Role) {
                 fail = false;
-                var GuestRole = getRoleByName('Guests', guildRole.guild);
+                var GuestRole = getRoleByName('Membres', guildRole.guild);
                 if (isPS4) {
                     var ps4Role = guildRole.guild.roles.get(clans[guildRole.id].ps4Role);
                     player.removeRole(ps4Role, reason);
