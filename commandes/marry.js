@@ -3,7 +3,7 @@ const Utils = require('../utils');
 var Constants = require('../models/constants');
 var Players = require('../models/players');
 module.exports = {
-    role: 'MANAGE_GUILD',
+    role: 'CHANGE_NICKNAME',
     helpCat: 'Permet de marier deux personnes',
     help: function (message) {
         Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande marry", "", message.author, [{
@@ -13,7 +13,7 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_GUILD")) {
+        if (!message.member.hasPermission("CHANGE_NICKNAME")) {
             Utils.reply(message, "Vous n'êtes pas assez religieux pour marier des gens.", true);
             return;
         }
