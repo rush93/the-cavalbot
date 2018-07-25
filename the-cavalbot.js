@@ -125,7 +125,7 @@ try {
     var now = moment();
     var diff = Math.abs(now.diff(joinAT, 'minutes'));
     moment.locale('fr');
-    member.guild.channels.get("443199155838648320").send(`<@!${member.id}> nous a quitté, il a été avec nous pendant `+ moment.duration(diff, 'minutes').humanize() );
+    member.guild.channels.get("443199155838648320").send(`<@!${member}> nous a quitté, il a été avec nous pendant `+ moment.duration(diff, 'minutes').humanize() );
 
     try {
       var clanId = clans.getPlayerClan(member).id;
@@ -145,7 +145,7 @@ try {
 
   bot.on('guildMemberAdd', member => {
     member.setNickname(member.displayName + ' |');
-    member.guild.channels.get("443199155838648320").send(`Bonjour et bienvenue <@!${member.id}> dans Overwatch Assemble ! 
+    member.guild.channels.get("443199155838648320").send(`Bonjour et bienvenue <@!${member}> dans Overwatch Assemble ! 
 Tu vas maintenant pouvoir choisir ton clan parmi la liste des clans qui se trouve dans #histoires-des-clans avec leurs histoires en dessous!
 Pour valider ton choix tu dois écrire _join [NomDuClan] dans ce channel :wink:
 Par exemple "_join La Griffe" pour rejoindre l'organisation de fatale'.
