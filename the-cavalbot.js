@@ -13,12 +13,14 @@ var clans = require('./models/clans');
 var players = require('./models/players');
 var ranks = require('./models/ranks');
 var event = require('./models/event');
+//var bdd = require('./models/connectionMYSQL');
 globalConst.init();
 interactions.init();
 clans.init();
 players.init();
 ranks.init();
 event.init();
+//bdd.init();
 
 var configCommands = require('./commandes/config');
 var clanCommands = require('./commandes/clan');
@@ -123,7 +125,7 @@ try {
     var now = moment();
     var diff = Math.abs(now.diff(joinAT, 'minutes'));
     moment.locale('fr');
-    member.guild.channels.get("402965157011128323").send(`${member.user.username} nous a quitté, il a été avec nous pendant `+ moment.duration(diff, 'minutes').humanize() );
+    member.guild.channels.get("443199155838648320").send(`${member.user.username} nous a quitté, il a été avec nous pendant `+ moment.duration(diff, 'minutes').humanize() );
 
     try {
       var clanId = clans.getPlayerClan(member).id;
@@ -143,16 +145,11 @@ try {
 
   bot.on('guildMemberAdd', member => {
     member.setNickname(member.displayName + ' |');
-    member.guild.channels.get("402965157011128323").send(`Bonjour et bienvenue ** ${member.user.username} ** ! 
-Vous voilà à présent sur les contrées de The Cavalry, et déjà un choix s'offre à vous. Ici, le monde est divisé en clans : 
-- **Overwatch**, la célèbre organisation connue de tous pour son bien fondé. Pour les rejoindre et participer à leur réussite, entrez *_join Overwatch*.
-- **Blackwatch**, l'ombre d'Overwatch, l'organisation qui n'existe pas, dont on ne parle pas. Pour rejoindre l'obscurité et appliquer leur propre justice, entrez *_join Blackwatch*.
-- **Shimada**, le grand clan qui domine la pègre nippone, même si il fut affaibli par Overwatch, on ne peut tuer un dragon. Pour rejoindre cette famille et la protéger avec son sabre, entrez *_join Shimada*.
-- **Talon**, l'organisation controversée  qui lutte pour le monde qu'ils ont décidé de forger. Pour rejoindre les rangs de celle-ci et hacker la terre, entrez *_join Talon*.
-- **Junkers**, l'Australie refusera toujours de s'éteindre, même après les bombes nucléaires, les junkers sont toujours là, pillards fous, rien ne les arrête. Pour suivre leurs pas et faire parti de la communauté, entrez *_join Junkers*.
-- **MEKA**, les troupes spéciales coréennes sont à l'affut, rien ni personne ne pourra faire tomber cette unité d'élite. Pour en faire parti, entrez *_join MEKA*.
-- Si vous ne désirez pas participer aux affrontements entre ces clans tout en profitant des lieux, un dernier choix s'offre à vous : rejoindre les **Vagabonds**. Ces derniers parcourent le monde sans être impactés par les conflits et sans prendre parti, pour les rejoindre entrez *_join Vagabond*.
-A présent, bonne chance aventurier, aventurière.`);
+    member.guild.channels.get("443199155838648320").send(`Bonjour et bienvenue ${member.user.username} dans Overwatch Assemble ! 
+Tu vas maintenant pouvoir choisir ton clan parmi la liste des clans qui se trouve dans #histoires-des-clans avec leurs histoires en dessous!
+Pour valider ton choix tu dois écrire _join [NomDuClan] dans ce channel :wink:
+Par exemple "_join La Griffe" pour rejoindre l'organisation de fatale'.
+Amuse-toi bien!`);
   });
 
   var runCommand = (args, message) => {
