@@ -192,20 +192,7 @@ Amuse-toi bien!`);
       if (message.author.bot) {
         return;
       }
-      if(globalConst.guildID == ""){
-        if(message.content.startsWith(globalConst.prefix+"config guildID") || message.content.startsWith(globalConst.prefix+"config prefix")){
-
-        }else{
-          Utils.reply(message, 'Administrateur !!!!! veuillez me configuez _config guildID [id], attention pas le droit à l\'erreur.', true);
-          return;
-        }
-        
-      }else {
-        if (globalConst.guildID != message.guild.id && globalConst.guildID != "") {
-            Utils.reply(message, "Attention une seul instance par serveur, veuillez contacter aejii#1262 et me kicker, ou je détruit ce serveur mouahahahahaha.", true);
-            return;
-        }
-      }
+      
       
       if (message.channel.constructor.name === 'DMChannel') {
         Utils.log('', false, 'DM message', message.author.username, message.content);
@@ -241,6 +228,22 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
         }
         return;
       }
+
+      if(globalConst.guildID == ""){
+        if(message.content.startsWith(globalConst.prefix+"config guildID") || message.content.startsWith(globalConst.prefix+"config prefix")){
+
+        }else{
+          Utils.reply(message, 'Administrateur !!!!! veuillez me configuez _config guildID [id], attention pas le droit à l\'erreur.', true);
+          return;
+        }
+        
+      }else {
+        if (globalConst.guildID != message.guild.id && globalConst.guildID != "") {
+            Utils.reply(message, "Attention une seul instance par serveur, veuillez contacter aejii#1262 et me kicker, ou je détruit ce serveur mouahahahahaha.", true);
+            return;
+        }
+      }
+      
       if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
         var args = message.content.split(" ");
         Utils.log('Command detected', false, message.channel.name, message.author.username, message.content, guild);
