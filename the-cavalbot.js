@@ -148,7 +148,7 @@ try {
     member.guild.channels.get("443199155838648320").send(`Bonjour et bienvenue <@!${member.id}> dans Overwatch Assemble ! 
 Tu vas maintenant pouvoir choisir ton clan parmi la liste des clans qui se trouve dans #histoires-des-clans avec leurs histoires en dessous!
 Pour valider ton choix tu dois écrire _join [NomDuClan] dans ce channel :wink:
-Par exemple "_join La Griffe" pour rejoindre l'organisation de fatale'.
+Par exemple "_join La Griffe" pour rejoindre l'organisation de fatale.
 Amuse-toi bien!`);
   });
 
@@ -231,21 +231,6 @@ Amuse-toi bien!`);
             }
             command[chatInteraction.functionToCall](message);
           } else {
-            // DIALOG FLOW
-            dialog(message.author, message.content)
-              .then((response) => {
-                if(typeof response === "string") {
-                  Utils.log('', false, 'DM message of ' + message.author.username, 'The-cavalbot', response);
-                  message.channel.send(response);
-                } else {
-                  Utils.log('', false, 'DM message of ' + message.author.username, 'The-cavalbot', '_' + response.fields.command.stringValue, guild);
-                  runCommand(('_' + response.fields.command.stringValue).split(' '), message)
-                }
-              })
-              .catch((err) => {
-                Utils.log(err, true);
-              })
-            //FIN DIALOGFLOW
           }
         }
         if (message.content.substr(0, globalConst.prefix.length) === globalConst.prefix) {
