@@ -36,7 +36,7 @@ module.exports = {
         Utils.reply(message, "Exil réussi", false);
 
         var channel = guild.channels.get("443498746144227358");
-        channel.send("Tu as été exiler. La raison : "+array[2]+ ".");
+        channel.send(` ${message.mentions.members.first()} Tu as été exiler. La raison : `+array[2]+ ".");
 
         setTimeout(function(){
             myFunc(message.guild ,message.mentions.members.first());
