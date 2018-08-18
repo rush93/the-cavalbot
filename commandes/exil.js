@@ -35,8 +35,8 @@ module.exports = {
         message.mentions.members.first().addRole(AuCachotRole, array[2]);
         Utils.reply(message, "Exil réussi", false);
 
-        var channel = message.guild.channels.get("443498746144227358");
-        channel.send(` ${message.mentions.members.first()} Tu as été exiler. La raison : `+array[2]+ ".");
+        var channel = message.guild.channels.get("443498746144227358");//ajouter constante
+        channel.send(` ${message.mentions.members.first()} Tu as été exiler `+parseInt(array[1])*1000*60*60+` heure(s) . La raison : `+array[2]+ ".");
 
         setTimeout(function(){
             myFunc(message.guild ,message.mentions.members.first());
