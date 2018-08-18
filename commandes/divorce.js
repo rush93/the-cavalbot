@@ -3,7 +3,7 @@ const Utils = require('../utils');
 var Constants = require('../models/constants');
 var Players = require('../models/players');
 module.exports = {
-    role: 'MANAGE_GUILD',
+    role: 'CHANGE_NICKNAME',
     helpCat: 'Permet de divorcer deux personnes',
     help: function (message) {
         Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande divorce", "", message.author, [{
@@ -13,7 +13,7 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_GUILD")) {
+        if (!message.member.hasPermission("CHANGE_NICKNAME")) {
             Utils.reply(message, "Il vous faut appeler un juge pour divorcer.", true);
             return;
         }

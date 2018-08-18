@@ -51,6 +51,7 @@ var testCommand = require('./commandes/test');
 var roleCommand = require('./commandes/role');
 var cooldownClanCommand = require('./commandes/cooldownClan');
 var pingCommand = require('./commandes/ping');
+var exilCommand = require('./commandes/exil');
 
 var commands = {
   config: configCommands,
@@ -81,7 +82,8 @@ var commands = {
   test: testCommand,
   role: roleCommand,
   cooldownClan: cooldownClanCommand,
-  ping: pingCommand
+  ping: pingCommand,
+  exil: exilCommand
 }
 try {
   bot.on('ready', function () {
@@ -144,9 +146,9 @@ try {
   });
 
   bot.on('guildMemberAdd', (member) => {
-    //var GuestsRole = member.guild.roles.get("Guests");
-    //console.log("member.guild.roles : "+ member.guild.roles);
-    //member.addRole(GuestsRole);
+
+    let GuestsRole = member.guild.roles.find("name", "Guests");
+    member.addRole(GuestsRole);
 
     member.setNickname(member.displayName + ' |');
     member.guild.channels.get("443199155838648320").send(`Bonjour et bienvenue ${member} dans Overwatch Assemble ! 
