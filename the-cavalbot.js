@@ -152,7 +152,7 @@ try {
     member.guild.channels.get("443199155838648320").send(`Bonjour et bienvenue ${member} dans Overwatch Assemble ! 
 Tu vas maintenant pouvoir choisir ton clan parmi la liste des clans qui se trouve dans #histoires-des-clans avec leurs histoires en dessous!
 Pour valider ton choix tu dois écrire _join NomDuClan dans ce channel :wink:
-Par exemple "_join La Griffe" pour rejoindre l'organisation de fatale.
+Par exemple "_join Vishkar Corporation" pour rejoindre la multinationale indienne.
 Amuse-toi bien!`);
   });
 
