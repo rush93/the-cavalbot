@@ -33,6 +33,10 @@ module.exports = {
         let AuCachotRole = message.guild.roles.find("name", "Au cachot");
 
         message.mentions.members.first().addRole(AuCachotRole, array[2]);
+        Utils.reply(message, "Exil réussi", false);
+
+        var channel = guild.channels.get("443498746144227358");
+        channel.send("Tu as été exiler. La raison : "+array[2]+ ".");
 
         setTimeout(function(){
             myFunc(message.guild ,message.mentions.members.first());
