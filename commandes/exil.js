@@ -11,7 +11,7 @@ function myFunc(guild,player) {
 }
 
 module.exports = {
-    role: 'MANAGE_GUILD',
+    role: 'CHANGE_NICKNAME',
     helpCat: 'Permet d\'exiler les mechants',
     help: function (message) {
         Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande exil :", "", message.author, [{
@@ -21,7 +21,7 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_GUILD")) {
+        if (!message.member.hasPermission("CHANGE_NICKNAME")) {
             Utils.reply(message, "Réessaie encore une fois et c'est toi que j'exil", true);
             return;
         }
