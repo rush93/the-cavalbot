@@ -103,13 +103,36 @@ ou :x: pour annuler la participation`,
         var event = Events.getEvent(key);
         Events.addParticipant(key, user.id);
         var fields = [];
-        for (var i = 0; i < event.timetable.length; i++) {
-            fields.push({
-                title: event.timetable[i],
-                text: `:${Utils.ReactMap[i]}:`,
-                grid: true
-            });
+        for (var i = 0; i < event.timetable.length; i++) {//boucle des différents horaires
+            var nbrParticipanthoraire = 0;
+            var participants = event.participants;
+            var participantsKeys = Object.keys(participants);//.length = participant global
+
+            //trouver participant par horaire
+            for (var j = 0; j < participantsKeys.length; j++) {
+                for (var k = 0; k < participants[participantsKeys[j]].timetable.length; k++) {
+                    if (participants[participantsKeys[j]].timetable[k] == event.timetable[i]) {
+                        nbrParticipanthoraire++;
+                    }
+                }
+            }
+            
+            //supprimer horaire(msg) quand full
+            if (nbrParticipanthoraire >= event.limite && event.limite != 0) {//nbr personne max
+                fields.push({
+                    title: event.timetable[i],
+                    text: `horaire full`,
+                    grid: true
+                });
+            }else{//ok
+                fields.push({
+                    title: event.timetable[i],
+                    text: `:${Utils.ReactMap[i]}:`,
+                    grid: true
+                });
+            }
         }
+
         Utils.sendDmEmbed(user, 0x00AFFF,
             `Veuillez choisir un horaire pour l\'évent ${event.name}.`,
             `Vous devez réagir à un ou plusieurs horaires
@@ -151,6 +174,13 @@ ou :x: pour annuler la participation`,
             Utils.sendDM(user, 'Vous devez choisir au moins un horaire.', true);
             return;
         }
+        //TODO
+        //erreur horaire full
+
+
+
+
+
         Utils.removeMyReact(messageReaction.message);
         Interactions.delReactInteractions(messageReaction.message.id);
         Events.setParticiapantTimetable(eventKey, user.id, choosenTime);
