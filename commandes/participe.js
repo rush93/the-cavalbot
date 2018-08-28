@@ -174,12 +174,32 @@ ou :x: pour annuler la participation`,
             Utils.sendDM(user, 'Vous devez choisir au moins un horaire.', true);
             return;
         }
-        //TODO
+
         //erreur horaire full
+        for (var i = 0; i < event.timetable.length; i++) {//boucle des différents horaires
+            if (choosenTime == event.timetable[i]) {
+                var nbrParticipanthoraire = 0;
+                var participants = event.participants;
+                var participantsKeys = Object.keys(participants);//.length = participant global
 
-
-
-
+                //trouver participant par horaire
+                for (var j = 0; j < participantsKeys.length; j++) {
+                    for (var k = 0; k < participants[participantsKeys[j]].timetable.length; k++) {
+                        if (participants[participantsKeys[j]].timetable[k] == event.timetable[i]) {
+                            nbrParticipanthoraire++;
+                        }
+                    }
+                }
+                //supprimer horaire(msg) quand full
+                if (nbrParticipanthoraire >= event.limite && event.limite != 0) {
+                    //nbr personne max
+                    Utils.sendDM(user, 'Horaire full désolé, demande au créateur de l\'event si il y a des désistements.', true);
+                    return;
+                }else{//ok
+                    
+                }
+            }
+        }
 
         Utils.removeMyReact(messageReaction.message);
         Interactions.delReactInteractions(messageReaction.message.id);
