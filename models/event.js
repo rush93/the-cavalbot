@@ -42,6 +42,7 @@ module.exports = {
         }
         events[key] = {
             name: name,
+            limite: 0,
             timetable: [],
             questions: [],
             participants: {}
@@ -61,6 +62,15 @@ module.exports = {
     },
     getEvent: function(name) {
         return events[name.toLowerCase()];
+    },
+    setLimite: function(name, limite) {
+        var key = name.toLowerCase();
+        if(!events[key]) {
+            return null;
+        }
+        events[key].limite = limite;
+        save();
+        return true;
     },
     addTime: function(name, time) {
         var key = name.toLowerCase();

@@ -88,6 +88,11 @@ var commands = {
             }
             var fields = [];
             fields.push({
+                title: 'Limite',
+                text: 'Limite de joueur : ' + event.limite + ' (0 = infini)',
+                grid: false
+            });
+            fields.push({
                 title: 'Horaires',
                 text: event.timetable.length > 0 ? event.timetable.join(', ') : 'Aucun',
                 grid: false
@@ -99,6 +104,27 @@ var commands = {
                 grid: false
             });
             Utils.sendEmbed(message, 0xE8C408, event.name, '', message.author, fields);
+        }
+    },
+    setlimite: {
+        help: [
+            'Permet de modifier la limite de joueur (par horaire).'
+        ],
+        args: '<name> <limite>',
+        runCommand: (args, message) => {
+            var array = args.join(" ").split(" ");
+
+            var name = array[0];
+            var event = Events.getEvent(name);
+            if (!event) {
+                Utils.reply(message, 'Aucun évent avec ce nom', true);
+                return;
+            }
+            if(Events.setLimite(name, array[1])) {
+                Utils.reply(message, 'Vous avez bien ajouté la limite de joueur par horaire.');
+                return;
+            }
+            Utils.reply(message, 'Aucune event avec ce nom trouvée.', true);
         }
     },
     addtime: {

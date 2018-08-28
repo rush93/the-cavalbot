@@ -9,3 +9,5 @@ nohup.out
 players.json
 dialogflow-credentials.json
 dialogflow.js
+models/connectionMYSQL.js
+commandes/test.js
