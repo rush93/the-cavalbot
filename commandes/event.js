@@ -112,15 +112,16 @@ var commands = {
         ],
         args: '<name> <limite>',
         runCommand: (args, message) => {
-            var array = args.join(" ").split(" ");
-
-            var name = array[0];
+            var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
+            args = reg[2].trim().split(' ');
+            var name = reg[1].replace(/"/g, '');
             var event = Events.getEvent(name);
+
             if (!event) {
                 Utils.reply(message, 'Aucun évent avec ce nom', true);
                 return;
             }
-            if(Events.setLimite(name, array[1])) {
+            if(Events.setLimite(name, args.join(' '))) {
                 Utils.reply(message, 'Vous avez bien ajouté la limite de joueur par horaire.');
                 return;
             }
