@@ -84,6 +84,9 @@ module.exports = {
         }
         return clans[guildRole.id];
     },
+    getAllClan: function () {
+        return clans;
+    },
     getClanById: function (id) {
         if (!clans[id] && clansPs4Map[id]) {
             return clans[clansPs4Map[id]];
