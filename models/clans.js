@@ -60,6 +60,17 @@ module.exports = {
         clans[guildRole.id].IsJoinable = bool;
         save();
     },
+    setFaction: function (guildRole, id) {
+        clans[guildRole.id].Faction = id;
+        save();
+    },
+    getFaction: function (guildRole) {
+        if(clans[guildRole.id].Faction != null){
+            return clans[guildRole.id].Faction;
+        }else{
+            return "false";
+        }
+    },
     getJoin: function (guildRole) {
         if(clans[guildRole.id].IsJoinable == "true"){
             return "true";
