@@ -4,6 +4,16 @@ var Players = require('../models/players');
 var Ranks = require('../models/ranks');
 var Clans = require('../models/clans');
 var Constants = require('../models/constants');
+
+const getBtag = (btags, btag) => {
+    for (let playerBtag in btags) {
+        if (playerBtag.toLowerCase() === btag.toLowerCase()) {
+            return playerBtag;
+        }
+    }
+    return false
+}
+
 module.exports = {
     role: 'SEND_MESSAGES',
     helpCat: 'Permet de changer son btag.',
@@ -20,8 +30,9 @@ module.exports = {
             return;
         }
         var btags = Players.getBtags(message.member.id)
-        if(btags && btags[args.join(' ')]) {
-            Players.setBtag(message.member.id, args.join(' '));
+        const btag = getBtag(btags, args.join(' '));
+        if(btag) {
+            Players.setBtag(message.member.id, btag);
             Utils.reply(message, 'Votre btag a bien été supprimé.');
             return;
         }
