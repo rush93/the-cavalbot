@@ -1,10 +1,11 @@
-
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const Utils = require('./utils');
 var request = require('request');
+var moment = require('moment');
 
 var token = require('./token');
+var dialog = require('./dialogflow.js');
 
 var globalConst = require('./models/constants');
 var interactions = require('./models/interactions');
@@ -12,12 +13,14 @@ var clans = require('./models/clans');
 var players = require('./models/players');
 var ranks = require('./models/ranks');
 var event = require('./models/event');
+//var bdd = require('./models/connectionMYSQL');
 globalConst.init();
 interactions.init();
 clans.init();
 players.init();
 ranks.init();
 event.init();
+//bdd.init();
 
 var configCommands = require('./commandes/config');
 var clanCommands = require('./commandes/clan');
@@ -45,6 +48,10 @@ var eventCommand = require('./commandes/event');
 var participeCommand = require('./commandes/participe');
 var reportCommand = require('./commandes/report');
 var testCommand = require('./commandes/test');
+var roleCommand = require('./commandes/role');
+var cooldownClanCommand = require('./commandes/cooldownClan');
+var pingCommand = require('./commandes/ping');
+var exilCommand = require('./commandes/exil');
 
 var commands = {
   config: configCommands,
@@ -72,7 +79,11 @@ var commands = {
   decline: declineCommand,
   participe: participeCommand,
   report: reportCommand,
-  test: testCommand
+  test: testCommand,
+  role: roleCommand,
+  cooldownClan: cooldownClanCommand,
+  ping: pingCommand,
+  exil: exilCommand
 }
 try {
   bot.on('ready', function () {
@@ -109,10 +120,41 @@ try {
     }
   });
 
+
+
   bot.on("guildMemberRemove", (member) => {
-  //console.log(`${member.user.username} a ragekiet "${member.guild.name}"` );
-  member.guild.channels.get("448527311336112139").send(`${member.user.username} a ragekiet`);
-});
+    var joinAT = moment(member.joinedAt);
+    var now = moment();
+    var diff = Math.abs(now.diff(joinAT, 'minutes'));
+    moment.locale('fr');
+    member.guild.channels.get("443199155838648320").send(`${member} (${member.user.username}) nous a quitté, il a été avec nous pendant `+ moment.duration(diff, 'minutes').humanize() );
+
+    try {
+      var clanId = clans.getPlayerClan(member).id;
+      var clan = clans.getPlayerClan(member);
+      var player = players.getPlayer(member.id, clanId);
+      players.resetRank(member, clan);
+      players.setPoints(member.id, clanId, 0);
+      //players.setCooldown(member);
+    }
+    catch(error) {
+      Utils.log(error, true);
+    }
+
+  });
+
+  bot.on('guildMemberAdd', (member) => {
+
+    let GuestsRole = member.guild.roles.find("name", "Guests");
+    member.addRole(GuestsRole);
+
+    member.setNickname(member.displayName + ' |');
+    member.guild.channels.get("443199155838648320").send(`Bonjour et bienvenue ${member} dans Overwatch Assemble ! 
+Tu vas maintenant pouvoir choisir ton clan parmi la liste des clans qui se trouve dans #histoires-des-clans avec leurs histoires en dessous!
+Pour valider ton choix tu dois écrire _join NomDuClan dans ce channel :wink:
+Par exemple "_join Vishkar Corporation" pour rejoindre la multinationale indienne.
+Amuse-toi bien!`);
+  });
 
   var runCommand = (args, message) => {
     if (args[0] === globalConst.prefix + 'help') {
@@ -154,12 +196,14 @@ try {
       if (message.author.bot) {
         return;
       }
+      
+      
       if (message.channel.constructor.name === 'DMChannel') {
         Utils.log('', false, 'DM message', message.author.username, message.content);
         var result = /^say ([0-9]+) (.+)$/.exec(message.content);
         if (result) {
           if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, 'ptdr t ki ?', true);
+            Utils.reply(message, 'ptdr t ki ?', true);
             return;
           }
           var channel = guild.channels.get(result[1]);
@@ -177,6 +221,7 @@ try {
               return;
             }
             command[chatInteraction.functionToCall](message);
+          } else {
           }
         }
         if (message.content.substr(0, globalConst.prefix.length) === globalConst.prefix) {
@@ -187,6 +232,22 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
         }
         return;
       }
+
+      if(globalConst.guildID == ""){
+        if(message.content.startsWith(globalConst.prefix+"config guildID") || message.content.startsWith(globalConst.prefix+"config prefix")){
+
+        }else{
+          Utils.reply(message, 'Administrateur !!!!! veuillez me configuez _config guildID [id], attention pas le droit à l\'erreur.', true);
+          return;
+        }
+        
+      }else {
+        if (globalConst.guildID != message.guild.id && globalConst.guildID != "") {
+            Utils.reply(message, "Attention une seul instance par serveur, veuillez contacter aejii#1262 et me kicker, ou je détruit ce serveur mouahahahahaha.", true);
+            return;
+        }
+      }
+      
       if (message.content.substring(0, globalConst.prefix.length) === globalConst.prefix) {
         var args = message.content.split(" ");
         Utils.log('Command detected', false, message.channel.name, message.author.username, message.content, guild);
@@ -198,7 +259,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
           Utils.log(e.stack, true);
         });
         return;
-      } else if (/^\*sucide( |$)/i.exec(message.content)) {//https://giphy.com/gifs/season-9-episode-15-bravo-xUA7b4ALChx9x5kJ8c
+      } else if (/^\*suicide( |$)/i.exec(message.content)) {//https://giphy.com/gifs/season-9-episode-15-bravo-xUA7b4ALChx9x5kJ8c
         var embed = new Discord.RichEmbed({});
         embed.setColor(0x00AFFF);
         embed.setImage("https://cdn.discordapp.com/attachments/327039523156656128/451056132182769675/giphy.gif");

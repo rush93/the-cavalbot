@@ -18,6 +18,34 @@ var commands = {
             Utils.reply(message, 'Le clan a bien été créé.')
         }
     },
+    setJoin: {
+        help: [
+            'Permet d\'ouvrir ou non un clan. true(ouvert) ou false(fermé)'
+        ],
+        args: 'true/false',
+        runCommand: (clan, args, message) => {
+            if (!Clans.getClan(clan)) {
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
+                return;
+            }
+            Clans.setJoin(clan, args.join(' '));
+            Utils.reply(message, 'Les portes du clan on bien été modifié. : '+args.join(' '));
+        }
+    },
+    setFaction: {
+        help: [
+            'Permet de lier une factions. exemple _setFaction 25465454858'
+        ],
+        args: '*id du role de la faction*',
+        runCommand: (clan, args, message) => {
+            if (!Clans.getClan(clan)) {
+                Utils.reply(message, 'Aucun clan avec ce rôle.', true);
+                return;
+            }
+            Clans.setFaction(clan, args.join(' '));
+            Utils.reply(message, 'La faction a bien été modifié.');
+        }
+    },
     delete: {
         help: [
             'Permet de supprimer un clan.'

@@ -76,6 +76,25 @@ var commands = {
             Utils.reply(message, 'Le leaveCooldown a bien été modifié.');
         }
     },
+    mariageCooldown: {
+        help: [
+            'Au bout de combien de minutes est-il possible de faire !leave après un divorse.'
+        ],
+        args: '[minutes]',
+        runCommand: (args, message) => {
+            if (args.length === 0) {
+                Utils.reply(message, "**mariageCooldown**: " + constants.mariageCooldown);
+                return;
+            }
+            var num = Number(args[0]);
+            if (isNaN(num)) {
+                Utils.reply(message, "la valeur doit être nombre.", true);
+                return;
+            }
+            constants.mariageCooldown = num;
+            Utils.reply(message, 'Le mariageCooldown a bien été modifié.');
+        }
+    },
     joinmessage: {
         help: [
             'Le message qui sera affiché quand un nouveau membre rejoinds le clan',
@@ -138,6 +157,39 @@ var commands = {
             Utils.reply(message, 'Le nom de domaine a bien été modifié.');
         }
     },
+    guildID: {
+        help: [
+            'l\'id de la guild(du serveur discord).',
+        ],
+        args: '[url]',
+        runCommand: (args, message) => {
+            if (args.length === 0) {
+                Utils.reply(message, "**guildID: **: " + constants.guildID);
+                return;
+            }
+            constants.guildID = args.join(' ');
+            Utils.reply(message, 'Le guildID a bien été modifié.');
+        }
+    },
+    logChannel: {
+        help: [
+            'l\'id du channel de log du serveur.',
+        ],
+        args: '[url]',
+        runCommand: (args, message) => {
+
+            if (args.length === 0) {
+                Utils.reply(message, "**channel: **: <#" + constants.logChannel + ">");
+                return;
+            }
+            if (!message.mentions.channels.first()) {
+                Utils.reply(message,"il faut mentionner un logChannel.",true);
+                return;
+            }
+            constants.logChannel = message.mentions.channels.first().id;
+            Utils.reply(message, 'Le logChannel a bien été modifié.');
+        }
+    },
     reportChannel: {
         help: [
             'le channel où seront report les messages.',
@@ -148,8 +200,8 @@ var commands = {
                 Utils.reply(message, "**channel: **: <#" + constants.reportChannel + ">");
                 return;
             }
-            if (!message.mentions.channels && !message.mentions.channels.first()) {
-                Utils.reply(message,"il faut mentionner un message.",true);
+            if (!message.mentions.channels.first()) {
+                Utils.reply(message,"il faut mentionner un channel.",true);
                 return;
             }
             constants.reportChannel = message.mentions.channels.first().id;

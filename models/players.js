@@ -3,6 +3,7 @@ var Constants = require('./constants');
 var Clans = require('./clans');
 var Utils = require('../utils');
 var oversmash = require('oversmash');
+var owjs = require('overwatch-js');
 const ow = oversmash.default()
 
 var request = require('request');
@@ -64,6 +65,39 @@ function updateBtag(btag, id) {
         });
     });
 }
+function updateBtagV2(btag, id) {
+    return new Promise((resolve , reject) => {
+        var uncriptedbtag = encodeURI(btag.replace('#', '-'));
+        owjs.getOverall('pc', 'eu', uncriptedbtag).then((data) => {
+            //console.dir(data, {depth : 2, colors : true});
+            
+            console.log("data.profile.rank :"+data.profile.rank)
+            if (data.profile.rank == "") {
+                reject('btag non trouvé');
+                return;
+            }
+            players[id].btags[btag] = { btag };
+            if(data.profile.rank == "NaN") {
+
+                players[id].btags[btag].comprank = 0;
+                players[id].lastUpdate = new Date();
+
+            } else {
+
+                console.log("players[id].id : "+players[id].id);
+                players[id].btags[btag].comprank = data.profile.rank;
+                players[id].lastUpdate = new Date();
+            }
+
+            save();
+
+            resolve(players[id].btags[btag].comprank);
+
+        }).catch(e => {
+            reject(e);
+        });
+    });       
+}
 
 function updatePsn(psn, id) {
     return new Promise((resolve , reject) => {
@@ -100,9 +134,19 @@ module.exports = {
     save: function () {
         save();
     },
+    setCooldownMariage: function (guildMember) {
+        createUserIfNotExist(guildMember.id);
+        players[guildMember.id].cooldownMariage = new Date();
+        save();
+    },
     setCooldown: function (guildMember) {
         createUserIfNotExist(guildMember.id);
         players[guildMember.id].cooldown = new Date();
+        save();
+    },
+    setCooldownAdmin: function (guildMember) {
+        createUserIfNotExist(guildMember.id);
+        players[guildMember.id].cooldown = guildMember.joinedAt;
         save();
     },
     getPlayer: function (id, clanId) {
@@ -285,14 +329,14 @@ module.exports = {
                 resolve(-1);
                 return;
             }
-            updateBtag(btag, id).then(resolve).catch(reject);
+            updateBtagV2(btag, id).then(resolve).catch(reject);
         });
     },
     updateComprank: function(id) {
         createUserIfNotExist(id);
         var btagsKey = Object.keys(players[id].btags);
         for(var i = 0; i < btagsKey.length; i++) {
-            updateBtag(btagsKey[i], id).catch((e) => { Utils.log(e, true) });
+            updateBtagV2(btagsKey[i], id).catch((e) => { Utils.log(e, true) });
         }
         var psnsKey = Object.keys(players[id].psns);
         for(var i = 0; i < psnsKey.length; i++) {

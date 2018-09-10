@@ -5,7 +5,7 @@ var Ranks = require('../models/ranks');
 var Clans = require('../models/clans');
 var Constants = require('../models/constants');
 module.exports = {
-	role: 'MANAGE_GUILD',
+	role: 'CHANGE_NICKNAME',
 	helpCat: 'Permet de donner des points à un joueur.',
 	help: function (message) {
 		Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande givepoints", "", message.author, [{
@@ -16,7 +16,7 @@ module.exports = {
 	},
 	runCommand: (args, message) => {
 
-        if (!message.member.hasPermission("MANAGE_GUILD")) {
+        if (!message.member.hasPermission("CHANGE_NICKNAME")) {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les clans", true);
             return;
 		}

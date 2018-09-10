@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dialogflow": "^0.5.0",
     "discord.js": "^11.3.2",
     "express": "^4.16.2",
     "jimp": "^0.2.28",

@@ -88,6 +88,11 @@ var commands = {
             }
             var fields = [];
             fields.push({
+                title: 'Limite',
+                text: 'Limite de joueur : ' + event.limite + ' (0 = infini)',
+                grid: false
+            });
+            fields.push({
                 title: 'Horaires',
                 text: event.timetable.length > 0 ? event.timetable.join(', ') : 'Aucun',
                 grid: false
@@ -99,6 +104,28 @@ var commands = {
                 grid: false
             });
             Utils.sendEmbed(message, 0xE8C408, event.name, '', message.author, fields);
+        }
+    },
+    setlimite: {
+        help: [
+            'Permet de modifier la limite de joueur (par horaire).'
+        ],
+        args: '<name> <limite>',
+        runCommand: (args, message) => {
+            var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
+            args = reg[2].trim().split(' ');
+            var name = reg[1].replace(/"/g, '');
+            var event = Events.getEvent(name);
+
+            if (!event) {
+                Utils.reply(message, 'Aucun évent avec ce nom', true);
+                return;
+            }
+            if(Events.setLimite(name, args.join(' '))) {
+                Utils.reply(message, 'Vous avez bien ajouté la limite de joueur par horaire.');
+                return;
+            }
+            Utils.reply(message, 'Aucune event avec ce nom trouvée.', true);
         }
     },
     addtime: {
@@ -200,10 +227,12 @@ var commands = {
             var participantsKeys = Object.keys(participants);
             var fields = [];
             for (var i = 0; i < participantsKeys.length; i++) {
+                var globalPlayer = Players.getPlayers()[participantsKeys[i]];
                 var btags = Players.getBtags(participantsKeys[i])
                 var btag = btags[Object.keys(btags)[0]];
                 var psns = Players.getPsns(participantsKeys[i])
                 var psn = psns[Object.keys(psns)[0]];
+
                 var participation = participants[participantsKeys[i]];
                 var questions = Object.keys(participation.questions).map(function(key) {
                     return participation.questions[key];
@@ -216,7 +245,9 @@ var commands = {
                     title:  message.guild.members.get(participantsKeys[i]).displayName,
                     text: 
 (btags && Object.keys(btags).length > 0 ? `**Btag**: ${btag.btag} (${btag.comprank ? btag.comprank : 0 })` : '' ) +
-(psns && Object.keys(psns).length > 0 ? `**PSN**: ${psn.psn} (${psn.psncomprank ? psn.psncomprank : 0 })` : '' ) + `
+(psns && Object.keys(psns).length > 0 ? `**PSN**: ${psn.psn} (${psn.psncomprank ? psn.psncomprank : 0 })` : '' ) + 
+` ${globalPlayer && globalPlayer.epou ? `
+:ring: <@!${globalPlayer.epou}>` : ''} `+`
 **horaire**: ${participation.timetable.join(', ')}
 **réponse**: ${questions.join(' - ')}
 `,
@@ -240,11 +271,11 @@ var help = function (message) {
     Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des évents', "", message.author, fields);
 }
 module.exports = {
-    role: 'MANAGE_ROLES',
+    role: 'CHANGE_NICKNAME',
     helpCat: 'Permet d\'administrer les évents',
     help,
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_ROLES")) {
+        if (!message.member.hasPermission("CHANGE_NICKNAME")) {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour toucher aux évents", true);
             return;
         }
