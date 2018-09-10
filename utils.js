@@ -154,8 +154,8 @@ var sendEmbedInChannel = function (channel, color, title, content, author, field
     }
     return channel.send("", embed);
 }
-var recurciveReactNbTime = function (message, nb, current, withConfirm = false, withCancel = false) {
-    message.react(UnicodeReactMap[current]).then(() => {
+var recurciveReactNbTime = function (message, nb, current, withConfirm = false, withCancel = false, ignoreReact = []) {
+    var then = () => {
         if(current + 1 !== nb) {
             recurciveReactNbTime(message, nb, current + 1, withConfirm, withCancel);
             return;
@@ -171,7 +171,12 @@ var recurciveReactNbTime = function (message, nb, current, withConfirm = false, 
         if (withCancel) {
             message.react(UnicodeCancelReact);
         }
-    });
+    }
+    if (ignoreReact.indexOf(current) >= 0) {
+        then();
+        return;
+    }
+    message.react(UnicodeReactMap[current]).then(then);
 }
 module.exports = {
     reply: function (message, toSend, error) {
@@ -333,8 +338,8 @@ module.exports = {
         //     console.log(console.trace());
         // }
     },
-    reactNbTime(message, nb, withConfirm = false, withCancel = false) {
-        recurciveReactNbTime(message, nb, 0, withConfirm, withCancel);
+    reactNbTime(message, nb, withConfirm = false, withCancel = false, ignoreReact = []) {
+        recurciveReactNbTime(message, nb, 0, withConfirm, withCancel, ignoreReact);
     },
     Color,
     ReactMap,

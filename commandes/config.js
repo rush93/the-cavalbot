@@ -167,6 +167,11 @@ var commands = {
                 Utils.reply(message, "**guildID: **: " + constants.guildID);
                 return;
             }
+            if (args.join(' ') === 'this') {
+                constants.guildID = message.guild.id;
+                Utils.reply(message, 'Le guildID a bien été modifié.');
+                return;
+            }
             constants.guildID = args.join(' ');
             Utils.reply(message, 'Le guildID a bien été modifié.');
         }
