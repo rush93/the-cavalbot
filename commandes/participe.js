@@ -63,7 +63,13 @@ ajouter un psn: **${Constants.prefix}psn votrepsn**
 
         Events.addParticipant(event.name, message.author.id);
         var fields = [];
+        const limite = event.limite ? Number(event.limite) : 0;
         for (var i = 0; i < event.timetable.length; i++) {
+            if (limite > 0) {
+                if (Events.getNbParticipants(event.name, event.timetable[i]) >= limite) {
+                    continue;
+                }
+            } 
             fields.push({
                 title: event.timetable[i],
                 text: `:${Utils.ReactMap[i]}:`,
@@ -103,36 +109,25 @@ ou :x: pour annuler la participation`,
         var event = Events.getEvent(key);
         Events.addParticipant(key, user.id);
         var fields = [];
-        for (var i = 0; i < event.timetable.length; i++) {//boucle des différents horaires
-            var nbrParticipanthoraire = 0;
-            var participants = event.participants;
-            var participantsKeys = Object.keys(participants);//.length = participant global
-
-            //trouver participant par horaire
-            for (var j = 0; j < participantsKeys.length; j++) {
-                for (var k = 0; k < participants[participantsKeys[j]].timetable.length; k++) {
-                    if (participants[participantsKeys[j]].timetable[k] == event.timetable[i]) {
-                        nbrParticipanthoraire++;
-                    }
+        const limite = event.limite ? Number(event.limite) : 0;
+        var ignoreReact = [];
+        for (var i = 0; i < event.timetable.length; i++) {
+            if (limite > 0) {
+                if (Events.getNbParticipants(event.name, event.timetable[i]) >= limite) {
+                    ignoreReact.push(i);
+                    continue;
                 }
             }
-            
-            //supprimer horaire(msg) quand full
-            if (nbrParticipanthoraire >= event.limite && event.limite != 0) {//nbr personne max
-                fields.push({
-                    title: event.timetable[i],
-                    text: `horaire full`,
-                    grid: true
-                });
-            }else{//ok
-                fields.push({
-                    title: event.timetable[i],
-                    text: `:${Utils.ReactMap[i]}:`,
-                    grid: true
-                });
-            }
+            fields.push({
+                title: event.timetable[i],
+                text: `:${Utils.ReactMap[i]}:`,
+                grid: true
+            });
         }
-
+        if (fields.length <= 0) {
+            Utils.sendDM(user, 'Plus de place pour cet event.', true);
+            return;
+        }
         Utils.sendDmEmbed(user, 0x00AFFF,
             `Veuillez choisir un horaire pour l\'évent ${event.name}.`,
             `Vous devez réagir à un ou plusieurs horaires
@@ -141,7 +136,7 @@ ou :x: pour annuler la participation`,
             user, fields
         ).then((message) => {
             Interactions.addReactInteractions('participe', 'chooseTimetable', message.id, user.id, [key]);
-            Utils.reactNbTime(message, event.timetable.length, true, true);
+            Utils.reactNbTime(message, event.timetable.length, true, true, ignoreReact);
         }).catch((e) => {
             Utils.log(e, true);
         });
@@ -164,43 +159,26 @@ ou :x: pour annuler la participation`,
             return;
         }
         var choosenTime = [];
+        var limiteReach = []
+        const limite = event.limite ? Number(event.limite) : 0;
         for (var i = 0; i < reactions.length; i++) {
             var key = Utils.InvertedUnicodeReactMap()[reactions[i].emoji.name];
-            if (reactions[i].count > 1 && key && event.timetable.length > key) {
-                choosenTime.push(event.timetable[i]);
+            if (key && reactions[i].count > 1 && event.timetable.length > key) {
+                if (limite > 0 && limite < Events.getNbParticipants(event.name, event.timetable[key])) {
+                    limiteReach.push(event.timetable[key]);
+                    continue;
+                }
+                choosenTime.push(event.timetable[key]);
             }
+        }
+        if (limiteReach.length !== 0) {
+            Utils.sendDM(user, 'Les horraires ' + limiteReach.join(', ') + ' sont déjà pleines.', true);
+            return;
         }
         if (choosenTime.length === 0) {
             Utils.sendDM(user, 'Vous devez choisir au moins un horaire.', true);
             return;
         }
-
-        //erreur horaire full
-        for (var i = 0; i < event.timetable.length; i++) {//boucle des différents horaires
-            if (choosenTime == event.timetable[i]) {
-                var nbrParticipanthoraire = 0;
-                var participants = event.participants;
-                var participantsKeys = Object.keys(participants);//.length = participant global
-
-                //trouver participant par horaire
-                for (var j = 0; j < participantsKeys.length; j++) {
-                    for (var k = 0; k < participants[participantsKeys[j]].timetable.length; k++) {
-                        if (participants[participantsKeys[j]].timetable[k] == event.timetable[i]) {
-                            nbrParticipanthoraire++;
-                        }
-                    }
-                }
-                //supprimer horaire(msg) quand full
-                if (nbrParticipanthoraire >= event.limite && event.limite != 0) {
-                    //nbr personne max
-                    Utils.sendDM(user, 'Horaire full désolé, demande au créateur de l\'event si il y a des désistements.', true);
-                    return;
-                }else{//ok
-                    
-                }
-            }
-        }
-
         Utils.removeMyReact(messageReaction.message);
         Interactions.delReactInteractions(messageReaction.message.id);
         Events.setParticiapantTimetable(eventKey, user.id, choosenTime);

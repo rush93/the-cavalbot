@@ -169,5 +169,19 @@ module.exports = {
         }
         events[key].participants[userId].questions[question] = response;
         save();
+    },
+    getNbParticipants(name, time) {
+        var key = name.toLowerCase();
+        if (!events[key]) {
+            return null;
+        }
+        var participants = Object.values(events[key].participants);
+        let nb = 0;
+        for (let participant of participants) {
+            if (participant.timetable.indexOf(time) >= 0) {
+                nb++;
+            }
+        }
+        return nb;
     }
 }
