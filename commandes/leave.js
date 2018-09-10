@@ -46,7 +46,9 @@ module.exports = {
             Players.setPoints(message.member.id, clan.id, 0);
         }
         Players.resetRank(message.member, clan);
-        Clans.removePlayer(Clans.getRole(clan.id, message.guild), message.member, "quitter le clan avec la commande leave", Object.keys(Players.getPsns(message.member.id)).length > 0)
+        let clanRole = Clans.getRole(clan.id, message.guild);
+        Clans.removePlayer(clanRole, message.member, "quitter le clan avec la commande leave", Object.keys(Players.getPsns(message.member.id)).length > 0);
+        message.member.removeRole(message.guild.roles.get(Clans.getFaction(clanRole)), 'Leave faction');
         Utils.reply(message, "Vous avez bien quitté le clan.");
     }
 }

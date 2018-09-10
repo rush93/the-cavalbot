@@ -28,13 +28,18 @@ var commands = {
                 Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
-            Clans.setJoin(clan, args.join(' '));
-            Utils.reply(message, 'Les portes du clan on bien été modifié. : '+args.join(' '));
+            let value = args[0].toLowerCase()
+            if ( value != "true" && value != "false" ) {
+                Utils.reply(message, 'Vous devez mêtre true(ouvert) ou false(fermé).', true);
+                return;
+            }
+            Clans.setJoin(clan, value === 'true');
+            Utils.reply(message, 'Les portes du clan on bien été modifié. : ' + args[0]);
         }
     },
     setFaction: {
         help: [
-            'Permet de lier une factions. exemple _setFaction 25465454858'
+            'Permet de lier une factions. exemple _clan clan setFaction @clan'
         ],
         args: '*id du role de la faction*',
         runCommand: (clan, args, message) => {
@@ -42,7 +47,12 @@ var commands = {
                 Utils.reply(message, 'Aucun clan avec ce rôle.', true);
                 return;
             }
-            Clans.setFaction(clan, args.join(' '));
+            let role = message.mentions.roles.first();
+            if (!role) {
+                Utils.reply(message, "Aucuns role mentionner.");
+                return;
+            }
+            Clans.setFaction(clan, role.id);
             Utils.reply(message, 'La faction a bien été modifié.');
         }
     },
@@ -169,6 +179,8 @@ var commands = {
                 return
             }
             Players.setCooldown(user);
+            var faction = message.guild.roles.get(Clans.getFaction(clan));
+            message.member.addRole(faction, "faction automatique");
             Utils.reply(message, 'Le joueur a bien été ajouté dans le clan.');
         }
     },
@@ -196,6 +208,7 @@ var commands = {
                 Players.setPoints(user.id, clanRemoved.id, 0);
             }
             Players.resetRank(user.id, clanRemoved);
+            message.member.removeRole(message.guild.roles.get(Clans.getFaction(clan)), 'Leave faction');
             Utils.reply(message, 'Le joueur a bien été supprimé du clan.');
         }
     },

@@ -68,14 +68,14 @@ module.exports = {
         if(clans[guildRole.id].Faction != null){
             return clans[guildRole.id].Faction;
         }else{
-            return "false";
+            return false;
         }
     },
     getJoin: function (guildRole) {
-        if(clans[guildRole.id].IsJoinable == "true"){
-            return "true";
+        if(clans[guildRole.id].IsJoinable == true){
+            return true;
         }else{
-            return "false";
+            return false;
         }
     },
     getClan: function (guildRole) {
