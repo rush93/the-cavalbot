@@ -148,7 +148,7 @@ try {
     let GuestsRole = member.guild.roles.find("name", "Guests");
     member.addRole(GuestsRole);
 
-    member.setNickname(member.displayName + ' |');
+    member.setNickname(member.displayName);
     member.guild.channels.get("443199155838648320").send(`Bonjour et bienvenue ${member} dans Overwatch Assemble ! 
 Tu vas maintenant pouvoir choisir ton clan parmi la liste des clans qui se trouve dans #histoires-des-clans avec leurs histoires en dessous!
 Pour valider ton choix tu dois écrire _join NomDuClan dans ce channel :wink:
