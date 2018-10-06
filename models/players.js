@@ -67,35 +67,33 @@ function updateBtag(btag, id) {
 }
 function updateBtagV2(btag, id) {
     return new Promise((resolve , reject) => {
-        var uncriptedbtag = encodeURI(btag.replace('#', '-'));
-        owjs.getOverall('pc', 'eu', uncriptedbtag).then((data) => {
-            //console.dir(data, {depth : 2, colors : true});
-            
-            console.log("data.profile.rank :"+data.profile.rank)
-            if (data.profile.rank == "") {
-                reject('btag non trouvé');
-                return;
-            }
-            players[id].btags[btag] = { btag };
-            if(data.profile.rank == "NaN") {
-
-                players[id].btags[btag].comprank = 0;
-                players[id].lastUpdate = new Date();
-
+        owjs.search(btag.toLowerCase()).then((search) => {
+            if (search.length === 1) {
+                owjs.getOverall('pc', 'eu', search[0].urlName).then((data) => {
+                    if (data.profile.rank == "") {
+                        reject('btag non trouvé');
+                        return;
+                    }
+                    btag = search[0].name
+                    players[id].btags[btag] = { btag };
+                    if(data.profile.rank == "NaN") {
+                        players[id].btags[btag].comprank = 0;
+                        players[id].lastUpdate = new Date();
+        
+                    } else {
+                        players[id].btags[btag].comprank = data.profile.rank;
+                        players[id].lastUpdate = new Date();
+                    }
+                    save();
+                    resolve(players[id].btags[btag].comprank);
+        
+                }).catch(e => {
+                    reject(e);
+                });
             } else {
-
-                console.log("players[id].id : "+players[id].id);
-                players[id].btags[btag].comprank = data.profile.rank;
-                players[id].lastUpdate = new Date();
+                reject(false);
             }
-
-            save();
-
-            resolve(players[id].btags[btag].comprank);
-
-        }).catch(e => {
-            reject(e);
-        });
+        })
     });       
 }
 
