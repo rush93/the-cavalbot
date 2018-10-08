@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const Utils = require('../utils');
 var Constants = require('../models/constants');
 var Players = require('../models/players');
+var moment = require('moment');
 
 module.exports = {
     role: 'SEND_MESSAGES',
@@ -36,6 +37,19 @@ module.exports = {
             Utils.reply(message, `<@!${user1.id}> a déjà un époux !`, true);
             return;
         }
+        var lastJoin = Players.getPlayers()[message.member.id] ? Players.getPlayers()[message.member.id].cooldownMariage : null;
+        if (lastJoin) {
+            lastJoin = moment(lastJoin);
+            var now = moment();
+            diff = Math.abs(now.diff(lastJoin, 'minutes'));
+            if (diff < Constants.mariageCooldown) {
+                var timeLeft = Constants.mariageCooldown - diff;
+                moment.locale('fr');
+                Utils.reply(message, 'Après une longue et douloureuse séparation vous avez besoin de temps pour vous remettre encore ' + moment.duration(timeLeft, 'minutes').humanize()) + ")";
+                return;
+            }
+        }
+        
         var roles = Utils.getRolesOfPerm(message.guild, 'MANAGE_GUILD');
         var str = [];
         for (var i = 0; i < roles.length; i++) {
