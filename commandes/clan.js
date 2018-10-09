@@ -245,11 +245,11 @@ var help = function (message) {
     Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des clans', "", message.author, fields);
 }
 module.exports = {
-    role: 'MANAGE_GUILD',
+    role: 'CHANGE_NICKNAME',
     helpCat: 'Permet d\'administrer les clans',
     help,
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_GUILD")) {
+        if (!message.member.hasPermission("CHANGE_NICKNAME")) {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les clans", true);
             return;
         }
