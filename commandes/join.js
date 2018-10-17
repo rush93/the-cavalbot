@@ -38,7 +38,6 @@ module.exports = {
         if (factionId == false) {// (exemple) es ce que la faction united nation est lié a ow ?
             //pas de faction lié, il ne se passe rien
             //Utils.reply(message, 'Aucune facction lié a ce clan', true);
-            return;
         }else{
             var faction = message.guild.roles.get(factionId);
             message.member.addRole(faction, "faction automatique");
