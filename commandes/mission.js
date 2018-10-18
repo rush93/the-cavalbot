@@ -86,7 +86,7 @@ var commands = {
     },
     modifierEtat: {
         help: [
-            'activer(true) ou dé-activer(false) une mission'
+            'activer(true) ou dé-activer(false) un mission'
         ],
         args: 'true/false',
         runCommand: (args, message) => {
