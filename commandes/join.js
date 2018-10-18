@@ -26,7 +26,7 @@ module.exports = {
             return;
         }
         if (Clans.getJoin(role) == false) {
-            Utils.reply(message, "Désolé ce clan est fermé", true);
+            Utils.reply(message, "Désolé ce clan est fermé (surement du à une population) effectue la commande _list pour voir la liste de clan", true);
             return;
         }
         clan = Clans.addPlayer(role, message.member, "rejoins le clan avec la commande join", Object.keys(Players.getPsns(message.member.id)).length > 0);
