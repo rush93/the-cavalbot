@@ -5,7 +5,6 @@ var request = require('request');
 var moment = require('moment');
 
 var token = require('./token');
-var dialog = require('./dialogflow.js');
 
 var globalConst = require('./models/constants');
 var interactions = require('./models/interactions');
@@ -13,6 +12,7 @@ var clans = require('./models/clans');
 var players = require('./models/players');
 var ranks = require('./models/ranks');
 var event = require('./models/event');
+var mission = require('./models/mission');
 //var bdd = require('./models/connectionMYSQL');
 globalConst.init();
 interactions.init();
@@ -20,7 +20,7 @@ clans.init();
 players.init();
 ranks.init();
 event.init();
-//bdd.init();
+mission.init();
 
 var configCommands = require('./commandes/config');
 var clanCommands = require('./commandes/clan');
@@ -52,6 +52,7 @@ var roleCommand = require('./commandes/role');
 var cooldownClanCommand = require('./commandes/cooldownClan');
 var pingCommand = require('./commandes/ping');
 var exilCommand = require('./commandes/exil');
+var missionCommand = require('./commandes/mission');
 
 var commands = {
   config: configCommands,
@@ -83,7 +84,8 @@ var commands = {
   role: roleCommand,
   cooldownClan: cooldownClanCommand,
   ping: pingCommand,
-  exil: exilCommand
+  exil: exilCommand,
+  mission: missionCommand
 }
 try {
   bot.on('ready', function () {
