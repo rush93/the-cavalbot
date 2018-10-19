@@ -64,5 +64,22 @@ module.exports = {
     },
     getMissions: function () {
         return missions;
+    },
+    modifEtat: function (nomEvent, etat) {
+        var ids = Object.keys(missions);
+        for (var i = 0; i < ids.length; i++) {
+            if (missions[i].event == nomEvent) {
+                missions[i].active = etat;
+            }
+        }
+        missions[ids.length] = {
+            nom: desc,
+            active: true,
+            difficulte: difficulte,
+            mode: mode,
+            heroe: hero,
+            event: event
+        };
+        save();
     }
 }

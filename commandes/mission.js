@@ -86,12 +86,21 @@ var commands = {
     },
     modifierEtat: {
         help: [
-            'activer(true) ou dé-activer(false) un mission'
+            'activer(true) ou dé-activer(false) une catégorie de mission (ex : hallowen)'
         ],
-        args: 'true/false',
+        args: 'nomEvent true/false',
         runCommand: (args, message) => {
+            if (args.length < 2) {
+                Utils.reply(message, 'Il manque un ou des arguments. (nomEvent true/false)');
+                return;
+            }
+            if (args[1] == true || args[1] == false) {
+                Mission.modifEtat(args[0],args[1]);
+                Utils.reply(message, 'L\'etat a bien été modifié.')
+            }else{
+                Utils.reply(message, '2eme arguments non valide, veuillez indiquez true ou false.')
+            }
             
-            Utils.reply(message, '');
         }
     },
     list: {
@@ -135,13 +144,25 @@ var commands = {
                 Utils.sendEmbed(message, 0xE8C408, "Missions par type", "", message.author, fields);
             }else{
                 for (var i = 0; i < keys.length; i++) {
-                    if (listMissions[keys[i]].difficulte == args[0] || listMissions[keys[i]].event == args[0]) {
+                    if (listMissions[keys[i]].difficulte == args[0]) {
                         fieldsTry.push({
                             title: i,
                             text: listMissions[keys[i]].nom,
                             grid: false
                         });
-                    }  
+                    } else if(listMissions[keys[i]].event == args[0]){
+                        var active;
+                        if (listMissions[keys[i]].active) {
+                            active = oui;
+                        }else{
+                            acrive = non;
+                        }
+                        fieldsTry.push({
+                            title: i,
+                            text: listMissions[keys[i]].nom + " active : "+active,
+                            grid: false
+                        });
+                    }
                 }
                 if (Object.keys(fieldsTry).length == 0) {
                     Utils.reply(message, 'Pas de mission pour cette catégorie');
