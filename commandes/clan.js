@@ -204,11 +204,15 @@ var commands = {
                 Utils.reply(message, 'Le joueur n\'est pas dans ce clan.', true);
                 return;
             }
+            if (Clans.getFaction(clan)) {
+                user.removeRole(message.guild.roles.get(Clans.getFaction(clan)), "Supression manuel (faction) de " + message.author.name);    
+            }
+            
             if (Constants.resetRankWhenChangeClan) {
                 Players.setPoints(user.id, clanRemoved.id, 0);
             }
             Players.resetRank(user.id, clanRemoved);
-            message.member.removeRole(message.guild.roles.get(Clans.getFaction(clan)), 'Leave faction');
+            //message.member.removeRole(message.guild.roles.get(Clans.getFaction(clan)), 'Leave faction');
             Utils.reply(message, 'Le joueur a bien été supprimé du clan.');
         }
     },
