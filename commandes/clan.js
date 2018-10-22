@@ -178,9 +178,10 @@ var commands = {
                 Utils.reply(message, 'Le joueur est déjà dans un clan veuillez l\'enlever en premier.', true);
                 return
             }
+            if (Clans.getFaction(clan)) {
+                user.addRole(message.guild.roles.get(Clans.getFaction(clan)), "faction automatique");
+            }
             Players.setCooldown(user);
-            var faction = message.guild.roles.get(Clans.getFaction(clan));
-            message.member.addRole(faction, "faction automatique");
             Utils.reply(message, 'Le joueur a bien été ajouté dans le clan.');
         }
     },
@@ -212,7 +213,6 @@ var commands = {
                 Players.setPoints(user.id, clanRemoved.id, 0);
             }
             Players.resetRank(user.id, clanRemoved);
-            //message.member.removeRole(message.guild.roles.get(Clans.getFaction(clan)), 'Leave faction');
             Utils.reply(message, 'Le joueur a bien été supprimé du clan.');
         }
     },
