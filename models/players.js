@@ -1,6 +1,7 @@
 var fs = require('fs');
 var Constants = require('./constants');
 var Clans = require('./clans');
+var Missions = require('./mission');
 var Utils = require('../utils');
 var oversmash = require('oversmash');
 var owjs = require('overwatch-js');
@@ -133,7 +134,15 @@ module.exports = {
         save();
     },
     addMission: function(guildMember) {
-        players[guildMember.id].missions = {};
+
+        players[guildMember.id].missions[0] = {
+            id: id,
+            difficulte: diff,
+            heroe: hero,
+            mode: mode,
+            nom: nom,
+            status:statu 
+        };
     },
     setCooldownMariage: function (guildMember) {
         createUserIfNotExist(guildMember.id);
