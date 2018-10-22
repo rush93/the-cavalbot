@@ -50,8 +50,8 @@ var commands = {
         ],
         args: '',
         runCommand: (args, message) => {
-            
-            Utils.reply(message, '');
+            Players.addMission(message.member);
+            Utils.reply(message, 'ok');
         }
     },
     demandeMissionEvent: {

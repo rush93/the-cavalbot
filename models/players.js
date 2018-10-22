@@ -132,6 +132,9 @@ module.exports = {
     save: function () {
         save();
     },
+    addMission: function(guildMember) {
+        players[guildMember.id].missions = {};
+    },
     setCooldownMariage: function (guildMember) {
         createUserIfNotExist(guildMember.id);
         players[guildMember.id].cooldownMariage = new Date();
