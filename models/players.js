@@ -133,9 +133,20 @@ module.exports = {
     save: function () {
         save();
     },
-    addMission: function(guildMember) {
+    addMission: function(message,difficulter) {
 
-        players[guildMember.id].missions[0] = {
+        var idMission = players[message.member.id].missions.length;
+
+        var listMission = Missions.getMissions;
+
+        var flag = true;
+        while(flag){
+            var random = Math.floor(Math.random() * Math.floor(listMission.length));
+            
+        }
+        
+
+        players[message.member.id].missions[idMission] = {
             id: id,
             difficulte: diff,
             heroe: hero,
