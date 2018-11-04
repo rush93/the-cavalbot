@@ -151,11 +151,31 @@ try {
     member.addRole(GuestsRole);
 
     member.setNickname(member.displayName);
-    member.guild.channels.get("443199155838648320").send(`Bonjour et bienvenue ${member} dans Overwatch Assemble ! 
-Tu vas maintenant pouvoir choisir ton clan parmi la liste des clans qui se trouve dans #histoires-des-clans avec leurs histoires en dessous!
-Pour valider ton choix tu dois écrire _join NomDuClan dans ce channel :wink:
-Par exemple "_join Vishkar Corporation" pour rejoindre la multinationale indienne.
-Amuse-toi bien!`);
+    member.guild.channels.get("443199155838648320").send(`Bienvenue à toi soldat ${member}! 
+Tu es convié à choisir un clan afin de participer à la vie du serveur ;)
+Pour rappel, voici la liste des commandes à taper pour rejoindre le clan que tu souhaites (copiez collez celle qui t'intéresse) :
+
+:small_orange_diamond:  Faction United Nations
+_join Overwatch
+_join Blackwatch
+_join Programme MEKA
+
+:small_blue_diamond: Faction Insurgés
+_join La Griffe
+_join Vishkar Corporation
+_join Deadlock Rebels
+
+:small_orange_diamond: Faction Gangs
+_join Junkers
+_join Los Muertos
+_join Shimada
+
+Et si tu ne souhaites pas participer aux évènements du serveur (tournoi, mini jeux, guerres):
+
+_join Shambali
+
+Si tu as des questions, nous sommes là pour te répondre!
+Bonne journée à toi! :widowmaker:`);
   });
 
   var runCommand = (args, message) => {
