@@ -48,9 +48,9 @@ var commands = {
         help: [
             'permet de demander une mission'
         ],
-        args: '',
+        args: 'difficulte',
         runCommand: (args, message) => {
-            Players.addMission(message.member);
+            Players.addMission(message,args[0]);
             Utils.reply(message, 'ok');
         }
     },
