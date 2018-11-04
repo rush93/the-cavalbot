@@ -153,7 +153,7 @@ try {
     member.setNickname(member.displayName);
     member.guild.channels.get("443199155838648320").send(`Bienvenue à toi soldat ${member}! 
 Tu es convié à choisir un clan afin de participer à la vie du serveur ;)
-Pour rappel, voici la liste des commandes à taper pour rejoindre le clan que tu souhaites (copiez collez celle qui t'intéresse) :
+Pour rappel, voici la liste des commandes à taper pour rejoindre le clan que tu souhaites (copie colle celle qui t'intéresse) :
 
 :small_orange_diamond:  Faction United Nations
 _join Overwatch
@@ -175,7 +175,7 @@ Et si tu ne souhaites pas participer aux évènements du serveur (tournoi, mini 
 _join Shambali
 
 Si tu as des questions, nous sommes là pour te répondre!
-Bonne journée à toi! :widowmaker:`);
+Bonne journée à toi!`);
   });
 
   var runCommand = (args, message) => {
