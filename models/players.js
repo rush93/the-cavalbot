@@ -135,25 +135,45 @@ module.exports = {
     },
     addMission: function(message,difficulter) {
 
-        var idMission = players[message.member.id].missions.length;
-
-        var listMission = Missions.getMissions;
-
-        var flag = true;
-        while(flag){
-            var random = Math.floor(Math.random() * Math.floor(listMission.length));
-            
+        //vérif si mission demandé
+        if(!players[message.member.id].missions == undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 0) {
+                    //TODO
+                    Utils.reply(message, 'vous avez deja une missions active');
+                    return;
+                }
+            }
+        }
+        if (!players[message.member.id].missions) {
+            idMission = 0;
+        }else{
+            var keys2 = Object.keys(players[message.member.id].missions);
+            var idMission = keys2.length;
         }
         
 
+        var listMission = Missions.getMissions();
+        var keys = Object.keys(listMission);//pour pouvoir faire .length
+
+        var random = Math.floor(Math.random() * Math.floor(keys.length));
+
+        if(players[message.member.id].missions == undefined){
+            players[message.member.id].missions = {};
+        }
+
         players[message.member.id].missions[idMission] = {
-            id: id,
-            difficulte: diff,
-            heroe: hero,
-            mode: mode,
-            nom: nom,
-            status:statu 
-        };
+            id: random,
+            difficulte: listMission[random].difficulte,
+            heroe: listMission[random].heroe,
+            mode: listMission[random].mode,
+            nom: listMission[random].nom,
+            status:0 
+        };//status : 0 = en cours, 1=validé, -1 = temps écoulé
+
+        save();
     },
     setCooldownMariage: function (guildMember) {
         createUserIfNotExist(guildMember.id);

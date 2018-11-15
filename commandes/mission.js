@@ -51,7 +51,7 @@ var commands = {
         args: 'difficulte',
         runCommand: (args, message) => {
             Players.addMission(message,args[0]);
-            Utils.reply(message, 'ok');
+            Utils.reply(message, 'mission ok');
         }
     },
     demandeMissionEvent: {
