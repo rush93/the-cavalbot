@@ -133,17 +133,53 @@ module.exports = {
     save: function () {
         save();
     },
-    addMission: function(message,difficulter) {
-
-        //vérif si mission demandé
-        if(!players[message.member.id].missions == undefined){
+    getHistoryMission: function (message, user) {
+        //TODO vérif .missions existe
+        if(!(players[user.id].missions == null)){
+            var listMissionJoueur = players[user.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            var fields = [];
+            for (var i = 0; i < key3.length; i++) {
+                //title: ((i + 1) === 1 ? '1er: ' : (i+1) +'e: ') + (guildMember.nickname ? guildMember.nickname : guildMember.user.username),
+                fields.push({
+                    title: ""+players[user.id].missions[i].nom,
+                    text: "Mode : "+players[user.id].missions[i].mode+"\nDifficulté : "+players[user.id].missions[i].difficulte+"\nStatus : "+(players[user.id].missions[i].status === 0 ? 'en cours' : (players[user.id].missions[i].status === 1 ? 'réussite' : 'échouée')),
+                    grid: true
+                });
+            }
+            var image = "https://cdn.discordapp.com/attachments/469212930177761291/513746707767492618/images.jpg";
+            Utils.sendEmbed(message, 0x00AFFF, 'Historique :', '', message.author, fields, image, 10);/**/
+            return 1;//ok
+        }else{
+            return -1;//pas d'historique
+        }
+    },
+    getCurrentMission: function (message) {
+        //TODO vérif .missions existe
+        if(!(players[message.member.id].missions == null)){
             var listMissionJoueur = players[message.member.id].missions;
             var key3 = Object.keys(listMissionJoueur);
             for (var i = 0; i < key3.length; i++) {
                 if (players[message.member.id].missions[i].status == 0) {
-                    //TODO
-                    Utils.reply(message, 'vous avez deja une missions active');
-                    return;
+                    //Utils.reply(message, 'vous avez deja une missions active');
+                    return "Nom : "+players[message.member.id].missions[i].nom+"\nMode : "+players[message.member.id].missions[i].mode+"\nDifficulté : "+players[message.member.id].missions[i].difficulte;
+                }
+            }
+            return -1;//pas de mission active
+        }else{
+            return -1;//pas de mission active
+        }
+    },
+    addMission: function(message,difficulter) {
+        //TODO vérif .missions existe
+        //vérif si mission demandé
+        if(!(players[message.member.id].missions == null)){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 0) {
+                    //Utils.reply(message, 'vous avez deja une missions active');
+                    return -1;
                 }
             }
         }
@@ -172,7 +208,7 @@ module.exports = {
             nom: listMission[random].nom,
             status:0 
         };//status : 0 = en cours, 1=validé, -1 = temps écoulé
-
+        return "Nom : "+players[message.member.id].missions[idMission].nom+"\nMode : "+players[message.member.id].missions[idMission].mode+"\nDifficulté : "+players[message.member.id].missions[idMission].difficulte;
         save();
     },
     setCooldownMariage: function (guildMember) {

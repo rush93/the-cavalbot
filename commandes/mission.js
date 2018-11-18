@@ -41,7 +41,12 @@ var commands = {
         ],
         args: '',
         runCommand: (args, message) => {
-            Utils.reply(message, '');
+            var retour = Players.getCurrentMission(message);
+            if (retour == -1) {
+                Utils.reply(message, "pas de mission active");
+            }else{
+                Utils.reply(message, retour);
+            }
         }
     },
     demandeMission: {
@@ -50,11 +55,16 @@ var commands = {
         ],
         args: 'difficulte',
         runCommand: (args, message) => {
-            Players.addMission(message,args[0]);
-            Utils.reply(message, 'mission ok');
+            var retour = Players.addMission(message,args[0]);
+            if(retour == -1){
+                Utils.reply(message, 'vous avez deja une missions active');
+            }else{
+                Utils.reply(message, "Voici votre mission : \n"+retour);
+            }
+            
         }
     },
-    demandeMissionEvent: {
+    /*demandeMissionEvent: {
         help: [
             'permet de demander une mission en rapport avec l\'event en cours'
         ],
@@ -83,7 +93,7 @@ var commands = {
             
             Utils.reply(message, '');
         }
-    },
+    },*/
     modifierEtat: {
         help: [
             'activer(true) ou dé-activer(false) une catégorie de mission (ex : hallowen)'
@@ -107,7 +117,7 @@ var commands = {
         help: [
             'affiche la list des missions'
         ],
-        args: '',
+        args: 'difficulté',
         runCommand: (args, message) => {
             var listMissions = Mission.getMissions();
             var keys = Object.keys(listMissions);
@@ -177,10 +187,18 @@ var commands = {
         help: [
             'affiche l\'history des missions d\'un joueur'
         ],
-        args: '',
+        args: '@joueur',
         runCommand: (args, message) => {
-            
-            Utils.reply(message, '');
+            var retour = -1;
+            if (args<1) {//historique de celui qui fait la commande
+                retour = Players.getHistoryMission(message,message.member);
+            }else{
+                var user = message.mentions.members.first();
+                retour = Players.getHistoryMission(message,user);
+            }
+            if (retour == -1) {
+                Utils.reply(message, 'Pas d\'historique de mission');
+            }
         }
     },
     verification: {

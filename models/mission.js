@@ -25,17 +25,6 @@ function load() {
     })
 }
 
-var getRoleByName = function (name, guild) {
-    if (missionsMap[name]) {
-        return guild.roles.get(missionsMap[name]);
-    }
-    var role = guild.roles.find('name', name);
-    if (role) {
-        missionsMap[role.name] = role.id;
-    }
-    return role;
-}
-
 module.exports = {
     init: function () {
         return new Promise((resolve, reject) => {
@@ -72,14 +61,6 @@ module.exports = {
                 missions[i].active = etat;
             }
         }
-        missions[ids.length] = {
-            nom: desc,
-            active: true,
-            difficulte: difficulte,
-            mode: mode,
-            heroe: hero,
-            event: event
-        };
         save();
     }
 }
