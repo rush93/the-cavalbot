@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 var moment = require('moment');
 const Utils = require('../utils');
 var Constants = require('../models/constants');
+var Players = require('../models/players');
 
 function myFunc(guild,player) {
 
@@ -21,21 +22,29 @@ module.exports = {
         }]);
     },
     runCommand: (args, message) => {
+        let AuCachotRole = message.guild.roles.find("name", "Au cachot");
+        var channel = message.guild.channels.get("443498746144227358");//ajouter constante
         if (!message.member.hasPermission("CHANGE_NICKNAME")) {
-            Utils.reply(message, "Réessaie encore une fois et c'est toi que j'exil", true);
+            Players.setTestExil(message.member);
+            if (Players.getTestExil(message.member)>=2) {
+                message.member.addRole(AuCachotRole, "Utilisation commande exil par la pleb");
+                Utils.reply(message, "Aller au cachot", false);
+                channel.send(` ${message.member} Tu as été exiler `+parseInt(Players.getTestExil(message.member))+" heure(s) . La raison : Utilisation de la commande exil par la pleb.");
+                setTimeout(function(){
+                    myFunc(message.guild ,message.member);
+                },parseInt(Players.getTestExil(message.member))*1000*60*60);
+            }else{
+                Utils.reply(message, "Réessaie encore une fois et c'est toi que j'exil", true);
+            }
             return;
         }
         var array = args.join(" ").split(" ");
     	//array[0] //joueur
         //array[1] //temps
         //array[2] //reason
-
-        let AuCachotRole = message.guild.roles.find("name", "Au cachot");
-
         message.mentions.members.first().addRole(AuCachotRole, array[2]);
         Utils.reply(message, "Exil réussi", false);
 
-        var channel = message.guild.channels.get("443498746144227358");//ajouter constante
         channel.send(` ${message.mentions.members.first()} Tu as été exiler `+parseInt(array[1])+` heure(s) . La raison : `+array[2]+ ".");
 
         setTimeout(function(){

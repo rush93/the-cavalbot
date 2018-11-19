@@ -221,6 +221,18 @@ module.exports = {
         players[guildMember.id].cooldown = new Date();
         save();
     },
+    setTestExil: function (guildMember) {
+        createUserIfNotExist(guildMember.id);
+        if (players[guildMember.id].testExil == undefined) {
+            players[guildMember.id].testExil = 1;
+        }else{
+            players[guildMember.id].testExil = players[guildMember.id].testExil + 1;
+        }
+        save();
+    },
+    getTestExil: function (guildMember) {
+        return players[guildMember.id].testExil;
+    },
     setCooldownAdmin: function (guildMember) {
         createUserIfNotExist(guildMember.id);
         players[guildMember.id].cooldown = guildMember.joinedAt;
