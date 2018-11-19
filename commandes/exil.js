@@ -23,7 +23,7 @@ module.exports = {
     },
     runCommand: (args, message) => {
         let AuCachotRole = message.guild.roles.find("name", "Au cachot");
-        var channel = message.guild.channels.get("483319784163770388");//ajouter constante
+        var channel = message.guild.channels.get("443498746144227358");//ajouter constante
         //483319784163770388
         //443498746144227358
         if (!message.member.hasPermission("KICK_MEMBERS")) {
