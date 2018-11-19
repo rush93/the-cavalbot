@@ -12,7 +12,7 @@ function myFunc(guild,player) {
 }
 
 module.exports = {
-    role: 'CHANGE_NICKNAME',
+    role: 'KICK_MEMBERS',
     helpCat: 'Permet d\'exiler les mechants',
     help: function (message) {
         Utils.sendEmbed(message, 0x00AFFF, "Utilisation de la commande exil :", "", message.author, [{
@@ -24,7 +24,7 @@ module.exports = {
     runCommand: (args, message) => {
         let AuCachotRole = message.guild.roles.find("name", "Au cachot");
         var channel = message.guild.channels.get("443498746144227358");//ajouter constante
-        if (!message.member.hasPermission("CHANGE_NICKNAME")) {
+        if (!message.member.hasPermission("KICK_MEMBERS")) {
             Players.setTestExil(message.member);
             if (Players.getTestExil(message.member)>=2) {
                 message.member.addRole(AuCachotRole, "Utilisation commande exil par la pleb");
