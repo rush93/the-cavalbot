@@ -7,6 +7,8 @@ _mission    information //affiche mission en cours ou propose commande demandeMi
             modifierEtat false/true "nom mission"
             history soi meme ou @personne
             vérification lienimage
+
+            //status : 0 = en cours, 1=validé, -1 = temps écoulé, 2 = en attende validation
 */
 const Discord = require('discord.js');
 const Utils = require('../utils');
@@ -207,8 +209,18 @@ var commands = {
         ],
         args: '',
         runCommand: (args, message) => {
-            
-            Utils.reply(message, '');
+            if (args.length >= 1) {
+                var channel = message.guild.channels.get("514148538557399050");//ajouter constante
+                //514148538557399050 salon test
+
+
+                //vérifier si mission en cours ou en attente validation
+                channel.send(""+args);
+                Utils.reply(message, 'Veuillez attendre que la validation par les autorités compétentes');
+                //modifier statut = 0 en statut = 2
+            }else{
+                Utils.reply(message, 'Veuillez insérer le lien de votre image justificative (imp écran non découpée)');
+            }
         }
     },
     points: {

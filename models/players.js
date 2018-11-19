@@ -134,8 +134,8 @@ module.exports = {
         save();
     },
     getHistoryMission: function (message, user) {
-        //TODO vérif .missions existe
-        if(!(players[user.id].missions == null)){
+        createUserIfNotExist(user.id);
+        if(!(players[user.id].missions == null) && players[user.id].missions != undefined){
             var listMissionJoueur = players[user.id].missions;
             var key3 = Object.keys(listMissionJoueur);
             var fields = [];
@@ -143,7 +143,7 @@ module.exports = {
                 //title: ((i + 1) === 1 ? '1er: ' : (i+1) +'e: ') + (guildMember.nickname ? guildMember.nickname : guildMember.user.username),
                 fields.push({
                     title: ""+players[user.id].missions[i].nom,
-                    text: "Mode : "+players[user.id].missions[i].mode+"\nDifficulté : "+players[user.id].missions[i].difficulte+"\nStatus : "+(players[user.id].missions[i].status === 0 ? 'en cours' : (players[user.id].missions[i].status === 1 ? 'réussite' : 'échouée')),
+                    text: "Mode : "+players[user.id].missions[i].mode+"\nDifficulté : "+players[user.id].missions[i].difficulte+"\nStatus : "+(players[user.id].missions[i].status === 0 ? 'en cours' : (players[user.id].missions[i].status === 1 ? 'réussite' : (players[user.id].missions[i].status === 2 ? 'en attente de validation' : 'échouée'))),
                     grid: true
                 });
             }
@@ -155,8 +155,8 @@ module.exports = {
         }
     },
     getCurrentMission: function (message) {
-        //TODO vérif .missions existe
-        if(!(players[message.member.id].missions == null)){
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) &&  players[user.id].missions != undefined){
             var listMissionJoueur = players[message.member.id].missions;
             var key3 = Object.keys(listMissionJoueur);
             for (var i = 0; i < key3.length; i++) {
@@ -171,9 +171,9 @@ module.exports = {
         }
     },
     addMission: function(message,difficulter) {
-        //TODO vérif .missions existe
-        //vérif si mission demandé
-        if(!(players[message.member.id].missions == null)){
+
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) && players[user.id].missions != undefined){
             var listMissionJoueur = players[message.member.id].missions;
             var key3 = Object.keys(listMissionJoueur);
             for (var i = 0; i < key3.length; i++) {
