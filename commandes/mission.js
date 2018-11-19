@@ -237,11 +237,11 @@ var help = function (message) {
     Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des missions', "", message.author, fields);
 }
 module.exports = {
-    role: 'CHANGE_NICKNAME',
+    role: 'MANAGE_GUILD',
     helpCat: 'Permet d\'obtenir une mission',
     help,
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("CHANGE_NICKNAME")) {
+        if (!message.member.hasPermission("MANAGE_GUILD")) {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour jouer avec les missions (pas encore)", true);
             return;
         }
