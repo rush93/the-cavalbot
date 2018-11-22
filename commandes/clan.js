@@ -30,11 +30,18 @@ var commands = {
             }
             let value = args[0].toLowerCase()
             if ( value != "true" && value != "false" ) {
-                Utils.reply(message, 'Vous devez mêtre true(ouvert) ou false(fermé).', true);
+                Utils.reply(message, 'Vous devez mettre true(ouvert) ou false(fermé).', true);
                 return;
+            }else{
+                if (value === 'true') {
+                     Clans.setDescription(clan, "Ouvert");
+                }else{
+                    Clans.setDescription(clan, "Fermé");
+                }
+                Clans.setJoin(clan, value === 'true');
+                Utils.reply(message, 'Les portes du clan on bien été modifié. : ' + args[0]);
             }
-            Clans.setJoin(clan, value === 'true');
-            Utils.reply(message, 'Les portes du clan on bien été modifié. : ' + args[0]);
+            
         }
     },
     setFaction: {

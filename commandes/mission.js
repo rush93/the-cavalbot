@@ -216,7 +216,11 @@ var commands = {
 
                 //vérifier si mission en cours ou en attente validation
                 channel.send(""+args);
+                /*message.react(Utils.UnicodeConfirmReact).then(() => {
+                    message.react(Utils.UnicodeCancelReact);
+                });*/
                 Utils.reply(message, 'Veuillez attendre que la validation par les autorités compétentes');
+                
                 //modifier statut = 0 en statut = 2
             }else{
                 Utils.reply(message, 'Veuillez insérer le lien de votre image justificative (imp écran non découpée)');
