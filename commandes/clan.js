@@ -34,7 +34,7 @@ var commands = {
                 return;
             }else{
                 if (value === 'true') {
-                     Clans.setDescription(clan, "Ouvert");
+                     Clans.setDescription(clan, "Ouvert\n_join "+clan.name);
                 }else{
                     Clans.setDescription(clan, "Fermé");
                 }
