@@ -50,7 +50,7 @@ module.exports = {
             }
         }
         
-        var roles = Utils.getRolesOfPerm(message.guild, 'MANAGE_GUILD');
+        var roles = Utils.getRolesOfPerm(message.guild, 'KICK_MEMBERS');
         var str = [];
         for (var i = 0; i < roles.length; i++) {
             str.push(`<@&${roles[i].id}>`);
