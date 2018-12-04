@@ -12,6 +12,7 @@ var clans = require('./models/clans');
 var players = require('./models/players');
 var ranks = require('./models/ranks');
 var event = require('./models/event');
+var messages = require('./models/messages');
 var mission = require('./models/mission');
 //var bdd = require('./models/connectionMYSQL');
 globalConst.init();
@@ -20,6 +21,8 @@ clans.init();
 players.init();
 ranks.init();
 event.init();
+messages.init();
+//bdd.init();
 mission.init();
 
 var configCommands = require('./commandes/config');
@@ -52,6 +55,7 @@ var roleCommand = require('./commandes/role');
 var cooldownClanCommand = require('./commandes/cooldownClan');
 var pingCommand = require('./commandes/ping');
 var exilCommand = require('./commandes/exil');
+var messagesCommand = require('./commandes/messages');
 var missionCommand = require('./commandes/mission');
 
 var commands = {
@@ -85,8 +89,12 @@ var commands = {
   cooldownClan: cooldownClanCommand,
   ping: pingCommand,
   exil: exilCommand,
+  messages: messagesCommand,
   mission: missionCommand
 }
+
+var intervalMessage = require('./intervals/messages');
+
 try {
   bot.on('ready', function () {
     Utils.log(Utils.Color.FgGreen + 'bot started');
@@ -333,6 +341,7 @@ try {
   bot.login(token).then(token => {
     guild = bot.guilds.first();
     api.initServer(guild);
+    intervalMessage(messages, guild);
   }).catch((e) => {
     Utils.log(e, true);
   })
