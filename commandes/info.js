@@ -112,7 +112,13 @@ var displayRoleOfMember = function (message, member) {
 
     
     if(moment.duration(diff, 'minutes').humanize() == "quelques secondes"){
-        message.channel.send('<@!'+member.id+'> envoi un mp a <@!227441303527489537> avec ta date d\'arriver dans ton clan ou attend 2 minutes si tu viens juste d\'arriver dans ton clan');
+        var roles = Utils.getRolesOfPerm(message.guild, 'KICK_MEMBERS');
+        var str = [];
+        for (var i = 0; i < roles.length; i++) {
+            str.push(`<@&${roles[i].id}>`);
+        }
+        message.channel.send(str.join(', '));
+        message.channel.send('<@!'+member.id+'> envoi un mp a au personne si dessus avec ta date d\'arriver dans ton clan ou attend 2 minutes si tu viens juste d\'arriver dans ton clan');
     }else{
         Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
         `**Clan:** ${role.name}` + `

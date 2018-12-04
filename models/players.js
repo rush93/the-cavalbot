@@ -1,6 +1,7 @@
 var fs = require('fs');
 var Constants = require('./constants');
 var Clans = require('./clans');
+var Missions = require('./mission');
 var Utils = require('../utils');
 var oversmash = require('oversmash');
 var owjs = require('overwatch-js');
@@ -132,6 +133,84 @@ module.exports = {
     save: function () {
         save();
     },
+    getHistoryMission: function (message, user) {
+        createUserIfNotExist(user.id);
+        if(!(players[user.id].missions == null) && players[user.id].missions != undefined){
+            var listMissionJoueur = players[user.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            var fields = [];
+            for (var i = 0; i < key3.length; i++) {
+                //title: ((i + 1) === 1 ? '1er: ' : (i+1) +'e: ') + (guildMember.nickname ? guildMember.nickname : guildMember.user.username),
+                fields.push({
+                    title: ""+players[user.id].missions[i].nom,
+                    text: "Mode : "+players[user.id].missions[i].mode+"\nDifficulté : "+players[user.id].missions[i].difficulte+"\nStatus : "+(players[user.id].missions[i].status === 0 ? 'en cours' : (players[user.id].missions[i].status === 1 ? 'réussite' : (players[user.id].missions[i].status === 2 ? 'en attente de validation' : 'échouée'))),
+                    grid: true
+                });
+            }
+            var image = "https://cdn.discordapp.com/attachments/469212930177761291/513746707767492618/images.jpg";
+            Utils.sendEmbed(message, 0x00AFFF, 'Historique :', '', message.author, fields, image, 10);/**/
+            return 1;//ok
+        }else{
+            return -1;//pas d'historique
+        }
+    },
+    getCurrentMission: function (message) {
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) &&  players[user.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 0) {
+                    //Utils.reply(message, 'vous avez deja une missions active');
+                    return "Nom : "+players[message.member.id].missions[i].nom+"\nMode : "+players[message.member.id].missions[i].mode+"\nDifficulté : "+players[message.member.id].missions[i].difficulte;
+                }
+            }
+            return -1;//pas de mission active
+        }else{
+            return -1;//pas de mission active
+        }
+    },
+    addMission: function(message,difficulter) {
+
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) && players[user.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 0) {
+                    //Utils.reply(message, 'vous avez deja une missions active');
+                    return -1;
+                }
+            }
+        }
+        if (!players[message.member.id].missions) {
+            idMission = 0;
+        }else{
+            var keys2 = Object.keys(players[message.member.id].missions);
+            var idMission = keys2.length;
+        }
+        
+
+        var listMission = Missions.getMissions();
+        var keys = Object.keys(listMission);//pour pouvoir faire .length
+
+        var random = Math.floor(Math.random() * Math.floor(keys.length));
+
+        if(players[message.member.id].missions == undefined){
+            players[message.member.id].missions = {};
+        }
+
+        players[message.member.id].missions[idMission] = {
+            id: random,
+            difficulte: listMission[random].difficulte,
+            heroe: listMission[random].heroe,
+            mode: listMission[random].mode,
+            nom: listMission[random].nom,
+            status:0 
+        };//status : 0 = en cours, 1=validé, -1 = temps écoulé
+        return "Nom : "+players[message.member.id].missions[idMission].nom+"\nMode : "+players[message.member.id].missions[idMission].mode+"\nDifficulté : "+players[message.member.id].missions[idMission].difficulte;
+        save();
+    },
     setCooldownMariage: function (guildMember) {
         createUserIfNotExist(guildMember.id);
         players[guildMember.id].cooldownMariage = new Date();
@@ -141,6 +220,18 @@ module.exports = {
         createUserIfNotExist(guildMember.id);
         players[guildMember.id].cooldown = new Date();
         save();
+    },
+    setTestExil: function (guildMember) {
+        createUserIfNotExist(guildMember.id);
+        if (players[guildMember.id].testExil == undefined) {
+            players[guildMember.id].testExil = 1;
+        }else{
+            players[guildMember.id].testExil = players[guildMember.id].testExil + 1;
+        }
+        save();
+    },
+    getTestExil: function (guildMember) {
+        return players[guildMember.id].testExil;
     },
     setCooldownAdmin: function (guildMember) {
         createUserIfNotExist(guildMember.id);

@@ -5,7 +5,6 @@ var request = require('request');
 var moment = require('moment');
 
 var token = require('./token');
-var dialog = require('./dialogflow.js');
 
 var globalConst = require('./models/constants');
 var interactions = require('./models/interactions');
@@ -14,6 +13,7 @@ var players = require('./models/players');
 var ranks = require('./models/ranks');
 var event = require('./models/event');
 var messages = require('./models/messages');
+var mission = require('./models/mission');
 //var bdd = require('./models/connectionMYSQL');
 globalConst.init();
 interactions.init();
@@ -23,6 +23,7 @@ ranks.init();
 event.init();
 messages.init();
 //bdd.init();
+mission.init();
 
 var configCommands = require('./commandes/config');
 var clanCommands = require('./commandes/clan');
@@ -55,6 +56,7 @@ var cooldownClanCommand = require('./commandes/cooldownClan');
 var pingCommand = require('./commandes/ping');
 var exilCommand = require('./commandes/exil');
 var messagesCommand = require('./commandes/messages');
+var missionCommand = require('./commandes/mission');
 
 var commands = {
   config: configCommands,
@@ -88,6 +90,7 @@ var commands = {
   ping: pingCommand,
   exil: exilCommand,
   messages: messagesCommand,
+  mission: missionCommand
 }
 
 var intervalMessage = require('./intervals/messages');
@@ -155,12 +158,32 @@ try {
     let GuestsRole = member.guild.roles.find("name", "Guests");
     member.addRole(GuestsRole);
 
-    member.setNickname(member.displayName + ' |');
-    member.guild.channels.get("443199155838648320").send(`Bonjour et bienvenue ${member} dans Overwatch Assemble ! 
-Tu vas maintenant pouvoir choisir ton clan parmi la liste des clans qui se trouve dans #histoires-des-clans avec leurs histoires en dessous!
-Pour valider ton choix tu dois écrire _join NomDuClan dans ce channel :wink:
-Par exemple "_join Vishkar Corporation" pour rejoindre la multinationale indienne.
-Amuse-toi bien!`);
+    member.setNickname(member.displayName);
+    member.guild.channels.get("443199155838648320").send(`Bienvenue à toi soldat ${member}! 
+Tu es convié à choisir un clan afin de participer à la vie du serveur ;)
+Pour rappel, voici la liste des commandes à taper pour rejoindre le clan que tu souhaites (copie colle celle qui t'intéresse) :
+
+:small_orange_diamond:  Faction United Nations
+_join Overwatch
+_join Blackwatch
+_join Programme MEKA
+
+:small_blue_diamond: Faction Insurgés
+_join La Griffe
+_join Vishkar Corporation
+_join Deadlock Rebels
+
+:small_orange_diamond: Faction Gangs
+_join Junkers
+_join Los Muertos
+_join Shimada
+
+Et si tu ne souhaites pas participer aux évènements du serveur (tournoi, mini jeux, guerres):
+
+_join Shambali
+
+Si tu as des questions, nous sommes là pour te répondre!
+Bonne journée à toi!`);
   });
 
   var runCommand = (args, message) => {

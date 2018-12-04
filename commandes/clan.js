@@ -30,11 +30,18 @@ var commands = {
             }
             let value = args[0].toLowerCase()
             if ( value != "true" && value != "false" ) {
-                Utils.reply(message, 'Vous devez mêtre true(ouvert) ou false(fermé).', true);
+                Utils.reply(message, 'Vous devez mettre true(ouvert) ou false(fermé).', true);
                 return;
+            }else{
+                if (value === 'true') {
+                     Clans.setDescription(clan, "Ouvert\n_join "+clan.name);
+                }else{
+                    Clans.setDescription(clan, "Fermé");
+                }
+                Clans.setJoin(clan, value === 'true');
+                Utils.reply(message, 'Les portes du clan on bien été modifié. : ' + args[0]);
             }
-            Clans.setJoin(clan, value === 'true');
-            Utils.reply(message, 'Les portes du clan on bien été modifié. : ' + args[0]);
+            
         }
     },
     setFaction: {
@@ -178,9 +185,10 @@ var commands = {
                 Utils.reply(message, 'Le joueur est déjà dans un clan veuillez l\'enlever en premier.', true);
                 return
             }
+            if (Clans.getFaction(clan)) {
+                user.addRole(message.guild.roles.get(Clans.getFaction(clan)), "faction automatique");
+            }
             Players.setCooldown(user);
-            var faction = message.guild.roles.get(Clans.getFaction(clan));
-            message.member.addRole(faction, "faction automatique");
             Utils.reply(message, 'Le joueur a bien été ajouté dans le clan.');
         }
     },
@@ -204,11 +212,14 @@ var commands = {
                 Utils.reply(message, 'Le joueur n\'est pas dans ce clan.', true);
                 return;
             }
+            if (Clans.getFaction(clan)) {
+                user.removeRole(message.guild.roles.get(Clans.getFaction(clan)), "Supression manuel (faction) de " + message.author.name);    
+            }
+            
             if (Constants.resetRankWhenChangeClan) {
                 Players.setPoints(user.id, clanRemoved.id, 0);
             }
             Players.resetRank(user.id, clanRemoved);
-            message.member.removeRole(message.guild.roles.get(Clans.getFaction(clan)), 'Leave faction');
             Utils.reply(message, 'Le joueur a bien été supprimé du clan.');
         }
     },
@@ -245,11 +256,11 @@ var help = function (message) {
     Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des clans', "", message.author, fields);
 }
 module.exports = {
-    role: 'MANAGE_GUILD',
+    role: 'CHANGE_NICKNAME',
     helpCat: 'Permet d\'administrer les clans',
     help,
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_GUILD")) {
+        if (!message.member.hasPermission("CHANGE_NICKNAME")) {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les clans", true);
             return;
         }

@@ -26,7 +26,7 @@ module.exports = {
             return;
         }
         if (Clans.getJoin(role) == false) {
-            Utils.reply(message, "Désolé ce clan est fermé", true);
+            Utils.reply(message, "Désolé ce clan est fermé (dû à une surpopulation) effectue la commande _list pour voir la liste de clan", true);
             return;
         }
         clan = Clans.addPlayer(role, message.member, "rejoins le clan avec la commande join", Object.keys(Players.getPsns(message.member.id)).length > 0);
@@ -37,8 +37,7 @@ module.exports = {
         let factionId = Clans.getFaction(role);
         if (factionId == false) {// (exemple) es ce que la faction united nation est lié a ow ?
             //pas de faction lié, il ne se passe rien
-            Utils.reply(message, 'Aucune facction lié a ce clan', true);
-            return;
+            //Utils.reply(message, 'Aucune facction lié a ce clan', true);
         }else{
             var faction = message.guild.roles.get(factionId);
             message.member.addRole(faction, "faction automatique");
