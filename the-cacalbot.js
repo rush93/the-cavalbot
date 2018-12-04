@@ -179,9 +179,11 @@ try {
 Je viens de t'envoyer un message privé, prend le temps de le lire :smiley:.
 Si tu as des questions ou si tu souhaites une présentation plus poussée du serveur, n'hésite pas à contacter un modérateur ou un membre du staff. Nous te souhaitons encore une fois la bienvenue et nous espérons que tu tu te plairas sur notre serveur!
 L'équipe d'OA
-Et n'oublie pas de choisir ton clan parmi la liste si dessous :`);
-    
-    
+Et n'oublie pas de choisir ton clan parmi la liste si dessous :`).then((message) => {
+                
+            });
+
+
   });
 
   var runCommand = (args, message) => {
