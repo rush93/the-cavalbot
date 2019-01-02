@@ -232,10 +232,20 @@ Bonne journée à toi!`);
         Utils.log('', false, 'DM message', message.author.username, message.content);
         var result = /^say ([0-9]+) (.+)$/.exec(message.content);
         if (result) {
-          if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, 'ptdr t ki ?', true);
-            return;
-          }
+          var dev = ["227441303527489537", "270268597874589696"];
+          var isDev = false;
+          dev.forEach((id) => {
+                if (message.author.id == id) {
+                  isDev = true;
+                  console.log("isdev");
+                }
+            });
+          if (!isDev) {
+              if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
+                Utils.reply(message, 'ptdr t ki ?', true);
+                return;
+              }
+            }
           var channel = guild.channels.get(result[1]);
           if (!channel) {
             Utils.reply(message, 'c\'est pas un channel ça', true);
