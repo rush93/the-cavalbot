@@ -157,8 +157,8 @@ try {
 
     let GuestsRole = member.guild.roles.find("name", "Guests");
     member.addRole(GuestsRole);
-
-    Utils.sendDM(message.author,"Bienvenue sur OwAssembly, le serveur qui reproduit l'ambiance du jeu à travers son système de clans et ses multiples évènements!"
+    Utils.log(`running ${Utils.Color.FgYellow}welcome ${Utils.Color.Reset}message`);
+    Utils.sendDM(member,"Bienvenue sur OwAssembly, le serveur qui reproduit l'ambiance du jeu à travers son système de clans et ses multiples évènements!"
 +"\nCe serveur n'a pas de vocation compétitive ou professionnelle. Si c'est ton but, nous t'invitons à aller visiter le discord de notre partenaire OverTown."
 
 +"\n\nAvant toute chose:"
@@ -175,15 +175,13 @@ try {
 
 
     member.setNickname(member.displayName);
-    member.guild.channels.get("443199155838648320").send(`Bienvenue à toi ${member},
+    member.guild.channels.get("483319784163770388").send(`Bienvenue à toi ${member},
 Je viens de t'envoyer un message privé, prend le temps de le lire :smiley:.
 Si tu as des questions ou si tu souhaites une présentation plus poussée du serveur, n'hésite pas à contacter un modérateur ou un membre du staff. Nous te souhaitons encore une fois la bienvenue et nous espérons que tu tu te plairas sur notre serveur!
 L'équipe d'OA
-Et n'oublie pas de choisir ton clan parmi la liste si dessous :`).then((message) => {
-                
-            });
-
-
+Et n'oublie pas de choisir ton clan parmi la liste si dessous :`).then((msg) => {
+      commands["list"].runCommand('list', msg);
+    });
   });
 
   var runCommand = (args, message) => {
@@ -331,7 +329,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
       Utils.reply(message, 'Aie..., j\'ai bugger. <@!270268597874589696> tu fait mal ton boulot! corrige moi ce bug tout de suite!', true)
     }
   });
-} catch (e) {
+} catch(e) {
   Utils.log(e.stack, true)
 }
 
