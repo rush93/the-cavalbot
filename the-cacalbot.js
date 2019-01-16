@@ -171,7 +171,7 @@ try {
 +"\nPour interagir avec lui, rends toi dans #bot-en-kaou-tchou ."
 +"\nLes deux premières commandes qui t'intéresseront sont le _help (liste des commandes du bot) et le _btag pour renseigner ton identifiant Battle.net et ainsi pouvoir participer aux divers évènements.Tu trouveras sur notre serveur plusieurs types d'évènements auquel tu peux facilement participer, et notamment :"
 +"\n:small_orange_diamond: Des mini-jeux de toutes sortes : le planning des mini-jeux se trouve dans #annonces-mini-jeux (épinglé). Pour participer, il te suffit de te rendre dans #bot-en-kaou-tchou et de taper la commande _participe"
-+"\n:small_orange_diamond: Des guerres de clan : les clans s'affrontent pendant une saison de 2 mois pour défendre leurs orbes et s'emparer de celle des autres clans! Les règles de cet affrontement se trouvent sur le site dans l'onglet GDC.small_orange_diamond: Des tournois : Une fois par mois, un grand tournoi vise à départager la meilleure équipe! Celle-ci remporte un grade "Vainqueurs du tournoi" durant le mois suivant. Les règles de cet évènement sont postées avant chaque nouveau tournoi dans #tournois-gdc .");
++"\n:small_orange_diamond: Des guerres de clan : les clans s'affrontent pendant une saison de 2 mois pour défendre leurs orbes et s'emparer de celle des autres clans! Les règles de cet affrontement se trouvent sur le site dans l'onglet GDC.small_orange_diamond: Des tournois : Une fois par mois, un grand tournoi vise à départager la meilleure équipe! Celle-ci remporte un grade \"Vainqueurs du tournoi\" durant le mois suivant. Les règles de cet évènement sont postées avant chaque nouveau tournoi dans #tournois-gdc .");
 
 
     member.setNickname(member.displayName);
