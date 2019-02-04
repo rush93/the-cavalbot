@@ -1,10 +1,7 @@
 /*diff = facile/moyen/diff/impossible
 _mission    information //affiche mission en cours ou propose commande demandeMission
             demandeMission  diff
-            demandeMissionEvent diff
-            demandeMissionEventGroupe diff
             demandeMissionGroupe diff
-            modifierEtat false/true "nom mission"
             history soi meme ou @personne
             vérification lienimage
 
@@ -26,14 +23,10 @@ var commands = {
             args = reg[2].trim().split(' ');
             var desc = reg[1].replace(/"/g, '');
             if (args.length < 3) {
-                Utils.reply(message, 'Il manque des arguments. (desc, difficulte, mode, hero, event (si il y a))');
+                Utils.reply(message, 'Il manque des arguments. (desc, difficulte, mode, hero)');
                 return;
             }
-            if (args[4]) {
-                Mission.createMission(desc, args[0],args[1],args[2],args[3],args[4]);
-            }else{
-                Mission.createMission(desc, args[0],args[1],args[2],args[3]);
-            }
+            Mission.createMission(desc, args[0],args[1],args[2],args[3]);
             Utils.reply(message, 'La mission a bien été crée.')
         }
     },
@@ -59,44 +52,15 @@ var commands = {
         runCommand: (args, message) => {
             var retour = Players.addMission(message,args[0]);
             if(retour == -1){
-                Utils.reply(message, 'vous avez deja une missions active');
+                //TODO vérifier si temps écoulé
+                Utils.reply(message, 'vous avez deja une missions active ou en cours de validation');
             }else{
                 Utils.reply(message, "Voici votre mission : \n"+retour);
             }
             
         }
     },
-    /*demandeMissionEvent: {
-        help: [
-            'permet de demander une mission en rapport avec l\'event en cours'
-        ],
-        args: '',
-        runCommand: (args, message) => {
-            
-            Utils.reply(message, '');
-        }
-    },
-    demandeMissionGroupe: {
-        help: [
-            'demander des missions à réaliser en groupe, plus dur mais plus de points'
-        ],
-        args: '',
-        runCommand: (args, message) => {
-            
-            Utils.reply(message, '');
-        }
-    },
-    demandeMissionEventGroupe: {
-        help: [
-            'mission de groupe et d\'event'
-        ],
-        args: '',
-        runCommand: (args, message) => {
-            
-            Utils.reply(message, '');
-        }
-    },*/
-    modifierEtat: {
+    /*modifierEtat: {
         help: [
             'activer(true) ou dé-activer(false) une catégorie de mission (ex : hallowen)'
         ],
@@ -114,7 +78,7 @@ var commands = {
             }
             
         }
-    },
+    },*/
     list: {
         help: [
             'affiche la list des missions'
@@ -205,25 +169,40 @@ var commands = {
     },
     verification: {
         help: [
+            'demander a valider une mission'
+        ],
+        args: '',
+        runCommand: (args, message) => {
+            if (args.length >= 1) {
+                var channel = message.guild.channels.get(Constants.missionChannel);
+
+                //vérifier si mission en cours ou en attente validation
+                var retour = Players.getCurrentMission(message);
+                if(Players.getCurrentValidation(message) == 1){
+                    Utils.reply(message, 'Vous avez deja envoyé une capture d\'écran');
+                }else if (retour == -1) {
+                    Utils.reply(message, "Pas de mission active");
+                }else{
+                    channel.send(retour+ "\nLien image : " +args + "\nValider mission : _mission valider "+message.member.id+"\nRefuser mission : _mission refuser "+message.member.id);
+                    Players.setValidation(message);//modifier statut = 0 en statut = 2
+                    Utils.reply(message, 'Veuillez attendre la validation par les autorités compétentes');
+                }
+                
+            }else{
+                Utils.reply(message, 'Veuillez insérer le lien de votre image justificative (capture d\'écran non découpée)');
+            }
+        }
+    },
+    valider: {
+        help: [
             'valider une mission'
         ],
         args: '',
         runCommand: (args, message) => {
             if (args.length >= 1) {
-                var channel = message.guild.channels.get("514148538557399050");//ajouter constante
-                //514148538557399050 salon test
-
-
-                //vérifier si mission en cours ou en attente validation
-                channel.send(""+args);
-                /*message.react(Utils.UnicodeConfirmReact).then(() => {
-                    message.react(Utils.UnicodeCancelReact);
-                });*/
-                Utils.reply(message, 'Veuillez attendre que la validation par les autorités compétentes');
-                
-                //modifier statut = 0 en statut = 2
+                Utils.reply(message, 'walla c\'est pas encore fait');
             }else{
-                Utils.reply(message, 'Veuillez insérer le lien de votre image justificative (imp écran non découpée)');
+                Utils.reply(message, 'Fail copier coller');
             }
         }
     },

@@ -6,6 +6,8 @@ var constants = {
     resetRankWhenChangeClan: true,
     guildID: "",
     logChannel: "",
+    bvnChannel: "",
+    missionChannel: "",
     leaveCooldown: 0,
     joinmessage: "no",
     leavemessage: "no",
@@ -50,6 +52,12 @@ module.exports = {
     },
     get logChannel() {
         return constants.logChannel;
+    },
+    get bvnChannel() {
+        return constants.bvnChannel;
+    },
+    get missionChannel() {
+        return constants.missionChannel;
     },
     get pseudoModifier() {
         return constants.pseudoModifier;
@@ -100,6 +108,16 @@ module.exports = {
         constants.logChannel = logChannel;
         save();
         return constants.logChannel;
+    },
+    set bvnChannel(bvnChannel) {
+        constants.bvnChannel = bvnChannel;
+        save();
+        return constants.bvnChannel;
+    },
+    set missionChannel(missionChannel) {
+        constants.missionChannel = missionChannel;
+        save();
+        return constants.missionChannel;
     },
     set resetRankWhenChangeClan(resetRankWhenChangeClan) {
         constants.resetRankWhenChangeClan = resetRankWhenChangeClan;

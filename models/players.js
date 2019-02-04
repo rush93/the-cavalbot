@@ -156,7 +156,7 @@ module.exports = {
     },
     getCurrentMission: function (message) {
         createUserIfNotExist(message.member.id);
-        if(!(players[message.member.id].missions == null) &&  players[user.id].missions != undefined){
+        if(!(players[message.member.id].missions == null) &&  players[message.member.id].missions != undefined){
             var listMissionJoueur = players[message.member.id].missions;
             var key3 = Object.keys(listMissionJoueur);
             for (var i = 0; i < key3.length; i++) {
@@ -170,14 +170,47 @@ module.exports = {
             return -1;//pas de mission active
         }
     },
-    addMission: function(message,difficulter) {
-
+    getCurrentValidation: function (message) {
         createUserIfNotExist(message.member.id);
-        if(!(players[message.member.id].missions == null) && players[user.id].missions != undefined){
+        if(!(players[message.member.id].missions == null) &&  players[message.member.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 2) {
+                    //Utils.reply(message, 'vous avez deja une missions en attente validation');
+                    return 1;
+                }
+            }
+            return -1;//pas de mission active
+        }else{
+            return -1;//pas de mission active
+        }
+    },
+    setValidation: function (message) {
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) &&  players[message.member.id].missions != undefined){
             var listMissionJoueur = players[message.member.id].missions;
             var key3 = Object.keys(listMissionJoueur);
             for (var i = 0; i < key3.length; i++) {
                 if (players[message.member.id].missions[i].status == 0) {
+                    players[message.member.id].missions[i].status = 2;// en attente validation
+                    save();
+                    return "1";
+                }
+            }
+            return -1;//pas de mission active
+        }else{
+            return -1;//pas de mission active
+        }
+    },
+    addMission: function(message,difficulter) {
+
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) && players[message.member.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 0 || players[message.member.id].missions[i].status == 2) {
                     //Utils.reply(message, 'vous avez deja une missions active');
                     return -1;
                 }
@@ -199,17 +232,19 @@ module.exports = {
         if(players[message.member.id].missions == undefined){
             players[message.member.id].missions = {};
         }
-
+        var datemission = new Date();
         players[message.member.id].missions[idMission] = {
             id: random,
             difficulte: listMission[random].difficulte,
             heroe: listMission[random].heroe,
             mode: listMission[random].mode,
             nom: listMission[random].nom,
-            status:0 
+            status:0,
+            date: datemission
         };//status : 0 = en cours, 1=validé, -1 = temps écoulé
-        return "Nom : "+players[message.member.id].missions[idMission].nom+"\nMode : "+players[message.member.id].missions[idMission].mode+"\nDifficulté : "+players[message.member.id].missions[idMission].difficulte;
         save();
+        return "Nom : "+players[message.member.id].missions[idMission].nom+"\nMode : "+players[message.member.id].missions[idMission].mode+"\nDifficulté : "+players[message.member.id].missions[idMission].difficulte;
+        
     },
     setCooldownMariage: function (guildMember) {
         createUserIfNotExist(guildMember.id);

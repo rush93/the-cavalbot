@@ -180,7 +180,7 @@ var commands = {
         help: [
             'l\'id du channel de log du serveur.',
         ],
-        args: '[url]',
+        args: 'id',
         runCommand: (args, message) => {
 
             if (args.length === 0) {
@@ -192,7 +192,46 @@ var commands = {
                 return;
             }
             constants.logChannel = message.mentions.channels.first().id;
+            
             Utils.reply(message, 'Le logChannel a bien été modifié.');
+        }
+    },
+    bvnChannel: {
+        help: [
+            'l\'id du channel de bienvenue du serveur.',
+        ],
+        args: 'id',
+        runCommand: (args, message) => {
+
+            if (args.length === 0) {
+                Utils.reply(message, "**channel: **: <#" + constants.bvnChannel + ">");
+                return;
+            }
+            if (!message.mentions.channels.first()) {
+                Utils.reply(message,"il faut mentionner un bienvenueChannel.",true);
+                return;
+            }
+            constants.bvnChannel = message.mentions.channels.first().id;
+            Utils.reply(message, 'Le bienvenueChannel a bien été modifié.');
+        }
+    },
+    missionChannel: {
+        help: [
+            'l\'id du channel de mission du serveur.',
+        ],
+        args: 'id',
+        runCommand: (args, message) => {
+
+            if (args.length === 0) {
+                Utils.reply(message, "**channel: **: <#" + constants.missionChannel + ">");
+                return;
+            }
+            if (!message.mentions.channels.first()) {
+                Utils.reply(message,"il faut mentionner un missionChannel.",true);
+                return;
+            }
+            constants.missionChannel = message.mentions.channels.first().id;
+            Utils.reply(message, 'Le missionChannel a bien été modifié.');
         }
     },
     reportChannel: {

@@ -175,14 +175,16 @@ try {
 
 
     member.setNickname(member.displayName);
-    member.guild.channels.get("483319784163770388").send(`Bienvenue à toi ${member},
+    if (globalConst.bvnChannel != "") {
+      member.guild.channels.get(globalConst.bvnChannel).send(`Bienvenue à toi ${member},
 Je viens de t'envoyer un message privé, prend le temps de le lire :smiley:.
 Si tu as des questions ou si tu souhaites une présentation plus poussée du serveur, n'hésite pas à contacter un modérateur ou un membre du staff. Nous te souhaitons encore une fois la bienvenue et nous espérons que tu tu te plairas sur notre serveur!
 L'équipe d'OA
 Et n'oublie pas de choisir ton clan parmi la liste si dessous :`).then((msg) => {
-      commands["list"].runCommand('list', msg);
-    });
-  });
+        commands["list"].runCommand('list', msg);
+      });
+    }
+  });// fin bot.on
 
   var runCommand = (args, message) => {
     if (args[0] === globalConst.prefix + 'help') {
