@@ -5,7 +5,8 @@ var Missions = require('./mission');
 var Utils = require('../utils');
 var oversmash = require('oversmash');
 var owjs = require('overwatch-js');
-const ow = oversmash.default()
+var moment = require('moment');
+const ow = oversmash.default();
 
 var request = require('request');
 var moment = require('moment');
@@ -122,6 +123,13 @@ function updatePsn(psn, id) {
         });
     });
 }
+Array.prototype.removeValue = function(name, value){
+    var array = $.map(this, function(v,i){
+       return v[name] === value ? null : v;
+    });
+    this.length = 0; //clear original array
+    this.push.apply(this, array); //push all elements except the one we want to delete
+ }
 module.exports = {
     init: function () {
         return new Promise((resolve, reject) => {
@@ -143,7 +151,7 @@ module.exports = {
                 //title: ((i + 1) === 1 ? '1er: ' : (i+1) +'e: ') + (guildMember.nickname ? guildMember.nickname : guildMember.user.username),
                 fields.push({
                     title: ""+players[user.id].missions[i].nom,
-                    text: "Mode : "+players[user.id].missions[i].mode+"\nDifficulté : "+players[user.id].missions[i].difficulte+"\nStatus : "+(players[user.id].missions[i].status === 0 ? 'en cours' : (players[user.id].missions[i].status === 1 ? 'réussite' : (players[user.id].missions[i].status === 2 ? 'en attente de validation' : 'échouée'))),
+                    text: "Mode : "+players[user.id].missions[i].mode+"\nDifficulté : "+players[user.id].missions[i].difficulte+"\nDate : " + moment(players[user.id].missions[i].date).format('DD/MM/YYYY') + "\nStatus : "+(players[user.id].missions[i].status === 0 ? 'en cours' : (players[user.id].missions[i].status === 1 ? 'réussite' : (players[user.id].missions[i].status === 2 ? 'en attente de validation' : 'échouée'))),
                     grid: true
                 });
             }
@@ -186,6 +194,57 @@ module.exports = {
             return -1;//pas de mission active
         }
     },
+    setUnValider: function (iduser) {
+        createUserIfNotExist(iduser);
+        if(!(players[iduser].missions == null) &&  players[iduser].missions != undefined){
+            var listMissionJoueur = players[iduser].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[iduser].missions[i].status == 2) {
+                    players[iduser].missions[i].status = 0;// on remet comme si la mission etait encours
+                    save();
+                    return "1";
+                }
+            }
+            return -1;//pas de mission en attente de validation
+        }else{
+            return -1;//pas de mission
+        }
+    },
+    setValider: function (iduser) {
+        createUserIfNotExist(iduser);
+        if(!(players[iduser].missions == null) &&  players[iduser].missions != undefined){
+            var listMissionJoueur = players[iduser].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[iduser].missions[i].status == 2) {
+                    players[iduser].missions[i].status = 1;// valider
+                    save();
+                    switch (players[iduser].missions[i].difficulte) {
+                        case "facile":
+                            return 30;
+                            break;
+                        case "intermediaire":
+                            return 30;
+                            break;
+                        case "extreme":
+                            return 30;
+                            break;
+                        case "impossible":
+                            return 30;
+                            break;                    
+                        default:
+                            Utils.log('difficulté mission inconnue', true, '_valider','modo');
+                            return 0;
+                            break;
+                    }
+                }
+            }
+            return -1;//pas de mission en attente de validation
+        }else{
+            return -1;//pas de mission
+        }
+    },
     setValidation: function (message) {
         createUserIfNotExist(message.member.id);
         if(!(players[message.member.id].missions == null) &&  players[message.member.id].missions != undefined){
@@ -225,12 +284,12 @@ module.exports = {
         if(!(players[message.member.id].missions == null) && players[message.member.id].missions != undefined){
             var listMissionJoueur = players[message.member.id].missions;
             var key3 = Object.keys(listMissionJoueur);
-            var tmp = "2019-02-05T10:53:10.007Z";// personne a demandé de mission avant de toute façon
+            var tmp = moment("2019-01-05T10:53:10.007Z");// personne a demandé de mission avant de toute façon
             for (var i = 0; i < key3.length; i++) {
                 if (players[message.member.id].missions[i].status == 1 ) {
-                    if (players[message.member.id].missions[i].date > tmp)
+                    if (moment(players[message.member.id].missions[i].date) > tmp)
                     {
-                        tmp = players[message.member.id].missions[i].date;
+                        tmp = moment(players[message.member.id].missions[i].date);
                     }
                 }
             }
@@ -252,7 +311,7 @@ module.exports = {
         return -1;
     },
     addMission: function(message,difficulter) {
-
+        //TODO en fct difficulté
         createUserIfNotExist(message.member.id);
         if(!(players[message.member.id].missions == null) && players[message.member.id].missions != undefined){
             var listMissionJoueur = players[message.member.id].missions;
@@ -274,6 +333,11 @@ module.exports = {
 
         var listMission = Missions.getMissions();
         var keys = Object.keys(listMission);//pour pouvoir faire .length
+        for (let index = 0; index < keys.length; index++) {
+            if (listMission[index].difficulte != difficulter) {
+                listMission = listMission.slice(index);
+            }
+        }
 
         var random = Math.floor(Math.random() * Math.floor(keys.length));
 

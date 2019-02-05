@@ -176,6 +176,26 @@ var commands = {
             Utils.reply(message, 'Le guildID a bien été modifié.');
         }
     },
+    retourMissionChannel: {
+        help: [
+            'l\'id du channel des retours missions (@player votre mission a été valider).',
+        ],
+        args: 'id',
+        runCommand: (args, message) => {
+
+            if (args.length === 0) {
+                Utils.reply(message, "**channel: **: <#" + constants.logChannel + ">");
+                return;
+            }
+            if (!message.mentions.channels.first()) {
+                Utils.reply(message,"il faut mentionner un Channel.",true);
+                return;
+            }
+            constants.retourMissionChannel = message.mentions.channels.first().id;
+            
+            Utils.reply(message, 'Le Channel pour les retours mission a bien été modifié.');
+        }
+    },
     logChannel: {
         help: [
             'l\'id du channel de log du serveur.',

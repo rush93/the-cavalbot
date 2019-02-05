@@ -12,7 +12,10 @@ const Utils = require('../utils');
 var Constants = require('../models/constants');
 var Mission = require('../models/mission');
 var Players = require('../models/players');
+var Clans = require('../models/clans');
+var Ranks = require('../models/ranks');
 var moment = require('moment');
+var givepointsCommands = require('./givepoints');
 
 var commands = {
     create: {
@@ -192,7 +195,6 @@ var commands = {
         runCommand: (args, message) => {
             if (args.length >= 1) {
                 var channel = message.guild.channels.get(Constants.missionChannel);
-
                 //vérifier si mission en cours ou en attente validation
                 var retour = Players.getCurrentMission(message);
                 if(Players.getCurrentValidation(message) == 1){
@@ -217,7 +219,71 @@ var commands = {
         args: '',
         runCommand: (args, message) => {
             if (args.length >= 1) {
-                Utils.reply(message, 'walla c\'est pas encore fait');
+                var retour = Players.setValider(args[0]);
+                if (retour != -1) {
+                    
+                    message.guild.channels.get(Constants.retourMissionChannel).send(`<@`+args[0]+`> GG! mission validé`);
+
+                    var points = Number(retour);
+                    // facile 30
+                    // intermediaire 50
+                    // extreme 75
+                    // impossible 100
+
+                    var member = message.guild.members.get(args[0]);
+                    var clanId = Clans.getPlayerClan(member).id;
+                    var player = Players.getPlayer(member.id, clanId)
+                    var oldPoints = 0;
+                    if (player)
+                        oldPoints = player.points;
+                    if (!oldPoints)
+                        oldPoints = 0;
+                    var newPoints = Number(oldPoints) + Number(points);
+                    console.log("newPoints :"+newPoints);
+                    Players.setPoints(member.id, clanId, newPoints);
+                    Utils.reply(message, 'Les points du joueur ont bien été modifiés.');
+                    var playerClan = Clans.getPlayerClan(member);
+                    var avaliabeRanks = Ranks.getRanks(playerClan.id);
+                    var keys = Ranks.getSortedKeys(playerClan.id);
+                    var nextRank = null;
+                    for (var i = 0; i < keys.length; i++) {
+                        if (avaliabeRanks[keys[i]].points > oldPoints && avaliabeRanks[keys[i]].points <= newPoints) {
+                            nextRank = avaliabeRanks[keys[i]];
+                        }
+                    }
+                    if (!nextRank) {
+                        return;
+                    }
+                    if (nextRank.points <= newPoints) {
+                        member.addRole(member.guild.roles.get(nextRank.roleId));
+                        Players.setActiveRank(member, nextRank);
+                        Utils.reply(message, `Bravo <@!${member.id}> tu as maintenant accès à un nouveau rang: **${nextRank.name}**.`);
+                    }
+                    
+
+
+                }else{
+                    Utils.reply(message, 'heu on dirai que cette personne n\'a pas de mission en attente de validation');
+                }
+            }else{
+                Utils.reply(message, 'Fail copier coller');
+            }
+        }
+    },
+    refuser: {
+        help: [
+            'refuser une mission'
+        ],
+        args: '',
+        runCommand: (args, message) => {
+            if (args.length >= 1) {
+                var retour = Players.setUnValider(args[0]);
+                if (retour == 1) {
+                    message.guild.channels.get(Constants.retourMissionChannel).send(`<@!`+args[0]+`> mission refusé`);
+                    Utils.reply(message, 'Mission refuser avec succes');
+                }else{
+                    Utils.reply(message, 'heu on dirai que cette personne n\'a pas de mission en attente de validation');
+                }
             }else{
                 Utils.reply(message, 'Fail copier coller');
             }
