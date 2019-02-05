@@ -24,6 +24,10 @@ var commands = {
         ],
         args: '',
         runCommand: (args, message) => {
+            if (!message.member.hasPermission("KICK_MEMBERS")) {
+                Utils.reply(message, "Vous n'avez pas assez de couilles pour modifier les missions", true);
+                return;
+            }
             if (args.length < 3) {
                 Utils.reply(message, 'Il manque des arguments. (desc, difficulte, mode, hero)');
                 return;
@@ -220,6 +224,10 @@ var commands = {
         ],
         args: '',
         runCommand: (args, message) => {
+            if (!message.member.hasPermission("KICK_MEMBERS")) {
+                Utils.reply(message, "Vous n'avez pas assez de couilles pour modifier les missions", true);
+                return;
+            }
             if (args.length >= 1) {
                 var retour = Players.setValider(args[0]);
                 if (retour != -1) {
@@ -269,6 +277,10 @@ var commands = {
         ],
         args: '',
         runCommand: (args, message) => {
+            if (!message.member.hasPermission("KICK_MEMBERS")) {
+                Utils.reply(message, "Vous n'avez pas assez de couilles pour modifier les missions", true);
+                return;
+            }
             if (args.length >= 1) {
                 var retour = Players.setUnValider(args[0]);
                 if (retour == 1) {
