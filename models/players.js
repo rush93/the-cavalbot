@@ -328,25 +328,34 @@ module.exports = {
         var keys = Object.keys(listMission);//pour pouvoir faire .length
         for (let index = 0; index < keys.length; index++) {
             if (listMission[index].difficulte != difficulter) {
-                listMission = listMission.slice(index);
+                delete listMission[index];
             }
         }
-
+        keys = Object.keys(listMission);
+        if (keys.length == 0) {
+            return -2;
+        }
+        console.log("listMission : "+JSON.stringify(listMission));
         var random = Math.floor(Math.random() * Math.floor(keys.length));
-
+        console.log("random:"+random);
         if(players[message.member.id].missions == undefined){
             players[message.member.id].missions = {};
         }
         var datemission = new Date();
-        players[message.member.id].missions[idMission] = {
-            id: random,
-            difficulte: listMission[random].difficulte,
-            heroe: listMission[random].heroe,
-            mode: listMission[random].mode,
-            nom: listMission[random].nom,
-            status:0,
-            date: datemission
-        };//status : 0 = en cours, 1=validé, -1 = temps écoulé
+        for (let index = 0; index < keys.length; index++) {
+            if (index == random) {
+                players[message.member.id].missions[idMission] = {
+                    id: keys[index],
+                    difficulte: listMission[keys[index]].difficulte,
+                    heroe: listMission[keys[index]].heroe,
+                    mode: listMission[keys[index]].mode,
+                    nom: listMission[keys[index]].nom,
+                    status:0,
+                    date: datemission
+                };//status : 0 = en cours, 1=validé, -1 = temps écoulé, 2 = demande validation effectué
+            }
+        }
+        
         save();
         return "Nom : "+players[message.member.id].missions[idMission].nom+"\nMode : "+players[message.member.id].missions[idMission].mode+"\nDifficulté : "+players[message.member.id].missions[idMission].difficulte;
         

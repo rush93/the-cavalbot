@@ -24,13 +24,13 @@ var commands = {
         ],
         args: '',
         runCommand: (args, message) => {
-            var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
-            args = reg[2].trim().split(' ');
-            var desc = reg[1].replace(/"/g, '');
             if (args.length < 3) {
                 Utils.reply(message, 'Il manque des arguments. (desc, difficulte, mode, hero)');
                 return;
             }
+            var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
+            args = reg[2].trim().split(' ');
+            var desc = reg[1].replace(/"/g, '');
             Mission.createMission(desc, args[0],args[1],args[2],args[3]);
             Utils.reply(message, 'La mission a bien été crée.')
         }
@@ -73,6 +73,8 @@ var commands = {
                         var retour = Players.addMission(message,args[0]);
                         Utils.reply(message, "Voici votre mission : \n"+retour);
                     }
+                }else if(retour == -2){
+                    Utils.reply(message, 'La difficulté que vous avez choisi n\'existe pas faite _mission list');
                 }else{
                     
                     Utils.reply(message, "Voici votre mission : \n"+retour);
@@ -137,7 +139,7 @@ var commands = {
                 });
             }
             if (args < 1) {
-                Utils.sendEmbed(message, 0xE8C408, "Missions par type", "", message.author, fields);
+                Utils.sendEmbed(message, 0xE8C408, "Missions par difficulté", "", message.author, fields);
             }else{
                 for (var i = 0; i < keys.length; i++) {
                     if (listMissions[keys[i]].difficulte == args[0]) {
@@ -221,15 +223,9 @@ var commands = {
             if (args.length >= 1) {
                 var retour = Players.setValider(args[0]);
                 if (retour != -1) {
-                    
-                    message.guild.channels.get(Constants.retourMissionChannel).send(`<@`+args[0]+`> GG! mission validé`);
+                    message.guild.channels.get(Constants.retourMissionChannel).send(`<@`+args[0]+`> GG! mission validé, tu viens de gagner `+retour+" points");
 
                     var points = Number(retour);
-                    // facile 30
-                    // intermediaire 50
-                    // extreme 75
-                    // impossible 100
-
                     var member = message.guild.members.get(args[0]);
                     var clanId = Clans.getPlayerClan(member).id;
                     var player = Players.getPlayer(member.id, clanId)
@@ -257,11 +253,8 @@ var commands = {
                     if (nextRank.points <= newPoints) {
                         member.addRole(member.guild.roles.get(nextRank.roleId));
                         Players.setActiveRank(member, nextRank);
-                        Utils.reply(message, `Bravo <@!${member.id}> tu as maintenant accès à un nouveau rang: **${nextRank.name}**.`);
+                        message.guild.channels.get(Constants.retourMissionChannel).send(`Bravo <@!${member.id}> tu as maintenant accès à un nouveau rang: **${nextRank.name}**.`);
                     }
-                    
-
-
                 }else{
                     Utils.reply(message, 'heu on dirai que cette personne n\'a pas de mission en attente de validation');
                 }
