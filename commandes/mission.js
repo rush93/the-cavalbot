@@ -12,6 +12,8 @@ const Utils = require('../utils');
 var Constants = require('../models/constants');
 var Mission = require('../models/mission');
 var Players = require('../models/players');
+var moment = require('moment');
+
 var commands = {
     create: {
         help: [
@@ -50,14 +52,29 @@ var commands = {
         ],
         args: 'difficulte',
         runCommand: (args, message) => {
-            var retour = Players.addMission(message,args[0]);
-            if(retour == -1){
-                //TODO vérifier si temps écoulé
-                Utils.reply(message, 'vous avez deja une missions active ou en cours de validation');
+            //vérifier si derniere mission pas fini il y a 5minutes
+            var lastTempsMissionValider = Players.getLastTempsMissionValider(message);
+            if(moment(lastTempsMissionValider).day(7).format('MM/DD/YYYY') == moment().day(7).format('MM/DD/YYYY')){
+                Utils.reply(message, "Veuillez attendre dimanche pour demander une autre mission");
             }else{
-                Utils.reply(message, "Voici votre mission : \n"+retour);
+                var retour = Players.addMission(message,args[0]);
+                var tempsMissionActive = Players.getTempsMission(message);
+                if(retour == -1){
+                    // vérifier si mission active/vérif mais 7 jours écoulé depuis old demande
+                    if (moment() - moment(tempsMissionActive).add(7, 'days') < 0)
+                    {
+                        Utils.reply(message, 'vous avez deja une missions active ou en cours de validation');
+                    }else{
+                        // set a -1 si temps passé
+                        Players.setTimeoutMission(message);
+                        var retour = Players.addMission(message,args[0]);
+                        Utils.reply(message, "Voici votre mission : \n"+retour);
+                    }
+                }else{
+                    
+                    Utils.reply(message, "Voici votre mission : \n"+retour);
+                }
             }
-            
         }
     },
     /*modifierEtat: {

@@ -203,6 +203,54 @@ module.exports = {
             return -1;//pas de mission active
         }
     },
+    setTimeoutMission: function (message) {
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) &&  players[message.member.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 0 || players[message.member.id].missions[i].status == 2) {
+                    players[message.member.id].missions[i].status = -1;// timeout
+                    save();
+                    return "1";
+                }
+            }
+            return -1;//pas de mission active
+        }else{
+            return -1;//pas de mission active
+        }
+    },
+    getLastTempsMissionValider: function(message,difficulter) {
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) && players[message.member.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            var tmp = "2019-02-05T10:53:10.007Z";// personne a demandé de mission avant de toute façon
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 1 ) {
+                    if (players[message.member.id].missions[i].date > tmp)
+                    {
+                        tmp = players[message.member.id].missions[i].date;
+                    }
+                }
+            }
+            return tmp;
+        }
+        return 0;
+    },
+    getTempsMission: function(message,difficulter) {
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) && players[message.member.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 0 || players[message.member.id].missions[i].status == 2) {
+                    return players[message.member.id].missions[i].date;
+                }
+            }
+        }
+        return -1;
+    },
     addMission: function(message,difficulter) {
 
         createUserIfNotExist(message.member.id);
