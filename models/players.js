@@ -335,9 +335,7 @@ module.exports = {
         if (keys.length == 0) {
             return -2;
         }
-        console.log("listMission : "+JSON.stringify(listMission));
         var random = Math.floor(Math.random() * Math.floor(keys.length));
-        console.log("random:"+random);
         if(players[message.member.id].missions == undefined){
             players[message.member.id].missions = {};
         }
