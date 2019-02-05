@@ -144,7 +144,7 @@ module.exports = {
                 //title: ((i + 1) === 1 ? '1er: ' : (i+1) +'e: ') + (guildMember.nickname ? guildMember.nickname : guildMember.user.username),
                 fields.push({
                     title: ""+players[user.id].missions[i].nom,
-                    text: "Mode : "+players[user.id].missions[i].mode+"\nDifficulté : "+players[user.id].missions[i].difficulte+"\nDate : " + moment(players[user.id].missions[i].date).format('DD/MM/YYYY') + "\nStatus : "+(players[user.id].missions[i].status === 0 ? 'en cours' : (players[user.id].missions[i].status === 1 ? 'réussite' : (players[user.id].missions[i].status === 2 ? 'en attente de validation' : 'échouée'))),
+                    text: "Mode : "+players[user.id].missions[i].mode+"\nDifficulté : "+players[user.id].missions[i].difficulte+"\nDate : " + moment(players[user.id].missions[i].date).format('MM/DD/YYYY') + "\nStatus : "+(players[user.id].missions[i].status === 0 ? 'en cours' : (players[user.id].missions[i].status === 1 ? 'réussite' : (players[user.id].missions[i].status === 2 ? 'en attente de validation' : 'échouée'))),
                     grid: true
                 });
             }
@@ -163,7 +163,7 @@ module.exports = {
             for (var i = 0; i < key3.length; i++) {
                 if (players[message.member.id].missions[i].status == 0) {
                     //Utils.reply(message, 'vous avez deja une missions active');
-                    return "Nom : "+players[message.member.id].missions[i].nom+"\nMode : "+players[message.member.id].missions[i].mode+"\nDifficulté : "+players[message.member.id].missions[i].difficulte;
+                    return "Nom : "+players[message.member.id].missions[i].nom+"\nMode : "+players[message.member.id].missions[i].mode+"\nHeroe : "+players[message.member.id].missions[i].heroe+"\nDifficulté : "+players[message.member.id].missions[i].difficulte + "\n A finir avant le : " +moment(players[message.member.id].missions[i].date).add(7, 'days').format('DD/MM/YYYY');
                 }
             }
             return -1;//pas de mission active
@@ -355,8 +355,8 @@ module.exports = {
         }
         
         save();
-        return "Nom : "+players[message.member.id].missions[idMission].nom+"\nMode : "+players[message.member.id].missions[idMission].mode+"\nDifficulté : "+players[message.member.id].missions[idMission].difficulte;
-        
+        return "Nom : "+players[message.member.id].missions[idMission].nom+"\nMode : "+players[message.member.id].missions[idMission].mode+"\nHeroe : "+players[message.member.id].missions[idMission].heroe+"\nDifficulté : "+players[message.member.id].missions[idMission].difficulte+"\nA valider avant le : "+moment(players[message.member.id].missions[idMission].date).add(7, 'days').format('MM/DD/YYYY');
+        //TODO ajouté date de fin
     },
     setCooldownMariage: function (guildMember) {
         createUserIfNotExist(guildMember.id);

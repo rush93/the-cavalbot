@@ -62,7 +62,7 @@ var commands = {
             //vérifier si derniere mission pas fini il y a 5minutes
             var lastTempsMissionValider = Players.getLastTempsMissionValider(message);
             if(moment(lastTempsMissionValider).day(7).format('MM/DD/YYYY') == moment().day(7).format('MM/DD/YYYY')){
-                Utils.reply(message, "Veuillez attendre dimanche pour demander une autre mission");
+                Utils.reply(message, "Veuillez attendre dimanche 00h pour demander une autre mission");
             }else{
                 var retour = Players.addMission(message,args[0]);
                 var tempsMissionActive = Players.getTempsMission(message);
@@ -208,7 +208,7 @@ var commands = {
                 }else if (retour == -1) {
                     Utils.reply(message, "Pas de mission active");
                 }else{
-                    channel.send(retour+ "\nLien image : " +args + "\nValider mission : _mission valider "+message.member.id+"\nRefuser mission : _mission refuser "+message.member.id);
+                    channel.send(retour+ "\nLien image : " +args + "\nValider mission : _mission valider "+message.member.id+"\nRefuser mission : _mission refuser "+message.member.id+"\n"+`<@301080434949881856>`);
                     Players.setValidation(message);//modifier statut = 0 en statut = 2
                     Utils.reply(message, 'Veuillez attendre la validation par les autorités compétentes');
                 }
@@ -284,7 +284,7 @@ var commands = {
             if (args.length >= 1) {
                 var retour = Players.setUnValider(args[0]);
                 if (retour == 1) {
-                    message.guild.channels.get(Constants.retourMissionChannel).send(`<@!`+args[0]+`> mission refusé`);
+                    message.guild.channels.get(Constants.retourMissionChannel).send(`<@!`+args[0]+`> screen pour votre mission refusé`);
                     Utils.reply(message, 'Mission refuser avec succes');
                 }else{
                     Utils.reply(message, 'heu on dirai que cette personne n\'a pas de mission en attente de validation');
