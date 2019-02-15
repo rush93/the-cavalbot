@@ -327,8 +327,8 @@ module.exports = {
         var listMission = Missions.getMissions();
         var keys = Object.keys(listMission);//pour pouvoir faire .length
         for (let index = 0; index < keys.length; index++) {
-            if (listMission[index].difficulte != difficulter) {
-                delete listMission[index];
+            if (listMission[keys[index]].difficulte != difficulter) {
+                delete listMission[keys[index]];
             }
         }
         keys = Object.keys(listMission);
