@@ -245,7 +245,7 @@ var commands = {
         ],
         args: '',
         runCommand: (args, message) => {
-            if (!message.member.hasPermission("KICK_MEMBERS")) {
+            if (!message.member.hasPermission("SEND_MESSAGES")) {
                 Utils.reply(message, "Vous n'avez pas assez de couilles pour modifier les missions", true);
                 return;
             }
