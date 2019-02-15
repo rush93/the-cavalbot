@@ -118,20 +118,19 @@ var commands = {
             var difficulte = [];
 
             for (var i = 0; i < keys.length; i++) {
-                if (listMissions[i].event==null) {
-                    if (difficulte[listMissions[i].difficulte]==null) {
-                        difficulte[listMissions[i].difficulte] = 1;
+                //if (listMissions[i].event==null) {
+                    if (difficulte[listMissions[keys[i]].difficulte]==null) {
+                        difficulte[listMissions[keys[i]].difficulte] = 1;
                     }else{
-                        difficulte[listMissions[i].difficulte]++;
+                        difficulte[listMissions[keys[i]].difficulte]++;
                     }
-                }else{
+                /*}else{
                     if (difficulte[listMissions[i].event]==null) {
                         difficulte[listMissions[i].event] = 1;
                     }else{
                         difficulte[listMissions[i].event]++;
                     }
-                    
-                }
+                }*/
                 
             }
             var keysDiff = Object.keys(difficulte);
@@ -215,6 +214,28 @@ var commands = {
                 
             }else{
                 Utils.reply(message, 'Veuillez insérer le lien de votre image justificative (capture d\'écran non découpée)');
+            }
+        }
+    },
+    supprimer: {
+        help: [
+            'supprimer une mission'
+        ],
+        args: 'id',
+        runCommand: (args, message) => {
+            if (!message.member.hasPermission("KICK_MEMBERS")) {
+                Utils.reply(message, "Vous n'avez pas assez de couilles pour modifier les missions", true);
+                return;
+            }
+            if (args.length != 1) {
+                Utils.reply(message, "pas assez/trop d'argument", true);
+            }else{
+                var retour = Mission.supprimerMission(args[0]);
+                if(retour == 0){
+                    Utils.reply(message, "Mission supprimer avec succes");
+                }else{
+                    Utils.reply(message, "Id inconnu", true);
+                }
             }
         }
     },

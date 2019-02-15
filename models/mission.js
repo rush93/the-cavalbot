@@ -51,6 +51,15 @@ module.exports = {
         };
         save();
     },
+    supprimerMission: function (id) {
+        if(missions[id] != null){
+            delete missions[id];
+            save();
+            return 0;
+        }else{
+            return -1;
+        }
+    },
     getMissions: function () {
         return missions;
     },
