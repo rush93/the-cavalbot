@@ -176,11 +176,31 @@ var commands = {
             Utils.reply(message, 'Le guildID a bien été modifié.');
         }
     },
+    retourMissionChannel: {
+        help: [
+            'l\'id du channel des retours missions (@player votre mission a été valider).',
+        ],
+        args: 'id',
+        runCommand: (args, message) => {
+
+            if (args.length === 0) {
+                Utils.reply(message, "**channel: **: <#" + constants.logChannel + ">");
+                return;
+            }
+            if (!message.mentions.channels.first()) {
+                Utils.reply(message,"il faut mentionner un Channel.",true);
+                return;
+            }
+            constants.retourMissionChannel = message.mentions.channels.first().id;
+            
+            Utils.reply(message, 'Le Channel pour les retours mission a bien été modifié.');
+        }
+    },
     logChannel: {
         help: [
             'l\'id du channel de log du serveur.',
         ],
-        args: '[url]',
+        args: 'id',
         runCommand: (args, message) => {
 
             if (args.length === 0) {
@@ -192,7 +212,46 @@ var commands = {
                 return;
             }
             constants.logChannel = message.mentions.channels.first().id;
+            
             Utils.reply(message, 'Le logChannel a bien été modifié.');
+        }
+    },
+    bvnChannel: {
+        help: [
+            'l\'id du channel de bienvenue du serveur.',
+        ],
+        args: 'id',
+        runCommand: (args, message) => {
+
+            if (args.length === 0) {
+                Utils.reply(message, "**channel: **: <#" + constants.bvnChannel + ">");
+                return;
+            }
+            if (!message.mentions.channels.first()) {
+                Utils.reply(message,"il faut mentionner un bienvenueChannel.",true);
+                return;
+            }
+            constants.bvnChannel = message.mentions.channels.first().id;
+            Utils.reply(message, 'Le bienvenueChannel a bien été modifié.');
+        }
+    },
+    missionChannel: {
+        help: [
+            'l\'id du channel de mission du serveur.',
+        ],
+        args: 'id',
+        runCommand: (args, message) => {
+
+            if (args.length === 0) {
+                Utils.reply(message, "**channel: **: <#" + constants.missionChannel + ">");
+                return;
+            }
+            if (!message.mentions.channels.first()) {
+                Utils.reply(message,"il faut mentionner un missionChannel.",true);
+                return;
+            }
+            constants.missionChannel = message.mentions.channels.first().id;
+            Utils.reply(message, 'Le missionChannel a bien été modifié.');
         }
     },
     reportChannel: {

@@ -5,7 +5,8 @@ var Missions = require('./mission');
 var Utils = require('../utils');
 var oversmash = require('oversmash');
 var owjs = require('overwatch-js');
-const ow = oversmash.default()
+var moment = require('moment');
+const ow = oversmash.default();
 
 var request = require('request');
 var moment = require('moment');
@@ -143,7 +144,7 @@ module.exports = {
                 //title: ((i + 1) === 1 ? '1er: ' : (i+1) +'e: ') + (guildMember.nickname ? guildMember.nickname : guildMember.user.username),
                 fields.push({
                     title: ""+players[user.id].missions[i].nom,
-                    text: "Mode : "+players[user.id].missions[i].mode+"\nDifficulté : "+players[user.id].missions[i].difficulte+"\nStatus : "+(players[user.id].missions[i].status === 0 ? 'en cours' : (players[user.id].missions[i].status === 1 ? 'réussite' : (players[user.id].missions[i].status === 2 ? 'en attente de validation' : 'échouée'))),
+                    text: "Mode : "+players[user.id].missions[i].mode+"\nDifficulté : "+players[user.id].missions[i].difficulte+"\nDate : " + moment(players[user.id].missions[i].date).format('MM/DD/YYYY') + "\nStatus : "+(players[user.id].missions[i].status === 0 ? 'en cours' : (players[user.id].missions[i].status === 1 ? 'réussite' : (players[user.id].missions[i].status === 2 ? 'en attente de validation' : 'échouée'))),
                     grid: true
                 });
             }
@@ -156,13 +157,13 @@ module.exports = {
     },
     getCurrentMission: function (message) {
         createUserIfNotExist(message.member.id);
-        if(!(players[message.member.id].missions == null) &&  players[user.id].missions != undefined){
+        if(!(players[message.member.id].missions == null) &&  players[message.member.id].missions != undefined){
             var listMissionJoueur = players[message.member.id].missions;
             var key3 = Object.keys(listMissionJoueur);
             for (var i = 0; i < key3.length; i++) {
                 if (players[message.member.id].missions[i].status == 0) {
                     //Utils.reply(message, 'vous avez deja une missions active');
-                    return "Nom : "+players[message.member.id].missions[i].nom+"\nMode : "+players[message.member.id].missions[i].mode+"\nDifficulté : "+players[message.member.id].missions[i].difficulte;
+                    return "Nom : "+players[message.member.id].missions[i].nom+"\nMode : "+players[message.member.id].missions[i].mode+"\nHeroe : "+players[message.member.id].missions[i].heroe+"\nDifficulté : "+players[message.member.id].missions[i].difficulte + "\n A finir avant le : " +moment(players[message.member.id].missions[i].date).add(7, 'days').format('DD/MM/YYYY');
                 }
             }
             return -1;//pas de mission active
@@ -170,14 +171,146 @@ module.exports = {
             return -1;//pas de mission active
         }
     },
-    addMission: function(message,difficulter) {
-
+    getCurrentValidation: function (message) {
         createUserIfNotExist(message.member.id);
-        if(!(players[message.member.id].missions == null) && players[user.id].missions != undefined){
+        if(!(players[message.member.id].missions == null) &&  players[message.member.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 2) {
+                    //Utils.reply(message, 'vous avez deja une missions en attente validation');
+                    return 1;
+                }
+            }
+            return -1;//pas de mission active
+        }else{
+            return -1;//pas de mission active
+        }
+    },
+    setUnValider: function (iduser) {
+        createUserIfNotExist(iduser);
+        if(!(players[iduser].missions == null) &&  players[iduser].missions != undefined){
+            var listMissionJoueur = players[iduser].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[iduser].missions[i].status == 2) {
+                    players[iduser].missions[i].status = 0;// on remet comme si la mission etait encours
+                    save();
+                    return "1";
+                }
+            }
+            return -1;//pas de mission en attente de validation
+        }else{
+            return -1;//pas de mission
+        }
+    },
+    setValider: function (iduser) {
+        createUserIfNotExist(iduser);
+        if(!(players[iduser].missions == null) &&  players[iduser].missions != undefined){
+            var listMissionJoueur = players[iduser].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[iduser].missions[i].status == 2) {
+                    players[iduser].missions[i].status = 1;// valider
+                    save();
+                    switch (players[iduser].missions[i].difficulte) {
+                        case "facile":
+                            return 30;
+                            break;
+                        case "intermediaire":
+                            return 30;
+                            break;
+                        case "extreme":
+                            return 30;
+                            break;
+                        case "impossible":
+                            return 30;
+                            break;                    
+                        default:
+                            Utils.log('difficulté mission inconnue', true, '_valider','modo');
+                            return 0;
+                            break;
+                    }
+                }
+            }
+            return -1;//pas de mission en attente de validation
+        }else{
+            return -1;//pas de mission
+        }
+    },
+    setValidation: function (message) {
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) &&  players[message.member.id].missions != undefined){
             var listMissionJoueur = players[message.member.id].missions;
             var key3 = Object.keys(listMissionJoueur);
             for (var i = 0; i < key3.length; i++) {
                 if (players[message.member.id].missions[i].status == 0) {
+                    players[message.member.id].missions[i].status = 2;// en attente validation
+                    save();
+                    return "1";
+                }
+            }
+            return -1;//pas de mission active
+        }else{
+            return -1;//pas de mission active
+        }
+    },
+    setTimeoutMission: function (message) {
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) &&  players[message.member.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 0 || players[message.member.id].missions[i].status == 2) {
+                    players[message.member.id].missions[i].status = -1;// timeout
+                    save();
+                    return "1";
+                }
+            }
+            return -1;//pas de mission active
+        }else{
+            return -1;//pas de mission active
+        }
+    },
+    getLastTempsMissionValider: function(message,difficulter) {
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) && players[message.member.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            var tmp = moment("2019-01-05T10:53:10.007Z");// personne a demandé de mission avant de toute façon
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 1 ) {
+                    if (moment(players[message.member.id].missions[i].date) > tmp)
+                    {
+                        tmp = moment(players[message.member.id].missions[i].date);
+                    }
+                }
+            }
+            return tmp;
+        }
+        return 0;
+    },
+    getTempsMission: function(message,difficulter) {
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) && players[message.member.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 0 || players[message.member.id].missions[i].status == 2) {
+                    return players[message.member.id].missions[i].date;
+                }
+            }
+        }
+        return -1;
+    },
+    addMission: function(message,difficulter) {
+        //TODO en fct difficulté
+        createUserIfNotExist(message.member.id);
+        if(!(players[message.member.id].missions == null) && players[message.member.id].missions != undefined){
+            var listMissionJoueur = players[message.member.id].missions;
+            var key3 = Object.keys(listMissionJoueur);
+            for (var i = 0; i < key3.length; i++) {
+                if (players[message.member.id].missions[i].status == 0 || players[message.member.id].missions[i].status == 2) {
                     //Utils.reply(message, 'vous avez deja une missions active');
                     return -1;
                 }
@@ -193,23 +326,37 @@ module.exports = {
 
         var listMission = Missions.getMissions();
         var keys = Object.keys(listMission);//pour pouvoir faire .length
-
+        for (let index = 0; index < keys.length; index++) {
+            if (listMission[index].difficulte != difficulter) {
+                delete listMission[index];
+            }
+        }
+        keys = Object.keys(listMission);
+        if (keys.length == 0) {
+            return -2;
+        }
         var random = Math.floor(Math.random() * Math.floor(keys.length));
-
         if(players[message.member.id].missions == undefined){
             players[message.member.id].missions = {};
         }
-
-        players[message.member.id].missions[idMission] = {
-            id: random,
-            difficulte: listMission[random].difficulte,
-            heroe: listMission[random].heroe,
-            mode: listMission[random].mode,
-            nom: listMission[random].nom,
-            status:0 
-        };//status : 0 = en cours, 1=validé, -1 = temps écoulé
-        return "Nom : "+players[message.member.id].missions[idMission].nom+"\nMode : "+players[message.member.id].missions[idMission].mode+"\nDifficulté : "+players[message.member.id].missions[idMission].difficulte;
+        var datemission = new Date();
+        for (let index = 0; index < keys.length; index++) {
+            if (index == random) {
+                players[message.member.id].missions[idMission] = {
+                    id: keys[index],
+                    difficulte: listMission[keys[index]].difficulte,
+                    heroe: listMission[keys[index]].heroe,
+                    mode: listMission[keys[index]].mode,
+                    nom: listMission[keys[index]].nom,
+                    status:0,
+                    date: datemission
+                };//status : 0 = en cours, 1=validé, -1 = temps écoulé, 2 = demande validation effectué
+            }
+        }
+        
         save();
+        return "Nom : "+players[message.member.id].missions[idMission].nom+"\nMode : "+players[message.member.id].missions[idMission].mode+"\nHeroe : "+players[message.member.id].missions[idMission].heroe+"\nDifficulté : "+players[message.member.id].missions[idMission].difficulte+"\nA valider avant le : "+moment(players[message.member.id].missions[idMission].date).add(7, 'days').format('MM/DD/YYYY');
+        //TODO ajouté date de fin
     },
     setCooldownMariage: function (guildMember) {
         createUserIfNotExist(guildMember.id);
