@@ -158,33 +158,34 @@ try {
     let GuestsRole = member.guild.roles.find("name", "Guests");
     member.addRole(GuestsRole);
 
+    Utils.log(`running ${Utils.Color.FgYellow}welcome ${Utils.Color.Reset}message`);
+    Utils.sendDM(member,"Bienvenue sur OwAssembly, le serveur qui reproduit l'ambiance du jeu à travers son système de clans et ses multiples évènements!"
++"\nCe serveur n'a pas de vocation compétitive ou professionnelle. Si c'est ton but, nous t'invitons à aller visiter le discord de notre partenaire OverTown."
+
++"\n\nAvant toute chose:"
++"\nPrends connaissance des quelques règles du serveur, elles se trouvent dans  #📋règlements ."
++"\nChoisis ton clan parmi les 9 que le serveur propose et participe avec les autres membres à la course aux points!"
++"\nL'histoire des différents clans se trouve sur notre site internet (http://overwatch-assemble.fr/)."
++"\nLe clan Shambali est celui qu'il te faut si tu souhaites être simple observateur et ne participer à aucun évènement."
+
++"\n\nLe bot Athena est à ta disposition à tout moment et peut te fournir un grand nombre d'informations."
++"\nPour interagir avec lui, rends toi dans #bot-en-kaou-tchou ."
++"\nLes deux premières commandes qui t'intéresseront sont le _help (liste des commandes du bot) et le _btag pour renseigner ton identifiant Battle.net et ainsi pouvoir participer aux divers évènements.Tu trouveras sur notre serveur plusieurs types d'évènements auquel tu peux facilement participer, et notamment :"
++"\n:small_orange_diamond: Des mini-jeux de toutes sortes : le planning des mini-jeux se trouve dans #annonces-mini-jeux (épinglé). Pour participer, il te suffit de te rendre dans #bot-en-kaou-tchou et de taper la commande _participe"
++"\n:small_orange_diamond: Des guerres de clan : les clans s'affrontent pendant une saison de 2 mois pour défendre leurs orbes et s'emparer de celle des autres clans! Les règles de cet affrontement se trouvent sur le site dans l'onglet GDC.small_orange_diamond: Des tournois : Une fois par mois, un grand tournoi vise à départager la meilleure équipe! Celle-ci remporte un grade \"Vainqueurs du tournoi\" durant le mois suivant. Les règles de cet évènement sont postées avant chaque nouveau tournoi dans #tournois-gdc .");
+
+
     member.setNickname(member.displayName);
-    member.guild.channels.get("443199155838648320").send(`Bienvenue à toi soldat ${member}! 
-Tu es convié à choisir un clan afin de participer à la vie du serveur ;)
-Pour rappel, voici la liste des commandes à taper pour rejoindre le clan que tu souhaites (copie colle celle qui t'intéresse) :
-
-:small_orange_diamond:  Faction United Nations
-_join Overwatch
-_join Blackwatch
-_join Programme MEKA
-
-:small_blue_diamond: Faction Insurgés
-_join La Griffe
-_join Vishkar Corporation
-_join Deadlock Rebels
-
-:small_orange_diamond: Faction Gangs
-_join Junkers
-_join Los Muertos
-_join Shimada
-
-Et si tu ne souhaites pas participer aux évènements du serveur (tournoi, mini jeux, guerres):
-
-_join Shambali
-
-Si tu as des questions, nous sommes là pour te répondre!
-Bonne journée à toi!`);
-  });
+    if (globalConst.bvnChannel != "") {
+      member.guild.channels.get(globalConst.bvnChannel).send(`Bienvenue à toi ${member},
+Je viens de t'envoyer un message privé, prend le temps de le lire :smiley:.
+Si tu as des questions ou si tu souhaites une présentation plus poussée du serveur, n'hésite pas à contacter un modérateur ou un membre du staff. Nous te souhaitons encore une fois la bienvenue et nous espérons que tu tu te plairas sur notre serveur!
+L'équipe d'OA
+Et n'oublie pas de choisir ton clan parmi la liste si dessous :`).then((msg) => {
+        commands["list"].runCommand('list', msg);
+      });
+    }
+  });// fin bot.on
 
   var runCommand = (args, message) => {
     if (args[0] === globalConst.prefix + 'help') {
