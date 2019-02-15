@@ -162,8 +162,7 @@ try {
     Utils.sendDM(member,"Bienvenue sur OwAssembly, le serveur qui reproduit l'ambiance du jeu à travers son système de clans et ses multiples évènements!"
 +"\nCe serveur n'a pas de vocation compétitive ou professionnelle. Si c'est ton but, nous t'invitons à aller visiter le discord de notre partenaire OverTown."
 
-+"\n\nAvant toute chose:"
-+"\nPrends connaissance des quelques règles du serveur, elles se trouvent dans  #📋règlements ."
++"\n\nAvant toute chose prends connaissance des quelques règles du serveur qui se trouvent dans #:clipboard:règlements."
 +"\nChoisis ton clan parmi les 9 que le serveur propose et participe avec les autres membres à la course aux points!"
 +"\nL'histoire des différents clans se trouve sur notre site internet (http://overwatch-assemble.fr/)."
 +"\nLe clan Shambali est celui qu'il te faut si tu souhaites être simple observateur et ne participer à aucun évènement."
@@ -171,7 +170,8 @@ try {
 +"\n\nLe bot Athena est à ta disposition à tout moment dans #bot-en-kaou-tchou avec la commandes_help pour obtenir la liste des commandes du bot."
 +"\nTu trouveras sur notre serveur plusieurs types d'évènements auquel tu peux facilement participer, et notamment :"
 +"\n:small_orange_diamond: Des mini-jeux de toutes sortes : le planning des mini-jeux se trouve dans #annonces-mini-jeux (épinglé). Pour participer, il te suffit de te rendre dans #bot-en-kaou-tchou et de taper la commande _participe"
-+"\n:small_orange_diamond: Des guerres de clan : les clans s'affrontent pendant une saison de 2 mois pour défendre leurs orbes et s'emparer de celle des autres clans! Les règles de cet affrontement se trouvent sur le site dans l'onglet GDC. :small_orange_diamond: Des tournois : Une fois par mois, un grand tournoi vise à départager la meilleure équipe!");
++"\n:small_orange_diamond: Des guerres de clan : les clans s'affrontent pendant une saison de 2 mois pour défendre leurs orbes et s'emparer de celle des autres clans! Les règles de cet affrontement se trouvent sur le site dans l'onglet GDC."
++"\n:small_orange_diamond: Des tournois : Une fois par mois, un grand tournoi vise à départager la meilleure équipe!");
 
 
     member.setNickname(member.displayName);
