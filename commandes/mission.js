@@ -245,7 +245,7 @@ var commands = {
         ],
         args: '',
         runCommand: (args, message) => {
-            if (!message.member.hasPermission("SEND_MESSAGES")) {
+            if (!message.member.hasPermission("KICK_MEMBERS")) {
                 Utils.reply(message, "Vous n'avez pas assez de couilles pour modifier les missions", true);
                 return;
             }
@@ -341,11 +341,11 @@ var help = function (message) {
     Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des missions', "", message.author, fields);
 }
 module.exports = {
-    role: 'MANAGE_GUILD',
+    role: 'SEND_MESSAGES',
     helpCat: 'Permet d\'obtenir une mission',
     help,
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_GUILD")) {
+        if (!message.member.hasPermission("SEND_MESSAGES")) {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour jouer avec les missions (pas encore)", true);
             return;
         }
