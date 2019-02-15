@@ -196,7 +196,7 @@ var commands = {
         help: [
             'demander a valider une mission'
         ],
-        args: '',
+        args: ' liendevitrescreen',
         runCommand: (args, message) => {
             if (args.length >= 1) {
                 var channel = message.guild.channels.get(Constants.missionChannel);
