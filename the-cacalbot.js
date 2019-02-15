@@ -157,6 +157,7 @@ try {
 
     let GuestsRole = member.guild.roles.find("name", "Guests");
     member.addRole(GuestsRole);
+
     Utils.log(`running ${Utils.Color.FgYellow}welcome ${Utils.Color.Reset}message`);
     Utils.sendDM(member,"Bienvenue sur OwAssembly, le serveur qui reproduit l'ambiance du jeu à travers son système de clans et ses multiples évènements!"
 +"\nCe serveur n'a pas de vocation compétitive ou professionnelle. Si c'est ton but, nous t'invitons à aller visiter le discord de notre partenaire OverTown."
@@ -232,10 +233,20 @@ Et n'oublie pas de choisir ton clan parmi la liste si dessous :`).then((msg) => 
         Utils.log('', false, 'DM message', message.author.username, message.content);
         var result = /^say ([0-9]+) (.+)$/.exec(message.content);
         if (result) {
-          if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, 'ptdr t ki ?', true);
-            return;
-          }
+          var dev = ["227441303527489537", "270268597874589696"];
+          var isDev = false;
+          dev.forEach((id) => {
+                if (message.author.id == id) {
+                  isDev = true;
+                  console.log("isdev");
+                }
+            });
+          if (!isDev) {
+              if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
+                Utils.reply(message, 'ptdr t ki ?', true);
+                return;
+              }
+            }
           var channel = guild.channels.get(result[1]);
           if (!channel) {
             Utils.reply(message, 'c\'est pas un channel ça', true);
@@ -331,7 +342,7 @@ mais bon entre nous même si tu est timide personne ne t'en voudra si tu fait ${
       Utils.reply(message, 'Aie..., j\'ai bugger. <@!270268597874589696> tu fait mal ton boulot! corrige moi ce bug tout de suite!', true)
     }
   });
-} catch(e) {
+} catch (e) {
   Utils.log(e.stack, true)
 }
 
