@@ -65,9 +65,9 @@ var commands = {
                 Utils.reply(message, "Veuillez attendre dimanche 00h pour demander une autre mission");
             }else{
                 var retour = Players.addMission(message,args[0]);
-                var tempsMissionActive = Players.getTempsMission(message);
                 if(retour == -1){
                     // vérifier si mission active/vérif mais 7 jours écoulé depuis old demande
+                    var tempsMissionActive = Players.getTempsMission(message);
                     if (moment() - moment(tempsMissionActive).add(7, 'days') < 0)
                     {
                         Utils.reply(message, 'vous avez deja une missions active ou en cours de validation');
@@ -264,7 +264,6 @@ var commands = {
                     if (!oldPoints)
                         oldPoints = 0;
                     var newPoints = Number(oldPoints) + Number(points);
-                    console.log("newPoints :"+newPoints);
                     Players.setPoints(member.id, clanId, newPoints);
                     Utils.reply(message, 'Les points du joueur ont bien été modifiés.');
                     var playerClan = Clans.getPlayerClan(member);

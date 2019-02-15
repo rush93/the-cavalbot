@@ -304,7 +304,6 @@ module.exports = {
         return -1;
     },
     addMission: function(message,difficulter) {
-        //TODO en fct difficulté
         createUserIfNotExist(message.member.id);
         if(!(players[message.member.id].missions == null) && players[message.member.id].missions != undefined){
             var listMissionJoueur = players[message.member.id].missions;
