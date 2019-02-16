@@ -92,6 +92,30 @@ var commands = {
   messages: messagesCommand,
   mission: missionCommand
 }
+var phrase = ["C'est un oiseau ! C'est un avion ! J'ai rien dit, c'est juste %player%",
+"%player% vient de rejoindre le serveur. Quelqu'un peut me soigner ?",
+"Bienvenue, %player%. Restez un peu et écoutez.",
+"Bienvenue, %player%. Nous vous attendions ( ͡° ͜ʖ ͡°)",
+"C'est dangereux d’y aller seul, emmenez %player% !",
+"Les roses sont rouges, les violettes sont bleues, %player% Max a rejoint ce lieu",
+"C'est %player% ! Loué soit le soleil ! \[T]/",
+"Oh mon dieu ! %player% est là.",
+"%player% vient de rejoindre le serveur. Quelqu'un peut me soigner ?",
+"%player% a rejoint le serveur ! C’est super efficace !",
+"Joueur %player% prêt",
+"%player% a rejoint le serveur ! C’est super efficace !",
+"%player% vient d’arriver. Il est trop OP - il faut le nerf.",
+"Un %player% a spawn dans le serveur.",
+"%player% a rejoint. Vous devez construire des pylônes supplémentaires.",
+"%player% has joined the battle bus.",
+"Bienvenue %player%. Laissez vos armes près de la porte.",
+"Où est %player% ? Dans le serveur !",
+"Swoooosh. %player% vient juste d’atterrir.",
+"Nous vous attendions, %player%",
+"%player% vient de rejoindre le serveur - glhf ",
+"%player% est arrivé(e). La fête est finie.",
+""
+];
 
 var intervalMessage = require('./intervals/messages');
 
