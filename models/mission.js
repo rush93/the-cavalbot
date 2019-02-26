@@ -3,8 +3,7 @@ var Constants = require('./constants');
 var Utils = require('../utils');
 var path = require(`path`);
 
-var missions = {};
-var missionsMap = {};
+var missions = [];
 
 function save() {
     fs.writeFile(path.resolve(__dirname + '/../data/missions.json'), JSON.stringify(missions), function (err) {
@@ -31,7 +30,6 @@ module.exports = {
             load()
                 .then(r => {
                     resolve(r)
-                    var ids = Object.keys(missions);
                 })
                 .catch(e => reject(e));
         });
@@ -40,15 +38,14 @@ module.exports = {
         save();
     },
     createMission: function (desc, difficulte, mode, hero, event) {
-        var ids = Object.keys(missions);
-        missions[ids.length] = {
+        missions.push({
             nom: desc,
             active: true,
             difficulte: difficulte,
             mode: mode,
             heroe: hero,
             event: event
-        };
+        })
         save();
     },
     supprimerMission: function (id) {
