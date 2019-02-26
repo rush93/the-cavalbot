@@ -405,7 +405,6 @@ module.exports = {
             };
         }
         if (savePlayers && points > players[id].clans[clanId].points) {
-            console.log(Clans.getClanById(clanId).points, '+', points - players[id].clans[clanId].points)
             Clans.addPoints(clanId,points - players[id].clans[clanId].points);
         } else if(savePlayers) {
             Clans.delPoints(clanId,players[id].clans[clanId].points - points);
