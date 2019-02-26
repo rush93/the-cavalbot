@@ -323,7 +323,7 @@ module.exports = {
         }
         
 
-        var listMission = Missions.getMissions();
+        var listMission = Object.assign({}, Missions.getMissions());
         var keys = Object.keys(listMission);//pour pouvoir faire .length
         for (let index = 0; index < keys.length; index++) {
             if (listMission[keys[index]].difficulte != difficulter) {
