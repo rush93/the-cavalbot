@@ -32,6 +32,15 @@ function load() {
     })
 }
 
+function getSumOfSeason(seasons) {
+    let seasonsKeys =  Object.keys(seasons);
+    let sum = 0;
+    for (let seasonsKey of seasonsKeys) {
+        sum += seasons[seasonsKey];
+    }
+    return sum;
+}
+
 function createUserIfNotExist(id) {
     if (!players[id]) {
         players[id] = {
@@ -387,7 +396,7 @@ module.exports = {
     getPlayer: function (id, clanId) {
         return players[id] ? players[id].clans[clanId] : null;
     },
-    setPoints: function (id, clanId, points) {
+    setPoints: function (id, clanId, points, savePlayers = true) {
         clanId = Clans.getClanById(clanId).id;
         createUserIfNotExist(id);
         if (!players[id].clans[clanId]) {
@@ -395,8 +404,29 @@ module.exports = {
                 id: id
             };
         }
+        if (savePlayers && points > players[id].clans[clanId].points) {
+            console.log(Clans.getClanById(clanId).points, '+', points - players[id].clans[clanId].points)
+            Clans.addPoints(clanId,points - players[id].clans[clanId].points);
+        } else if(savePlayers) {
+            Clans.delPoints(clanId,players[id].clans[clanId].points - points);
+        }
         players[id].clans[clanId].points = points;
-        save();
+        if(savePlayers) {
+            save();
+        }
+    },
+    getPointsOfAllTimes: function(playerid, clanId) {
+        createUserIfNotExist(playerid);
+        if (!players[playerid].clans[clanId]) {
+            players[playerid].clans[clanId] = {
+                id: playerid
+            };
+        }
+        if (!players[playerid].clans[clanId].season) {
+            return players[playerid].clans[clanId].points;
+        } else {
+            return players[playerid].clans[clanId].points + getSumOfSeason(players[playerid].clans[clanId].season);
+        }
     },
     setActiveRank: function (guildMember, rank) {
         createUserIfNotExist(guildMember.id);

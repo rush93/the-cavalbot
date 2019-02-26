@@ -90,34 +90,11 @@ const UnicodeConfirmReact = '✅';
 const UnicodeCancelReact = '❌';
 var Constants = require('./models/constants');
 
-var getClanScores = function (Players, Clans) {
+var getClanScores = function (Clans) {
     var scores = {};
-    var players = Players.getPlayers();
-    var PlayerKeys = Object.keys(players);
-    for (var i = 0; i < PlayerKeys.length; i++) {
-        var objectKeys = Object.keys(players[PlayerKeys[i]].clans);
-        for (var j = 0; j < objectKeys.length; j++) {
-            if (typeof(players[PlayerKeys[i]].clans[objectKeys[j]]) === "object") {
-                if (!scores[objectKeys[j]]) {
-                    scores[objectKeys[j]] = 0;
-                }
-                if (players[PlayerKeys[i]].clans[objectKeys[j]]) {
-                    scores[objectKeys[j]]+= players[PlayerKeys[i]].clans[objectKeys[j]].points;
-                }
-            }
-        }
-    }
-    var scoreKeys = Object.keys(scores);
-    for (var i = 0; i < scoreKeys.length; i++) {
-        var clan = Clans.getClanById(scoreKeys[i]);
-        if (clan != undefined) {
-            if ( clan && clan.ps4Role && clan.ps4Role != scoreKeys[i] && scores[clan.ps4Role]) {
-                scores[scoreKeys[i]] += scores[clan.ps4Role];
-            }
-            
-            var tmp = Clans.getPointsOfLastSeason(scoreKeys[i]);
-            scores[scoreKeys[i]] -= tmp;
-        }
+    const clansIds = Object.keys(Clans.getAllClan());
+    for (const clanId of clansIds) {
+        scores[clanId] = Clans.getClanById(clanId).points;
     }
     return scores;
 }
@@ -284,8 +261,8 @@ module.exports = {
         return result;
     },
     getClanScores,
-    getScoreOfClan: function(Players, clanId, Clans) {
-        var scores = getClanScores(Players, Clans);
+    getScoreOfClan: function(clanId, Clans) {
+        var scores = getClanScores(Clans);
         if (Clans.getClanById(clanId).ps4Role === clanId) {
             clanId = Clans.getClanById(clanId).id;
         }

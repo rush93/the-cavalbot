@@ -26,9 +26,10 @@ module.exports = {
             return;
         }
         var player = Players.getPlayer(message.member.id, clan.id);
-        if (!player || player.points < rang.points) {
+        var allPlayerPoints = Players.getPointsOfAllTimes(message.member.id, clan.id);
+        if (!player || allPlayerPoints < rang.points) {
             Utils.reply(message, `Vous n'avez pas assez de points pour rejoindre le clan **${rang.name}**,
-il vous en faut **${rang.points}** et vous en avez **${(player && player.points) ? player.points : 0}**.`, true);
+il vous en faut **${rang.points}** et vous en avez **${(player && allPlayerPoints) ? allPlayerPoints : 0}**.`, true);
             return;
         }
         var promise = Players.setActiveRank(message.member, rang);

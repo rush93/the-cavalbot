@@ -9,7 +9,7 @@ var moment = require('moment');
 var displayRoleOfClan = function (message, role) {
     var ranks = Ranks.getSortedKeys(role.id);
     var clan = Clans.getClan(role);
-    var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
+    var totalPoints = Utils.getScoreOfClan(clan.id, Clans);
     var fields = [
         {
             title: "Nombre de personnes",
@@ -97,11 +97,8 @@ var displayRoleOfMember = function (message, member) {
     var seasonPoints = null;
     if ( Constants.season && Constants.season !== 0 && player && player.points) {
         seasonPoints = player.points;
-        if (player.season && player.season[Constants.season]) {
-            seasonPoints -= player.season[Constants.season];
-        }
     }
-    var totalPoints = Utils.getScoreOfClan(Players, clan.id, Clans);
+    var totalPoints = Players.getPointsOfAllTimes(player.id, clan.id);
     var image = Constants.domain + '/images/clansimple?c=' + clan.id;
     var dif = globalPlayer && globalPlayer.lastUpdate ? moment.duration(moment().diff(globalPlayer.lastUpdate)).locale("fr").humanize() : null;
     var lastJoin = globalPlayer ? globalPlayer.cooldown : null;
@@ -111,27 +108,27 @@ var displayRoleOfMember = function (message, member) {
     moment.locale('fr');
 
     
-    if(moment.duration(diff, 'minutes').humanize() == "quelques secondes"){
-        var roles = Utils.getRolesOfPerm(message.guild, 'KICK_MEMBERS');
-        var str = [];
-        for (var i = 0; i < roles.length; i++) {
-            str.push(`<@&${roles[i].id}>`);
-        }
-        message.channel.send(str.join(', '));
-        message.channel.send('<@!'+member.id+'> envoi un mp a au personne si dessus avec ta date d\'arriver dans ton clan ou attend 2 minutes si tu viens juste d\'arriver dans ton clan');
-    }else{
+    // if(moment.duration(diff, 'minutes').humanize() == "quelques secondes"){
+    //     var roles = Utils.getRolesOfPerm(message.guild, 'KICK_MEMBERS');
+    //     var str = [];
+    //     for (var i = 0; i < roles.length; i++) {
+    //         str.push(`<@&${roles[i].id}>`);
+    //     }
+    //     message.channel.send(str.join(', '));
+    //     message.channel.send('<@!'+member.id+'> envoi un mp a au personne si dessus avec ta date d\'arriver dans ton clan ou attend 2 minutes si tu viens juste d\'arriver dans ton clan');
+    // }else{
         Utils.sendEmbed(message, role.color, (member.nickname ? member.nickname : member.user.username),
         `**Clan:** ${role.name}` + `
 **Dans le clan depuis**: ` + moment.duration(diff, 'minutes').humanize() + (seasonPoints === null ? '' : `
 **Points de la saison:** ${seasonPoints}`) + `
-**Total de points:** ${!player ? 0 : player.points ? player.points : 0}` + (!btagString || btagString.length <= 0 ? '' : `
+**Total de points:** ${!player ? 0 : totalPoints ? totalPoints : 0}` + (!btagString || btagString.length <= 0 ? '' : `
 **Battle tag:** ${btagString.join(', ')}`) + (!psnString || psnString.length <= 0  ? '' : `
 **PSN:** ${psnString.join(', ')}`) + (!dif  ? '' : `
 **Dernière mise à jour:** ${dif}`) + ` ${globalPlayer && globalPlayer.epou ? `
 :ring: <@!${globalPlayer.epou}>` : ''} `
         , message.author, fields, image);
     Players.updateComprank(member.id);
-    }
+    // }
     return;
 }
 module.exports = {

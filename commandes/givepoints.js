@@ -42,20 +42,22 @@ module.exports = {
 			if (!oldPoints)
 				oldPoints = 0;
 			var newPoints = oldPoints + points
+			var oldAllPoints = Players.getPointsOfAllTimes(member.id, clanId);
 			Players.setPoints(member.id, clanId, newPoints);
+			var newAllPoints = Players.getPointsOfAllTimes(member.id, clanId);
 			var playerClan = Clans.getPlayerClan(member);
 			var avaliabeRanks = Ranks.getRanks(playerClan.id);
 			var keys = Ranks.getSortedKeys(playerClan.id);
 			var nextRank = null;
 			for (var i = 0; i < keys.length; i++) {
-				if (avaliabeRanks[keys[i]].points > oldPoints && avaliabeRanks[keys[i]].points <= newPoints) {
+				if (avaliabeRanks[keys[i]].points > oldAllPoints && avaliabeRanks[keys[i]].points <= newAllPoints) {
 					nextRank = avaliabeRanks[keys[i]];
 				}
 			}
 			if (!nextRank) {
 				return;
 			}
-			if (nextRank.points <= newPoints) {
+			if (nextRank.points <= newAllPoints) {
 				member.addRole(member.guild.roles.get(nextRank.roleId));
 				Players.setActiveRank(member, nextRank);
 				Utils.reply(message, `Bravo <@!${member.id}> tu as maintenant accès à un nouveau rang: **${nextRank.name}**.`);

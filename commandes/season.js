@@ -11,27 +11,25 @@ var commands = {
         args: '',
         runCommand: (args, message) => {
             var season = Constants.season + 1;
-            var scores = {};
             var players = Players.getPlayers();
             var PlayerKeys = Object.keys(players);
             for (var i = 0; i < PlayerKeys.length; i++) {
                 var objectKeys = Object.keys(players[PlayerKeys[i]].clans);
                 for (var j = 0; j < objectKeys.length; j++) {
                     if (typeof(players[PlayerKeys[i]].clans[objectKeys[j]]) === "object") {
-                        if (!scores[objectKeys[j]]) {
-                            scores[objectKeys[j]] = 0;
-                        }
                         if (players[PlayerKeys[i]].clans[objectKeys[j]]) {
-                            scores[objectKeys[j]]+= players[PlayerKeys[i]].clans[objectKeys[j]].points;
                             Players.setSeasonPoints(PlayerKeys[i], objectKeys[j], season, true);
+                            Players.setPoints(PlayerKeys[i], objectKeys[j], 0, false);
                         }
                     }
                 }
             }
             Players.save();
-            var scoreKeys = Object.keys(scores);
-            for (var i = 0; i < scoreKeys.length; i++) {
-                Clans.setSeasonPoints(scoreKeys[i], scores[scoreKeys[i]], season, true);
+            var clansIds = Object.keys(Clans.getAllClan())
+            for (var i = 0; i < clansIds.length; i++) {
+                let points = Clans.getClanById(clansIds[i]).points;
+                Clans.setSeasonPoints(clansIds[i], points, season, true);
+                Clans.delPoints(clansIds[i], points);
             }
             Clans.save();
             Utils.reply(message, 'Une nouvelle saison a été créée.');
@@ -49,7 +47,7 @@ var commands = {
                 return;
             }
             Constants.season = Constants.season - 1;
-            Utils.reply(message, 'Le rollback a bien été pris en compte.');
+            Utils.reply(message, 'Le rollback a bien été pris en compte. (ou pas lol #flem de recoder ça)');
         }
     },
 }

@@ -18,7 +18,7 @@ module.exports = {
             return;
         }
         var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        var score = Utils.getScoreOfClan(Players, clan.id, Clans) + '';
+        var score = Utils.getScoreOfClan(clan.id, Clans) + '';
         if (fs.existsSync(`${__dirname}/../../img/generated/${clan.id}_${score}.png`)) {
             Utils.log(Utils.Color.FgMagenta + ip + Utils.Color.Reset + `: Image requested ${Utils.Color.FgGreen}load from cache.`);
             var path = require(`path`);

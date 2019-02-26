@@ -95,7 +95,8 @@ module.exports = {
     },
     createClan: function (guildRole) {
         clans[guildRole.id] = {
-            id: guildRole.id
+            id: guildRole.id,
+            points: 0,
         };
         save();
     },
@@ -122,6 +123,14 @@ module.exports = {
     },
     setDescription: function (guildRole, description) {
         clans[guildRole.id].description = description;
+        save();
+    },
+    addPoints: function (clanId, points) {
+        clans[clanId].points += points;
+        save();
+    },
+    delPoints: function (clanId, points) {
+        clans[clanId].points -= points;
         save();
     },
     setImage: function (guildRole, image) {
