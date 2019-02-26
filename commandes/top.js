@@ -162,9 +162,6 @@ module.exports = {
             for (var i = nbPerPage * (page - 1); i < sortedPlayers.length && i < nbPerPage * page; i++) {
                 var guildMember = role.members.get(sortedPlayers[i].id);
                 var points = sortedPlayers[i].points ? sortedPlayers[i].points : 0;
-                if(curentSeason && curentSeason && sortedPlayers[i].season && sortedPlayers[i].season[curentSeason]) {
-                    points = points - sortedPlayers[i].season[curentSeason];
-                }
                 fields.push({
                     title: ((i + 1) === 1 ? '1er: ' : (i+1) +'e: ') + (guildMember.nickname ? guildMember.nickname : guildMember.user.username),
                     text: points + " points",
