@@ -1,10 +1,7 @@
 /*diff = facile/moyen/diff/impossible
 _mission    information //affiche mission en cours ou propose commande demandeMission
             demandeMission  diff
-            demandeMissionEvent diff
-            demandeMissionEventGroupe diff
             demandeMissionGroupe diff
-            modifierEtat false/true "nom mission"
             history soi meme ou @personne
             vérification lienimage
 
@@ -15,6 +12,11 @@ const Utils = require('../utils');
 var Constants = require('../models/constants');
 var Mission = require('../models/mission');
 var Players = require('../models/players');
+var Clans = require('../models/clans');
+var Ranks = require('../models/ranks');
+var moment = require('moment');
+var givepointsCommands = require('./givepoints');
+
 var commands = {
     create: {
         help: [
@@ -22,18 +24,18 @@ var commands = {
         ],
         args: '',
         runCommand: (args, message) => {
+            if (!message.member.hasPermission("KICK_MEMBERS")) {
+                Utils.reply(message, "Vous n'avez pas assez de couilles pour modifier les missions", true);
+                return;
+            }
+            if (args.length < 3) {
+                Utils.reply(message, 'Il manque des arguments. (desc, difficulte, mode, hero)');
+                return;
+            }
             var reg = /("[^"]+"|[^ ]+)((?: [^ ]+)+)/g.exec(args.join(' '));
             args = reg[2].trim().split(' ');
             var desc = reg[1].replace(/"/g, '');
-            if (args.length < 3) {
-                Utils.reply(message, 'Il manque des arguments. (desc, difficulte, mode, hero, event (si il y a))');
-                return;
-            }
-            if (args[4]) {
-                Mission.createMission(desc, args[0],args[1],args[2],args[3],args[4]);
-            }else{
-                Mission.createMission(desc, args[0],args[1],args[2],args[3]);
-            }
+            Mission.createMission(desc, args[0],args[1],args[2],args[3]);
             Utils.reply(message, 'La mission a bien été crée.')
         }
     },
@@ -57,46 +59,34 @@ var commands = {
         ],
         args: 'difficulte',
         runCommand: (args, message) => {
-            var retour = Players.addMission(message,args[0]);
-            if(retour == -1){
-                Utils.reply(message, 'vous avez deja une missions active');
+            //vérifier si derniere mission pas fini il y a 5minutes
+            var lastTempsMissionValider = Players.getLastTempsMissionValider(message);
+            if(moment(lastTempsMissionValider).day(7).format('MM/DD/YYYY') == moment().day(7).format('MM/DD/YYYY')){
+                Utils.reply(message, "Veuillez attendre dimanche 00h pour demander une autre mission");
             }else{
-                Utils.reply(message, "Voici votre mission : \n"+retour);
+                var retour = Players.addMission(message,args[0]);
+                if(retour == -1){
+                    // vérifier si mission active/vérif mais 7 jours écoulé depuis old demande
+                    var tempsMissionActive = Players.getTempsMission(message);
+                    if (moment() - moment(tempsMissionActive).add(7, 'days') < 0)
+                    {
+                        Utils.reply(message, 'vous avez deja une missions active ou en cours de validation');
+                    }else{
+                        // set a -1 si temps passé
+                        Players.setTimeoutMission(message);
+                        var retour = Players.addMission(message,args[0]);
+                        Utils.reply(message, "Voici votre mission : \n"+retour);
+                    }
+                }else if(retour == -2){
+                    Utils.reply(message, 'La difficulté que vous avez choisi n\'existe pas faite _mission list');
+                }else{
+                    
+                    Utils.reply(message, "Voici votre mission : \n"+retour);
+                }
             }
-            
         }
     },
-    /*demandeMissionEvent: {
-        help: [
-            'permet de demander une mission en rapport avec l\'event en cours'
-        ],
-        args: '',
-        runCommand: (args, message) => {
-            
-            Utils.reply(message, '');
-        }
-    },
-    demandeMissionGroupe: {
-        help: [
-            'demander des missions à réaliser en groupe, plus dur mais plus de points'
-        ],
-        args: '',
-        runCommand: (args, message) => {
-            
-            Utils.reply(message, '');
-        }
-    },
-    demandeMissionEventGroupe: {
-        help: [
-            'mission de groupe et d\'event'
-        ],
-        args: '',
-        runCommand: (args, message) => {
-            
-            Utils.reply(message, '');
-        }
-    },*/
-    modifierEtat: {
+    /*modifierEtat: {
         help: [
             'activer(true) ou dé-activer(false) une catégorie de mission (ex : hallowen)'
         ],
@@ -114,7 +104,7 @@ var commands = {
             }
             
         }
-    },
+    },*/
     list: {
         help: [
             'affiche la list des missions'
@@ -128,20 +118,19 @@ var commands = {
             var difficulte = [];
 
             for (var i = 0; i < keys.length; i++) {
-                if (listMissions[i].event==null) {
-                    if (difficulte[listMissions[i].difficulte]==null) {
-                        difficulte[listMissions[i].difficulte] = 1;
+                //if (listMissions[i].event==null) {
+                    if (difficulte[listMissions[keys[i]].difficulte]==null) {
+                        difficulte[listMissions[keys[i]].difficulte] = 1;
                     }else{
-                        difficulte[listMissions[i].difficulte]++;
+                        difficulte[listMissions[keys[i]].difficulte]++;
                     }
-                }else{
+                /*}else{
                     if (difficulte[listMissions[i].event]==null) {
                         difficulte[listMissions[i].event] = 1;
                     }else{
                         difficulte[listMissions[i].event]++;
                     }
-                    
-                }
+                }*/
                 
             }
             var keysDiff = Object.keys(difficulte);
@@ -153,7 +142,7 @@ var commands = {
                 });
             }
             if (args < 1) {
-                Utils.sendEmbed(message, 0xE8C408, "Missions par type", "", message.author, fields);
+                Utils.sendEmbed(message, 0xE8C408, "Missions par difficulté", "", message.author, fields);
             }else{
                 for (var i = 0; i < keys.length; i++) {
                     if (listMissions[keys[i]].difficulte == args[0]) {
@@ -205,25 +194,123 @@ var commands = {
     },
     verification: {
         help: [
+            'demander a valider une mission'
+        ],
+        args: ' liendevitrescreen',
+        runCommand: (args, message) => {
+            if (args.length >= 1) {
+                var channel = message.guild.channels.get(Constants.missionChannel);
+                //vérifier si mission en cours ou en attente validation
+                var retour = Players.getCurrentMission(message);
+                if(Players.getCurrentValidation(message) == 1){
+                    Utils.reply(message, 'Vous avez deja envoyé une capture d\'écran');
+                }else if (retour == -1) {
+                    Utils.reply(message, "Pas de mission active");
+                }else{
+                    channel.send(retour+ "\nLien image : " +args + "\nValider mission : _mission valider "+message.member.id+"\nRefuser mission : _mission refuser "+message.member.id+"\n"+`<@301080434949881856>`);
+                    Players.setValidation(message);//modifier statut = 0 en statut = 2
+                    Utils.reply(message, 'Veuillez attendre la validation par les autorités compétentes');
+                }
+                
+            }else{
+                Utils.reply(message, 'Veuillez insérer le lien de votre image justificative (capture d\'écran non découpée)');
+            }
+        }
+    },
+    supprimer: {
+        help: [
+            'supprimer une mission'
+        ],
+        args: 'id',
+        runCommand: (args, message) => {
+            if (!message.member.hasPermission("KICK_MEMBERS")) {
+                Utils.reply(message, "Vous n'avez pas assez de couilles pour modifier les missions", true);
+                return;
+            }
+            if (args.length != 1) {
+                Utils.reply(message, "pas assez/trop d'argument", true);
+            }else{
+                var retour = Mission.supprimerMission(args[0]);
+                if(retour == 0){
+                    Utils.reply(message, "Mission supprimer avec succes");
+                }else{
+                    Utils.reply(message, "Id inconnu", true);
+                }
+            }
+        }
+    },
+    valider: {
+        help: [
             'valider une mission'
         ],
         args: '',
         runCommand: (args, message) => {
+            if (!message.member.hasPermission("KICK_MEMBERS")) {
+                Utils.reply(message, "Vous n'avez pas assez de couilles pour modifier les missions", true);
+                return;
+            }
             if (args.length >= 1) {
-                var channel = message.guild.channels.get("514148538557399050");//ajouter constante
-                //514148538557399050 salon test
+                var retour = Players.setValider(args[0]);
+                if (retour != -1) {
+                    message.guild.channels.get(Constants.retourMissionChannel).send(`<@`+args[0]+`> GG! mission validé, tu viens de gagner `+retour+" points");
 
-
-                //vérifier si mission en cours ou en attente validation
-                channel.send(""+args);
-                /*message.react(Utils.UnicodeConfirmReact).then(() => {
-                    message.react(Utils.UnicodeCancelReact);
-                });*/
-                Utils.reply(message, 'Veuillez attendre que la validation par les autorités compétentes');
-                
-                //modifier statut = 0 en statut = 2
+                    var points = Number(retour);
+                    var member = message.guild.members.get(args[0]);
+                    var clanId = Clans.getPlayerClan(member).id;
+                    var player = Players.getPlayer(member.id, clanId)
+                    var oldPoints = 0;
+                    if (player)
+                        oldPoints = player.points;
+                    if (!oldPoints)
+                        oldPoints = 0;
+                    var newPoints = Number(oldPoints) + Number(points);
+                    Players.setPoints(member.id, clanId, newPoints);
+                    Utils.reply(message, 'Les points du joueur ont bien été modifiés.');
+                    var playerClan = Clans.getPlayerClan(member);
+                    var avaliabeRanks = Ranks.getRanks(playerClan.id);
+                    var keys = Ranks.getSortedKeys(playerClan.id);
+                    var nextRank = null;
+                    for (var i = 0; i < keys.length; i++) {
+                        if (avaliabeRanks[keys[i]].points > oldPoints && avaliabeRanks[keys[i]].points <= newPoints) {
+                            nextRank = avaliabeRanks[keys[i]];
+                        }
+                    }
+                    if (!nextRank) {
+                        return;
+                    }
+                    if (nextRank.points <= newPoints) {
+                        member.addRole(member.guild.roles.get(nextRank.roleId));
+                        Players.setActiveRank(member, nextRank);
+                        message.guild.channels.get(Constants.retourMissionChannel).send(`Bravo <@!${member.id}> tu as maintenant accès à un nouveau rang: **${nextRank.name}**.`);
+                    }
+                }else{
+                    Utils.reply(message, 'heu on dirai que cette personne n\'a pas de mission en attente de validation');
+                }
             }else{
-                Utils.reply(message, 'Veuillez insérer le lien de votre image justificative (imp écran non découpée)');
+                Utils.reply(message, 'Fail copier coller');
+            }
+        }
+    },
+    refuser: {
+        help: [
+            'refuser une mission'
+        ],
+        args: '',
+        runCommand: (args, message) => {
+            if (!message.member.hasPermission("KICK_MEMBERS")) {
+                Utils.reply(message, "Vous n'avez pas assez de couilles pour modifier les missions", true);
+                return;
+            }
+            if (args.length >= 1) {
+                var retour = Players.setUnValider(args[0]);
+                if (retour == 1) {
+                    message.guild.channels.get(Constants.retourMissionChannel).send(`<@!`+args[0]+`> screen pour votre mission refusé`);
+                    Utils.reply(message, 'Mission refuser avec succes');
+                }else{
+                    Utils.reply(message, 'heu on dirai que cette personne n\'a pas de mission en attente de validation');
+                }
+            }else{
+                Utils.reply(message, 'Fail copier coller');
             }
         }
     },
@@ -253,11 +340,11 @@ var help = function (message) {
     Utils.sendEmbed(message, 0x00AFFF, 'Liste des commandes des missions', "", message.author, fields);
 }
 module.exports = {
-    role: 'MANAGE_GUILD',
+    role: 'SEND_MESSAGES',
     helpCat: 'Permet d\'obtenir une mission',
     help,
     runCommand: (args, message) => {
-        if (!message.member.hasPermission("MANAGE_GUILD")) {
+        if (!message.member.hasPermission("SEND_MESSAGES")) {
             Utils.reply(message, "Vous n'avez pas assez de couilles pour jouer avec les missions (pas encore)", true);
             return;
         }

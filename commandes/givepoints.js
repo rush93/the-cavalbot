@@ -17,7 +17,7 @@ module.exports = {
 	runCommand: (args, message) => {
 
         if (!message.member.hasPermission("CHANGE_NICKNAME")) {
-            Utils.reply(message, "Vous n'avez pas assez de couilles pour administrer les clans", true);
+            Utils.reply(message, "Vous n'avez pas assez de couilles pour donner des points", true);
             return;
 		}
 		

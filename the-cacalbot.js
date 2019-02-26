@@ -92,6 +92,30 @@ var commands = {
   messages: messagesCommand,
   mission: missionCommand
 }
+var phrase = ["C'est un oiseau ! C'est un avion ! J'ai rien dit, c'est juste %player%",
+"%player% vient de rejoindre le serveur. Quelqu'un peut me soigner ?",
+"Bienvenue, %player%. Restez un peu et écoutez.",
+"Bienvenue, %player%. Nous vous attendions ( ͡° ͜ʖ ͡°)",
+"C'est dangereux d’y aller seul, emmenez %player% !",
+"Les roses sont rouges, les violettes sont bleues, %player% Max a rejoint ce lieu",
+"C'est %player% ! Loué soit le soleil ! \[T]/",
+"Oh mon dieu ! %player% est là.",
+"%player% vient de rejoindre le serveur. Quelqu'un peut me soigner ?",
+"%player% a rejoint le serveur ! C’est super efficace !",
+"Joueur %player% prêt",
+"%player% a rejoint le serveur ! C’est super efficace !",
+"%player% vient d’arriver. Il est trop OP - il faut le nerf.",
+"Un %player% a spawn dans le serveur.",
+"%player% a rejoint. Vous devez construire des pylônes supplémentaires.",
+"%player% has joined the battle bus.",
+"Bienvenue %player%. Laissez vos armes près de la porte.",
+"Où est %player% ? Dans le serveur !",
+"Swoooosh. %player% vient juste d’atterrir.",
+"Nous vous attendions, %player%",
+"%player% vient de rejoindre le serveur - glhf ",
+"%player% est arrivé(e). La fête est finie.",
+""
+];
 
 var intervalMessage = require('./intervals/messages');
 
@@ -158,33 +182,33 @@ try {
     let GuestsRole = member.guild.roles.find("name", "Guests");
     member.addRole(GuestsRole);
 
+    Utils.log(`running ${Utils.Color.FgYellow}welcome ${Utils.Color.Reset}message`);
+    Utils.sendDM(member,"Bienvenue sur OwAssembly, le serveur qui reproduit l'ambiance du jeu à travers son système de clans et ses multiples évènements!"
++"\nCe serveur n'a pas de vocation compétitive ou professionnelle. Si c'est ton but, nous t'invitons à aller visiter le discord de notre partenaire OverTown."
+
++"\n\nAvant toute chose prends connaissance des quelques règles du serveur qui se trouvent dans #:clipboard:règlements."
++"\nChoisis ton clan parmi les 9 que le serveur propose et participe avec les autres membres à la course aux points!"
++"\nL'histoire des différents clans se trouve sur notre site internet (http://overwatch-assemble.fr/)."
++"\nLe clan Shambali est celui qu'il te faut si tu souhaites être simple observateur et ne participer à aucun évènement."
+
++"\n\nLe bot Athena est à ta disposition à tout moment dans #bot-en-kaou-tchou avec la commandes_help pour obtenir la liste des commandes du bot."
++"\nTu trouveras sur notre serveur plusieurs types d'évènements auquel tu peux facilement participer, et notamment :"
++"\n:small_orange_diamond: Des mini-jeux de toutes sortes : le planning des mini-jeux se trouve dans #annonces-mini-jeux (épinglé). Pour participer, il te suffit de te rendre dans #bot-en-kaou-tchou et de taper la commande _participe"
++"\n:small_orange_diamond: Des guerres de clan : les clans s'affrontent pendant une saison de 2 mois pour défendre leurs orbes et s'emparer de celle des autres clans! Les règles de cet affrontement se trouvent sur le site dans l'onglet GDC."
++"\n:small_orange_diamond: Des tournois : Une fois par mois, un grand tournoi vise à départager la meilleure équipe!");
+
+
     member.setNickname(member.displayName);
-    member.guild.channels.get("443199155838648320").send(`Bienvenue à toi soldat ${member}! 
-Tu es convié à choisir un clan afin de participer à la vie du serveur ;)
-Pour rappel, voici la liste des commandes à taper pour rejoindre le clan que tu souhaites (copie colle celle qui t'intéresse) :
-
-:small_orange_diamond:  Faction United Nations
-_join Overwatch
-_join Blackwatch
-_join Programme MEKA
-
-:small_blue_diamond: Faction Insurgés
-_join La Griffe
-_join Vishkar Corporation
-_join Deadlock Rebels
-
-:small_orange_diamond: Faction Gangs
-_join Junkers
-_join Los Muertos
-_join Shimada
-
-Et si tu ne souhaites pas participer aux évènements du serveur (tournoi, mini jeux, guerres):
-
-_join Shambali
-
-Si tu as des questions, nous sommes là pour te répondre!
-Bonne journée à toi!`);
-  });
+    if (globalConst.bvnChannel != "") {
+      member.guild.channels.get(globalConst.bvnChannel).send(`Bienvenue à toi ${member},
+Je viens de t'envoyer un message privé, prend le temps de le lire :smiley:.
+Si tu as des questions ou si tu souhaites une présentation plus poussée du serveur, n'hésite pas à contacter un modérateur ou un membre du staff. Nous te souhaitons encore une fois la bienvenue et nous espérons que tu tu te plairas sur notre serveur!
+L'équipe d'OA
+Et n'oublie pas de choisir ton clan parmi la liste si dessous :`).then((msg) => {
+        commands["list"].runCommand('list', msg);
+      });
+    }
+  });// fin bot.on
 
   var runCommand = (args, message) => {
     if (args[0] === globalConst.prefix + 'help') {
@@ -232,10 +256,20 @@ Bonne journée à toi!`);
         Utils.log('', false, 'DM message', message.author.username, message.content);
         var result = /^say ([0-9]+) (.+)$/.exec(message.content);
         if (result) {
-          if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
-            Utils.reply(message, 'ptdr t ki ?', true);
-            return;
-          }
+          var dev = ["227441303527489537", "270268597874589696"];
+          var isDev = false;
+          dev.forEach((id) => {
+                if (message.author.id == id) {
+                  isDev = true;
+                  console.log("isdev");
+                }
+            });
+          if (!isDev) {
+              if (!guild.members.get(message.author.id).hasPermission("MANAGE_GUILD")) {
+                Utils.reply(message, 'ptdr t ki ?', true);
+                return;
+              }
+            }
           var channel = guild.channels.get(result[1]);
           if (!channel) {
             Utils.reply(message, 'c\'est pas un channel ça', true);
