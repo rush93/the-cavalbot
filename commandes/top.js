@@ -142,14 +142,6 @@ module.exports = {
             var sortedPlayers = teamPlayers.sort((a, b) => {
                 var p1 = a.points ? a.points : 0;
                 var p2 = b.points ? b.points : 0;
-                if(curentSeason && curentSeason > 0) {
-                    if(a.season && a.season[curentSeason]) {
-                        p1 = p1 - a.season[curentSeason];
-                    }
-                    if(b.season && b.season[curentSeason]) {
-                        p2 = p2 - b.season[curentSeason];
-                    }
-                }
                 return p1 - p2;
             });
             sortedPlayers = sortedPlayers.reverse();
@@ -161,7 +153,7 @@ module.exports = {
             }
             for (var i = nbPerPage * (page - 1); i < sortedPlayers.length && i < nbPerPage * page; i++) {
                 var guildMember = role.members.get(sortedPlayers[i].id);
-                var points = sortedPlayers[i].points ? sortedPlayers[i].points : 0;
+                var points = sortedPlayers[i].points ? sortedPlayers[i].points : 0;ac
                 fields.push({
                     title: ((i + 1) === 1 ? '1er: ' : (i+1) +'e: ') + (guildMember.nickname ? guildMember.nickname : guildMember.user.username),
                     text: points + " points",

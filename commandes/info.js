@@ -98,7 +98,7 @@ var displayRoleOfMember = function (message, member) {
     if ( Constants.season && Constants.season !== 0 && player && player.points) {
         seasonPoints = player.points;
     }
-    var totalPoints = Players.getPointsOfAllTimes(player.id, clan.id);
+    var totalPoints = Players.getPointsOfAllTimes(member.id, clan.id);
     var image = Constants.domain + '/images/clansimple?c=' + clan.id;
     var dif = globalPlayer && globalPlayer.lastUpdate ? moment.duration(moment().diff(globalPlayer.lastUpdate)).locale("fr").humanize() : null;
     var lastJoin = globalPlayer ? globalPlayer.cooldown : null;
